@@ -25,6 +25,9 @@
       --shadow:0 10px 34px rgba(2,23,56,.08);
       --shadow-lg:0 18px 52px rgba(2,23,56,.16);
       --radius:18px;
+      /* aliases do padrão Juntos */
+      --az:#092040; --ci:#00B7D7; --am:#ECC203; --cz:#EFF1F3; --es:#021738; --br:#FFFFFF;
+      --gv:#1A6B3C; --gvb:#ebf7eb; --aw:#7A4F00; --awb:#fff8e0; --rd:#8B1A1A; --rdb:#fce8e8; --bd:#dde4ee; --mut:#718096; --txt:#2f3b48;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -228,36 +231,100 @@
     @media(max-width:900px){.activity-grid{grid-template-columns:1fr}.audit-cards,.goal-grid{grid-template-columns:1fr}.facts-row{grid-template-columns:repeat(2,1fr)}.filters-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:760px){.topbar-inner{align-items:flex-start;flex-direction:column}.header-actions{justify-content:flex-start}.kpi-grid{grid-template-columns:repeat(2,1fr)}.page-head{flex-direction:column}.coverage-row{grid-template-columns:130px 1fr 42px}main{padding:18px 14px 50px}.topbar-inner,.nav-shell{padding-left:14px;padding-right:14px}}
     @media(max-width:520px){.kpi-grid{grid-template-columns:1fr}.section-kpis{grid-template-columns:1fr 1fr}.filters-grid{grid-template-columns:1fr}.evidence-row{grid-template-columns:13px 1fr}.evidence-row .evidence-state,.evidence-link{grid-column:2}.finance-strip{grid-template-columns:repeat(2,1fr)}.coverage-row{grid-template-columns:1fr}.bar-value{text-align:left}.brand-cluster{gap:10px}.institution-logo{width:66px;height:46px}.brand h1{font-size:18px}.page-head h2{font-size:20px}.login-card{padding:24px}}
+
+
+    /* ===== PULSA SP — PADRÃO VISUAL JUNTOS ===== */
+    body{background:var(--cz);color:var(--txt);font-family:'Open Sans',Arial,sans-serif}
+    h1,h2,h3,h4,button{font-family:'Montserrat',Arial,sans-serif}
+    .pwd,#login{background:var(--az);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+    .pbox.login-card{background:var(--br);border-radius:16px;padding:36px 40px;max-width:430px;width:100%;text-align:center;box-shadow:0 22px 60px rgba(0,0,0,.28);border:0}
+    .plogo-main{height:auto;max-height:88px;max-width:250px;object-fit:contain;display:block;margin:0 auto 22px;background:#fff}
+    .pkicker{color:var(--am);font:700 10.5px 'Montserrat',sans-serif;letter-spacing:1.25px;margin-bottom:8px;text-transform:uppercase}
+    .psub{color:var(--az)!important;font:700 16px/1.35 'Montserrat',sans-serif!important;margin:0 0 7px!important}
+    .phint{font-size:12px;color:#8390a0!important;margin:0 0 20px!important;line-height:1.5}
+    .pin{width:100%;padding:12px 16px!important;border:2px solid var(--bd)!important;border-radius:10px!important;font-size:15px!important;letter-spacing:2px;color:var(--az);outline:none;margin-bottom:12px;background:#fff!important}
+    .pin:focus{border-color:var(--ci)!important;box-shadow:none!important}
+    .pbtn{width:100%;padding:13px!important;background:var(--az)!important;color:var(--am)!important;border:0!important;border-radius:10px!important;font-size:14px!important;font-weight:700!important;letter-spacing:1px;box-shadow:none!important;margin:0!important}
+    .pbtn:hover{background:var(--ci)!important;color:var(--br)!important}
+    .pfoot{font-size:10px;color:rgba(255,255,255,.58);margin-top:18px;text-align:center;line-height:1.5}
+
+    .hdr.topbar{background:var(--az);box-shadow:0 2px 10px rgba(0,0,0,.3)}
+    .hdri.topbar-inner{max-width:1220px;min-height:68px;padding:8px 24px;gap:18px}
+    .brandwrap{gap:14px}.institution-logo{background:transparent;border:0;box-shadow:none;width:auto;height:auto;padding:0;border-radius:0}
+    .hlogo{height:43px;max-width:150px;object-fit:contain;background:var(--br);border-radius:8px;padding:5px 10px}
+    .hdiv{width:1px;height:34px;background:rgba(255,255,255,.2)}
+    .htit{color:var(--am)!important;font:700 15px 'Montserrat',sans-serif!important;letter-spacing:.5px!important}
+    .hsub{color:rgba(255,255,255,.62)!important;font-size:10.5px!important;margin-top:2px!important}
+    .agent-badge{border:0;background:rgba(236,194,3,.15);color:var(--am);padding:5px 8px;font-size:9px}
+    .header-actions{gap:5px}.link-action,.ghost-btn{font-size:9.5px;padding:6px 8px;border-radius:7px}
+    .nav-shell{max-width:1220px;padding:0 24px 8px}.hnav{gap:4px}
+    .nbtn.nav-tab{color:rgba(255,255,255,.65);font-size:10.5px;font-weight:700;letter-spacing:.45px;padding:8px 11px;border-radius:8px;text-transform:uppercase;background:none;box-shadow:none}
+    .nbtn.nav-tab:hover{color:#fff;background:rgba(255,255,255,.1)}
+    .nbtn.nav-tab.on,.nbtn.nav-tab.active{color:var(--am);background:rgba(236,194,3,.15);box-shadow:none}
+
+    .wrap{max-width:1220px;margin:0 auto;padding:24px 16px 60px}
+    .page-head{margin-bottom:10px}.page-head .st{font:700 11px 'Montserrat',sans-serif!important;color:var(--az)!important;text-transform:uppercase;letter-spacing:1.4px;margin:0 0 4px!important;padding-left:10px;border-left:4px solid var(--ci)}
+    .page-head p{font-size:11px}.st{font:700 11px 'Montserrat',sans-serif;color:var(--az);text-transform:uppercase;letter-spacing:1.4px;margin:22px 0 12px;padding-left:10px;border-left:4px solid var(--ci)}
+    .card{background:var(--br);border:1.5px solid var(--bd);border-radius:12px;padding:16px 18px;box-shadow:none}
+    .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .notice{background:#e0f7fb;border:1px solid #b8ecf5;border-radius:10px;padding:13px 16px;font-size:11px;color:#176377;line-height:1.55}
+
+    .ficha-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px 26px}.ficha-rot{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8592A3;margin-bottom:4px}.ficha-val{font:600 13px/1.45 'Montserrat',sans-serif;color:var(--az);overflow-wrap:anywhere}.ficha-span{grid-column:1/-1}
+    .diag-top{display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:12px}.diag-main,.diag-card{border:0;text-align:left;min-height:145px}
+    .diag-main{background:linear-gradient(135deg,#092040 0%,#0d3768 100%);border-radius:12px;padding:18px 20px;color:#fff}.diag-main .n{font:700 34px Montserrat;color:var(--am)}.diag-main .t{font:700 12px Montserrat;margin-top:2px}.diag-main .s{font-size:10.5px;color:rgba(255,255,255,.68);margin-top:6px;line-height:1.45}
+    .diag-card{background:#fff;border:1.5px solid var(--bd);border-radius:12px;padding:16px 18px}.diag-card .n{font:700 22px Montserrat;color:var(--ci)}.diag-card .t{font:700 10.5px Montserrat;color:var(--az);margin-top:3px;text-transform:uppercase;letter-spacing:.35px}.diag-card .s{font-size:10.5px;color:#718096;margin-top:6px;line-height:1.45}
+    button.diag-main,button.diag-card{cursor:pointer}button.diag-main:hover,button.diag-card:hover{filter:brightness(1.02)}
+
+    .kpi{background:var(--az);border:0;border-radius:12px;padding:18px;text-align:center;min-height:110px}.knum{color:var(--am);font:700 26px Montserrat}.klab{color:rgba(255,255,255,.76);font-size:10.5px;margin-top:4px}.khelp{color:rgba(255,255,255,.48);font-size:9px;margin-top:7px;line-height:1.35}.kpi.warn{background:#745e08}.kpi.danger{background:#631f2a}
+    .sbw{height:14px;background:#dde4ee;border-radius:999px;overflow:hidden}.sb{height:100%;border-radius:999px;transition:width 1s ease}.smid{background:var(--ci)}
+    .badge{display:inline-block;font:700 9.5px/1.2 Montserrat;padding:4px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}.bCo{background:var(--gvb);color:var(--gv)}.bIn{background:var(--awb);color:var(--aw)}.bAl{background:#ffe8cc;color:#8B4A00}.bEr{background:var(--rdb);color:var(--rd)}.bPe{background:#edf2f7;color:#5b6572}.bAn{background:#e0f7fb;color:#176377}
+    .alerta-doc{background:#fff;border:2px solid var(--am);border-left:6px solid var(--am);border-radius:12px;padding:16px 18px;margin-bottom:14px}.alerta-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}.alerta-title{font:700 13px Montserrat;color:var(--az);text-transform:uppercase;letter-spacing:.5px}.alerta-count{font:700 24px Montserrat;color:#8B5A00}.alerta-help{font-size:11px;color:#657180;line-height:1.55;margin-top:4px}.alerta-list{margin-top:12px;display:grid;gap:8px}.alerta-item{background:#fffaf0;border:1px solid #f0dfaa;border-radius:9px;padding:10px 12px}.alerta-item strong{font:700 11px Montserrat;color:var(--az)}.alerta-meta{font-size:10.5px;color:#6f7884;margin-top:3px;line-height:1.45}
+    .execution-card{padding:18px 20px}.execution-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:12px}.execution-title{font:700 12px Montserrat;color:var(--az)}.execution-help{font-size:10px;color:#7b8490;margin-top:3px}.execution-number{font:700 26px Montserrat;color:var(--ci);white-space:nowrap}.execution-number small{font-size:11px;color:#738091}.execution-number.money{font-size:20px}.execution-foot{font:700 10px Montserrat;color:var(--az);margin-top:7px}.coverage-card{padding:20px 22px}
+    .card-title-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}.card-title-row h3{font:700 13px Montserrat;color:var(--az);margin:0}.rank-item{box-shadow:none;border:1px solid #e2e7ed;border-radius:9px}.rank-num{border-radius:7px}.rank-score{color:var(--ci)}
+
+    .filters-panel{border:1.5px solid var(--bd);border-radius:12px;padding:14px;box-shadow:none}.filter-field label{font-size:9.5px}.filter-field input,.filter-field select{border:1.5px solid var(--bd);border-radius:9px;font-size:11px;background:#fff}.primary-btn{background:var(--az);color:var(--am);box-shadow:none;border-radius:9px}.secondary-btn{border:1.5px solid var(--bd);border-radius:9px}
+    .activity-card-grid,.activity-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.activity-card{background:#fff;border:1.5px solid var(--bd);border-left:4px solid var(--ci);border-radius:14px;padding:16px 17px;min-height:285px;display:flex;flex-direction:column;box-shadow:none;overflow:visible}.activity-card:before{display:none}.activity-card.st-ok{border-left-color:var(--gv)}.activity-card.st-alerta{border-left-color:#E07B00}.activity-card.st-erro{border-left-color:#cc2222}.activity-card-head{padding:0;border:0;margin-bottom:10px}.activity-card-kicker{font:700 9.5px Montserrat;color:var(--ci);text-transform:uppercase;letter-spacing:.55px;margin-bottom:4px}.activity-card-title{font:700 13px/1.4 Montserrat;color:var(--az)}.activity-card-sub{font-size:10.5px;color:#68717d;line-height:1.45;margin-top:4px}.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:0;justify-content:flex-end}.activity-card-evidence{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}.activity-evidence-item{background:#f6f8fb;border:1px solid #e4e9ef;border-radius:9px;padding:8px 5px;text-align:center}.activity-evidence-item .n{font:700 10px Montserrat;color:var(--az)}.activity-evidence-item .l{font-size:8px;color:#75808c;text-transform:uppercase;letter-spacing:.2px;margin-top:2px}.activity-evidence-item.ev-ok .n{color:var(--gv)}.activity-evidence-item.ev-pending .n{color:var(--aw)}.activity-evidence-item.ev-divergent .n{color:var(--rd)}.activity-card-total{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:10px;padding:9px 10px;border-radius:9px;background:#eaf8fb;font-size:10.5px;color:#176377}.activity-card-total strong{font-family:Montserrat}.evidence-title{font:700 10px Montserrat;color:var(--az);text-transform:uppercase;letter-spacing:.35px;margin:11px 0 7px}.evidence-list{display:grid;gap:5px}.evidence-row{grid-template-columns:12px minmax(110px,.9fr) 1.1fr auto;padding:6px 8px;min-height:32px}.evidence-row b,.evidence-row .evidence-state{font-size:9px}.finance-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.finance-mini>div{background:#f6f8fb;border:1px solid #e4e9ef;border-radius:8px;padding:7px}.finance-mini span{display:block;font-size:8px;color:#7b8795;text-transform:uppercase}.finance-mini strong{font:700 9.5px Montserrat;color:var(--az);display:block;margin-top:2px}.activity-card-reading{margin-top:10px;border-left:3px solid var(--ci);background:#f7fafc;border-radius:8px;padding:9px 10px;font-size:10px;color:#596575;line-height:1.5}.activity-card-reading strong{color:var(--az)}.activity-next{margin-top:7px;border-left:3px solid var(--am);background:#fffaf0;border-radius:8px;padding:9px 10px;font-size:10px;color:#6d5a18;line-height:1.5}.activity-next strong{color:var(--az)}
+    .drive-actions{display:grid;grid-template-columns:1fr;gap:6px;margin-top:auto;padding-top:10px}.drive-open{display:block;text-align:center;text-decoration:none;background:var(--az);color:var(--am);border-radius:8px;padding:8px 9px;font:700 9.5px Montserrat;text-transform:uppercase;letter-spacing:.3px}.drive-open.secondary{background:#e8f7fb;color:#0f6072;border:1px solid #a8deea}.drive-nolink{font-size:9.5px;color:#8a939e;text-align:center;padding:7px;border:1px dashed #cfd6df;border-radius:8px}
+
+    .evidence-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.evidence-card{background:#fff;border:1.5px solid var(--bd);border-left:4px solid var(--ci);border-radius:14px;padding:16px 17px;display:flex;flex-direction:column;min-height:290px}.evidence-card.nao-verificado{border-left-color:#c9940a}.evidence-card.divergente{border-left-color:#cc2222}.evidence-card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.evidence-card-kicker{font:700 9px Montserrat;color:var(--ci);text-transform:uppercase;letter-spacing:.5px}.evidence-card h3{font:700 12.5px Montserrat;color:var(--az);line-height:1.4;margin:4px 0}.evidence-card-origin{font-size:9.5px;color:#74808d}.evidence-package{display:flex;gap:10px;align-items:center;background:#f6f8fb;border:1px solid #e4e9ef;border-radius:9px;padding:10px;margin-top:11px}.package-number{font:700 24px Montserrat;color:var(--ci)}.evidence-package strong{display:block;font:700 9px Montserrat;color:var(--az);text-transform:uppercase}.evidence-package span{display:block;font-size:10px;color:#68717d;margin-top:3px}.evidence-detail{display:grid;gap:3px;margin-top:9px;font-size:9.5px}.evidence-detail strong{font:700 9px Montserrat;color:var(--az);text-transform:uppercase}.evidence-detail span{color:#68717d}
+
+    .finance-kpi-grid{margin-bottom:16px}.finance-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.finance-card{background:#fff;border:1.5px solid var(--bd);border-left:4px solid var(--gv);border-radius:14px;padding:16px 17px;display:flex;flex-direction:column;min-height:310px}.finance-card.finance-alert{border-left-color:#cc2222}.finance-card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.finance-card-kicker{font:700 9px Montserrat;color:var(--ci);text-transform:uppercase;letter-spacing:.5px}.finance-card h3{font:700 12.5px Montserrat;color:var(--az);line-height:1.4;margin:4px 0}.finance-provider{font-size:9.5px;color:#74808d}.finance-values,.finance-data{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:11px}.finance-values>div,.finance-data>div{background:#f6f8fb;border:1px solid #e4e9ef;border-radius:8px;padding:8px;min-width:0}.finance-values span,.finance-data span{display:block;font-size:8px;color:#7b8795;text-transform:uppercase}.finance-values strong,.finance-data strong{display:block;font:700 9.5px Montserrat;color:var(--az);margin-top:2px;overflow-wrap:anywhere}.danger-text{color:var(--rd)!important}
+
+    .criteria-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.criteria-card{background:#fff;border:1.5px solid var(--bd);border-radius:12px;padding:14px}.criteria-title{font:700 11.5px Montserrat;color:var(--az);margin-bottom:9px}.criteria-line{display:flex;justify-content:space-between;gap:8px;font-size:9px;padding:5px 0;border-bottom:1px solid #edf1f4}.criteria-line span{color:#7b8795}.criteria-line strong{color:#4c5c6c;text-align:right}.criteria-help{font-size:9.5px;color:#68717d;line-height:1.45;margin-top:8px}.criteria-next{font-size:9px;color:#6d5a18;line-height:1.45;margin-top:8px;background:#fffaf0;border-radius:7px;padding:7px}.audit-card-grid,.audit-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.audit-card{box-shadow:none;border:1.5px solid var(--bd);border-left:4px solid var(--ci);border-radius:12px;padding:14px}.audit-card.critical{border-left-color:#cc2222}.audit-card.medium{border-left-color:#c9940a}.audit-card.ok{border-left-color:var(--gv)}.audit-card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.audit-kicker{font:700 9px Montserrat;color:var(--ci);text-transform:uppercase;letter-spacing:.5px}.audit-card h4{font:700 12px Montserrat;color:var(--az);margin:4px 0}.audit-card p{font-size:9.8px}
+
+    .meta-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.meta-card-juntos.goal-card{background:#fff;border:1.5px solid var(--bd);border-radius:14px;padding:18px;box-shadow:none;min-height:280px}.meta-card-juntos.goal-card h3{font:700 13px Montserrat;color:var(--az)}.goal-progress{height:11px}.goal-progress span{background:var(--ci)}
+
+    @media(max-width:1000px){.diag-top{grid-template-columns:repeat(2,1fr)}.g4,.g3{grid-template-columns:repeat(2,1fr)}.activity-card-grid,.activity-grid,.evidence-card-grid,.finance-card-grid,.criteria-card-grid,.audit-card-grid,.meta-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.header-actions{display:none}.activity-card-evidence{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:650px){.diag-top,.g4,.g3,.g2,.activity-card-grid,.activity-grid,.evidence-card-grid,.finance-card-grid,.criteria-card-grid,.audit-card-grid,.meta-card-grid{grid-template-columns:1fr}.hdri.topbar-inner{padding:8px 14px}.hlogo{height:38px;max-width:105px}.hsub{display:none}.wrap{padding:18px 12px}.activity-card-evidence{grid-template-columns:repeat(2,1fr)}.finance-values,.finance-data,.finance-mini{grid-template-columns:1fr}.pbox.login-card{padding:30px 24px}.nav-shell{padding-left:12px;padding-right:12px}.page-head{flex-direction:column}}
+
   </style>
 </head>
 <body>
   <section id="login">
-    <div class="login-card">
-      <div class="login-logo" aria-label="Instituto BR">
-        <img src="./assets/logo-instituto-br.png" alt="Instituto BR">
-      </div>
-      <div class="login-kicker">Acesso institucional</div>
-      <h1>PULSA SP</h1>
-      <p>Sistema de Monitoramento e Prestação de Contas</p>
+    <div class="login-card pbox">
+      <img class="login-brand-logo plogo-main" src="./assets/logo-instituto-br.png" alt="Instituto BR">
+      <div class="login-kicker pkicker">Sistema de Monitoramento e Prestação de Contas — SMPC</div>
+      <h1 class="psub">PULSA SP · SMPC</h1>
+      <p class="phint">Acesso ao painel executivo de evidências, financeiro, metas e auditoria documental.</p>
       <label for="senha">Senha de acesso</label>
-      <input id="senha" type="password" autocomplete="current-password" placeholder="Informe sua senha">
-      <button class="primary-btn" onclick="entrar()">Entrar no painel</button>
-      <div id="erroLogin" class="login-error"></div>
+      <input class="pin" id="senha" type="password" autocomplete="current-password" placeholder="Senha de acesso">
+      <button class="primary-btn pbtn" onclick="entrar()">ACESSAR SISTEMA</button>
+      <div id="erroLogin" class="login-error perr"></div>
     </div>
+    <div class="pfoot">Instituto BR Arte · Painel de monitoramento documental</div>
   </section>
 
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand-cluster">
-        <div class="institution-logo" aria-label="Instituto BR">
-          <img src="./assets/logo-instituto-br.png" alt="Instituto BR">
-        </div>
+  <header class="topbar hdr">
+    <div class="topbar-inner hdri">
+      <div class="brand-cluster brandwrap">
+        <div class="institution-logo" aria-label="Instituto BR"><img class="hlogo" src="./assets/logo-instituto-br.png" alt="Instituto BR"></div>
+        <div class="hdiv"></div>
         <div class="brand">
           <div class="brand-line">
-            <h1>PULSA SP</h1>
+            <h1 class="htit">PULSA SP · SMPC</h1>
             <span id="agentBadge" class="agent-badge">AGENTE_PULSA_V1</span>
           </div>
-          <p>Periferias Urbanas, Linguagens, Saberes e Arte · SMPC</p>
+          <p class="hsub">Periferias Urbanas, Linguagens, Saberes e Arte · Sistema de Monitoramento e Prestação de Contas</p>
         </div>
       </div>
       <div class="header-actions">
@@ -268,23 +335,23 @@
       </div>
     </div>
     <div class="nav-shell">
-      <nav class="nav-tabs" aria-label="Navegação principal">
-        <button class="nav-tab active" data-tab="resumo" onclick="trocarAba('resumo',this)">Resumo</button>
-        <button class="nav-tab" data-tab="espetaculos" onclick="trocarAba('espetaculos',this)">Espetáculos</button>
-        <button class="nav-tab" data-tab="evidencias" onclick="trocarAba('evidencias',this)">Evidências</button>
-        <button class="nav-tab" data-tab="financeiro" onclick="trocarAba('financeiro',this)">Financeiro</button>
-        <button class="nav-tab" data-tab="auditoria" onclick="trocarAba('auditoria',this)">Auditoria</button>
-        <button class="nav-tab" data-tab="metas" onclick="trocarAba('metas',this)">Metas</button>
+      <nav class="nav-tabs hnav" aria-label="Navegação principal">
+        <button class="nav-tab nbtn active on" data-tab="resumo" onclick="trocarAba('resumo',this)">Resumo</button>
+        <button class="nav-tab nbtn" data-tab="espetaculos" onclick="trocarAba('espetaculos',this)">Espetáculos</button>
+        <button class="nav-tab nbtn" data-tab="evidencias" onclick="trocarAba('evidencias',this)">Evidências</button>
+        <button class="nav-tab nbtn" data-tab="financeiro" onclick="trocarAba('financeiro',this)">Financeiro</button>
+        <button class="nav-tab nbtn" data-tab="auditoria" onclick="trocarAba('auditoria',this)">Auditoria</button>
+        <button class="nav-tab nbtn" data-tab="metas" onclick="trocarAba('metas',this)">Metas</button>
       </nav>
     </div>
   </header>
 
-  <main>
+  <main class="wrap">
     <div id="globalLoading" class="loading hidden"><span class="loader-dot"></span>Carregando dados oficiais do PULSA SP...</div>
 
     <section id="pane-resumo" class="pane">
       <div class="page-head">
-        <div><h2>Resumo executivo</h2><p>Visão consolidada de execução, conformidade documental, evidências e alertas prioritários.</p></div>
+        <div><h2 class="st">Resumo executivo</h2><p>Visão consolidada de execução, conformidade documental, evidências e alertas prioritários.</p></div>
         <div id="updatedAt" class="updated">Atualização: --</div>
       </div>
       <div id="summaryContent"></div>
@@ -292,7 +359,7 @@
 
     <section id="pane-espetaculos" class="pane hidden">
       <div class="page-head">
-        <div><h2>Espetáculos e atividades</h2><p>Dossiês documentais com evidências recebidas, lacunas, divergências e próxima ação do agente.</p></div>
+        <div><h2 class="st">Espetáculos e atividades</h2><p>Dossiês documentais com evidências recebidas, lacunas, divergências e próxima ação do agente.</p></div>
         <div class="updated">25 por página</div>
       </div>
       <div class="filters-panel">
@@ -324,23 +391,23 @@
         <div class="filter-actions"><button class="primary-btn" onclick="loadAtividades(1)">Aplicar filtros</button><button class="secondary-btn" onclick="resetAtividadeFiltros()">Limpar filtros</button></div>
       </div>
       <div id="activityMeta" class="activity-meta-line"><span>Carregue os dados para visualizar os dossiês.</span></div>
-      <div id="activityList" class="activity-grid"></div>
+      <div id="activityList" class="activity-grid activity-card-grid"></div>
       <div id="activityPagination"></div>
     </section>
     <section id="pane-evidencias" class="pane hidden">
-      <div class="page-head"><div><h2>Evidências recebidas</h2><p>Inventário de rastreabilidade: origem, pacote recebido, destino, pendência e situação de auditoria.</p></div><div class="updated">Fonte: EVIDENCIAS_EMAIL</div></div>
+      <div class="page-head"><div><h2 class="st">Evidências recebidas</h2><p>Inventário de rastreabilidade: origem, pacote recebido, destino, pendência e situação de auditoria.</p></div><div class="updated">Fonte: EVIDENCIAS_EMAIL</div></div>
       <div id="evidenceContent"></div>
     </section>
     <section id="pane-financeiro" class="pane hidden">
-      <div class="page-head"><div><h2>Financeiro e Notas Fiscais</h2><p>Conferência de valores, documentos fiscais e origem do PIX sem inferência de dados.</p></div><div class="updated">Fonte: FINANCEIRO_NF</div></div>
+      <div class="page-head"><div><h2 class="st">Financeiro e Notas Fiscais</h2><p>Conferência de valores, documentos fiscais e origem do PIX sem inferência de dados.</p></div><div class="updated">Fonte: FINANCEIRO_NF</div></div>
       <div id="financeContent"></div>
     </section>
     <section id="pane-auditoria" class="pane hidden">
-      <div class="page-head"><div><h2>Auditoria e pendências</h2><p>Critérios documentais, achados, divergências e próximos passos de regularização.</p></div><div class="filter-field" style="min-width:180px"><label>Prioridade</label><select id="auditPriority" onchange="loadAuditoria()"><option value="">Todas</option><option value="CRÍTICA">Crítica</option><option value="ALTA">Alta</option><option value="MÉDIA">Média</option><option value="BAIXA">Baixa</option><option value="CONFORME">Conforme</option></select></div></div>
+      <div class="page-head"><div><h2 class="st">Auditoria e pendências</h2><p>Critérios documentais, achados, divergências e próximos passos de regularização.</p></div><div class="filter-field" style="min-width:180px"><label>Prioridade</label><select id="auditPriority" onchange="loadAuditoria()"><option value="">Todas</option><option value="CRÍTICA">Crítica</option><option value="ALTA">Alta</option><option value="MÉDIA">Média</option><option value="BAIXA">Baixa</option><option value="CONFORME">Conforme</option></select></div></div>
       <div id="auditContent"></div>
     </section>
     <section id="pane-metas" class="pane hidden">
-      <div class="page-head"><div><h2>Metas e monitoramento</h2><p>Meta física, indicadores, meios de verificação e avanço acumulado do projeto.</p></div><div class="updated">Fonte: METAS</div></div>
+      <div class="page-head"><div><h2 class="st">Metas e monitoramento</h2><p>Meta física, indicadores, meios de verificação e avanço acumulado do projeto.</p></div><div class="updated">Fonte: METAS</div></div>
       <div id="goalsContent"></div>
     </section>
   </main>
@@ -442,6 +509,7 @@
 
     function renderResumo(r){
       const root=document.getElementById('summaryContent');
+      const c=(BOOT&&BOOT.config)||{};
       const target=r.metaApresentacoes||0;
       const metaPct=r.progressoMetaPercentual==null?0:r.progressoMetaPercentual;
       const kpis=[
@@ -452,34 +520,53 @@
         ['completos',r.completos||0,'Dossiês completos','Conformidade documental integral',''],
         ['pendentes',r.pendentes||0,'Pendências documentais','Atividades ainda incompletas','warn'],
         ['divergencia',r.divergencias||0,'Divergências críticas','Conflitos que exigem saneamento','danger'],
-        ['naoVerificados',r.naoVerificados||0,'Arquivos não verificados','Recebidos, mas com validação técnica pendente','warn'],
-        ['financeiro',moneyBR(r.valorFiscalVerificado||0),'Valor fiscal localizado','Soma dos valores fiscais carregados','']
+        ['naoVerificados',r.naoVerificados||0,'Arquivos não verificados','Recebidos, mas com validação técnica pendente','warn']
       ];
       root.innerHTML=`
-        <div class="kpi-grid">${kpis.map(k=>kpiCard(...k)).join('')}</div>
-        <div class="summary-grid">
-          <article class="panel">
-            <div class="panel-head"><div><h3>Cobertura por tipo de evidência</h3><div class="mini">Cobertura validada nos sete requisitos centrais</div></div></div>
-            <div class="panel-body"><div class="coverage-list">${renderCoverage(r.cobertura||{})}</div></div>
-          </article>
-          <article class="panel"><div class="panel-body"><div class="meta-card">
-            <div class="small">Meta de apresentações</div>
-            <div class="big">${numberBR(r.totalMapeadas||0)} <span style="font-size:14px;font-weight:600;color:#C9D7E4">/ ${numberBR(target||0)}</span></div>
-            <div class="sub">Avanço acumulado do projeto conforme a fonte oficial</div>
-            <div class="meta-track"><span style="width:${Math.min(100,Math.max(0,metaPct))}%"></span></div>
-            <div class="sub">${pct(metaPct)} da meta física cadastrada</div>
-          </div></div></article>
+        <div class="st">Ficha do Projeto</div>
+        <article class="card ficha-card"><div class="ficha-grid">
+          <div><div class="ficha-rot">Projeto</div><div class="ficha-val">${esc(c.projeto||'PULSA SP')}</div></div>
+          <div><div class="ficha-rot">Código</div><div class="ficha-val">${esc(c.codigo||'PULSA')}</div></div>
+          <div><div class="ficha-rot">Território</div><div class="ficha-val">${esc(c.territorio||'Município de São Paulo')}</div></div>
+          <div><div class="ficha-rot">Vigência</div><div class="ficha-val">${esc(c.vigencia||'A confirmar')}</div></div>
+          <div class="ficha-span"><div class="ficha-rot">Meta central</div><div class="ficha-val">${esc(c.meta1||'Realizar apresentações artístico-culturais em múltiplas linguagens')}</div></div>
+          <div><div class="ficha-rot">Público estimado</div><div class="ficha-val">${esc(c.publicoEstimado||'A consolidar')}</div></div>
+          <div><div class="ficha-rot">Agente</div><div class="ficha-val">${esc(c.agente||'AGENTE_PULSA_V1')}</div></div>
+        </div></article>
+
+        <div class="st">Operação e Evidências</div>
+        <div class="diag-top">
+          <button class="diag-main" data-kpi-filter="total"><div class="n">${numberBR(r.totalMapeadas||0)}</div><div class="t">Apresentações monitoradas</div><div class="s">Base cumulativa do PULSA, preparada para receber nova programação semanal sem apagar o histórico.</div></button>
+          <button class="diag-card" data-kpi-filter="fotos"><div class="n">${numberBR(r.atividadesComFotos||0)}</div><div class="t">Com evidência</div><div class="s">Atividades com registro fotográfico já localizado na fonte oficial.</div></button>
+          <button class="diag-card" data-kpi-filter="nf"><div class="n">${numberBR(r.nfs||0)}</div><div class="t">NFs localizadas</div><div class="s">Documentos fiscais registrados e vinculados à trilha financeira.</div></button>
+          <div class="diag-card"><div class="n">AGENTE</div><div class="t">AGENTE_PULSA_V1</div><div class="s">Leitura automática de lacunas, divergências e próxima ação por dossiê.</div></div>
         </div>
-        <div class="rank-grid">
-          <article class="panel"><div class="panel-head"><h3>Dossiês mais completos</h3></div><div class="panel-body"><div class="rank-list">${renderRank(r.topCompletos||[],false)}</div></div></article>
-          <article class="panel"><div class="panel-head"><h3>Prioridade de saneamento</h3></div><div class="panel-body"><div class="rank-list">${renderRank(r.topCriticos||[],true)}</div></div></article>
+
+        <div class="st">Pendências Documentais Prioritárias</div>
+        <div class="alerta-doc"><div class="alerta-top"><div><div class="alerta-title">Saneamento documental</div><div class="alerta-help">Pendências, divergências e arquivos ainda não verificados permanecem visíveis até a comprovação documental.</div></div><div class="alerta-count">${numberBR((r.pendentes||0)+(r.divergencias||0))}</div></div><div class="alerta-list">${renderAlerts(r.alertasCriticos||[])}</div></div>
+
+        <div class="st">Visão Geral</div>
+        <div class="g4 kpi-grid-juntos">${kpis.map(k=>kpiCard(...k)).join('')}</div>
+
+        <div class="st">Execução Documental</div>
+        <div class="g2 dashboard-doc-grid">
+          <article class="card execution-card"><div class="execution-head"><div><div class="execution-title">Meta física de apresentações</div><div class="execution-help">Avanço acumulado conforme a fonte oficial.</div></div><div class="execution-number">${numberBR(r.totalMapeadas||0)} <small>/ ${numberBR(target||0)}</small></div></div><div class="sbw"><div class="sb smid" style="width:${Math.min(100,Math.max(0,metaPct))}%"></div></div><div class="execution-foot">${pct(metaPct)} da meta física</div></article>
+          <article class="card execution-card"><div class="execution-head"><div><div class="execution-title">Valor fiscal localizado</div><div class="execution-help">Soma dos valores fiscais carregados no controle financeiro.</div></div><div class="execution-number money">${moneyBR(r.valorFiscalVerificado||0)}</div></div><div class="notice">O painel não infere PIX, valor ou dados bancários ausentes. Divergências permanecem em auditoria.</div></article>
         </div>
-        <article class="panel"><div class="panel-head"><div><h3>Alertas críticos do agente</h3><div class="mini">Achados prioritários da trilha de auditoria</div></div></div><div class="panel-body"><div class="alert-list">${renderAlerts(r.alertasCriticos||[])}</div></div></article>`;
+
+        <div class="st">Cobertura de Evidências</div>
+        <article class="card coverage-card"><div class="coverage-list">${renderCoverage(r.cobertura||{})}</div></article>
+
+        <div class="st">Dossiês e Prioridade de Saneamento</div>
+        <div class="g2 rank-grid-juntos">
+          <article class="card"><div class="card-title-row"><h3>Dossiês mais completos</h3><span class="badge bCo">Conformidade</span></div><div class="rank-list">${renderRank(r.topCompletos||[],false)}</div></article>
+          <article class="card"><div class="card-title-row"><h3>Mais críticos</h3><span class="badge bEr">Prioridade</span></div><div class="rank-list">${renderRank(r.topCriticos||[],true)}</div></article>
+        </div>`;
       root.querySelectorAll('[data-kpi-filter]').forEach(el=>el.addEventListener('click',()=>onKpiClick(el.dataset.kpiFilter)));
     }
 
     function kpiCard(filter,value,label,hint,cls){
-      return `<button class="kpi-card ${esc(cls||'')}" data-kpi-filter="${esc(filter)}"><div class="kpi-label">${esc(label)}</div><div class="kpi-value">${esc(value)}</div><div class="kpi-hint">${esc(hint)}</div></button>`;
+      return `<button class="kpi ${esc(cls||'')}" data-kpi-filter="${esc(filter)}"><div class="knum">${esc(value)}</div><div class="klab">${esc(label)}</div><div class="khelp">${esc(hint)}</div></button>`;
     }
 
     function renderCoverage(cobertura){
@@ -502,7 +589,7 @@
         const title=r['Espetáculo / Ação']||r['ID / Escopo']||r.Tema||'Achado de auditoria';
         const desc=r['Próximo passo']||r.Situação||r.situacao||'';
         const medium=/m[eé]dia|baixa/i.test(String(r.Prioridade||''));
-        return `<div class="alert-row ${medium?'medium':''}"><div class="alert-title">${esc(title)}</div><div class="alert-desc">${esc(desc)}</div></div>`;
+        return `<div class="alerta-item ${medium?'medium':''}"><strong>${esc(title)}</strong><div class="alerta-meta">${esc(desc)}</div></div>`;
       }).join('');
     }
 
@@ -514,7 +601,7 @@
 
     function trocarAba(nome,btn){
       ACTIVE_TAB=nome;
-      document.querySelectorAll('.nav-tab').forEach(x=>x.classList.toggle('active',x===btn));
+      document.querySelectorAll('.nav-tab').forEach(x=>{x.classList.toggle('active',x===btn);x.classList.toggle('on',x===btn);});
       document.querySelectorAll('.pane').forEach(x=>x.classList.add('hidden'));
       const pane=document.getElementById('pane-'+nome); if(pane) pane.classList.remove('hidden');
       if(nome==='resumo' && BOOT) renderResumo(BOOT.resumo||{});
@@ -587,29 +674,34 @@
 
     function renderCardAtividade(a){
       const priority=String(a.prioridade||'').toLowerCase().replace(/_/g,'-');
-      const pClass=a.prioridade==='ALTA'?'high':a.prioridade==='MEDIA'?'medium':'good';
+      const pClass=a.prioridade==='ALTA'?'bEr':a.prioridade==='MEDIA'?'bIn':'bCo';
+      const statusClass=/aten|diverg/i.test(String(a.statusDocumental||''))?'bAl':/parcial|pend/i.test(String(a.statusDocumental||''))?'bIn':'bCo';
       const ev=a.evidencias||{};
       const evidenceRows=[
         ['Nota Fiscal',ev.nf],['Contrato / cachê',ev.contrato],['Fotos da apresentação',ev.fotoApresentacao],['Fotos do público',ev.fotoPublico],
-        ['Borderô',ev.bordero],['Relatório de execução física',ev.relatorio],['Programação / divulgação',ev.programacao],['Vídeos',ev.videos],['Acessibilidade / outros',ev.acessibilidadeOutros]
+        ['Borderô',ev.bordero],['Relatório físico',ev.relatorio],['Programação / divulgação',ev.programacao],['Vídeos',ev.videos],['Acessibilidade / outros',ev.acessibilidadeOutros]
       ].map(([label,e])=>renderSemaforoEvidencia(e,label)).join('');
       const buttons=[];
-      if(a.dossieUrl)buttons.push(`<a class="card-link" href="${esc(a.dossieUrl)}" target="_blank" rel="noopener">Abrir dossiê</a>`);
-      if(a.nfUrl)buttons.push(`<a class="card-link alt" href="${esc(a.nfUrl)}" target="_blank" rel="noopener">Abrir NF</a>`);
-      if(a.fonteBrutaUrl)buttons.push(`<a class="card-link alt" href="${esc(a.fonteBrutaUrl)}" target="_blank" rel="noopener">Abrir fonte bruta</a>`);
+      if(a.dossieUrl)buttons.push(`<a class="drive-open" href="${esc(a.dossieUrl)}" target="_blank" rel="noopener">Abrir dossiê</a>`);
+      if(a.nfUrl)buttons.push(`<a class="drive-open secondary" href="${esc(a.nfUrl)}" target="_blank" rel="noopener">Abrir NF</a>`);
+      if(a.fonteBrutaUrl)buttons.push(`<a class="drive-open secondary" href="${esc(a.fonteBrutaUrl)}" target="_blank" rel="noopener">Abrir fonte bruta</a>`);
       const valProg=a.valorProgramacao==null?'Não informado':moneyBR(a.valorProgramacao);
       const valNF=a.valorNF==null?'Não informado':moneyBR(a.valorNF);
-      return `<article class="activity-card priority-${esc(priority)}" id="activity-${esc(a.id)}">
-        <div class="activity-card-head"><div><h3>${esc(a.nome||a.id)}</h3><div class="activity-sub">${esc(a.data||'Data não informada')} · ${esc(a.hora||'Horário não informado')} · ${esc(a.local||'Local não informado')}</div></div>
-        <div class="status-stack"><span class="status-pill ${pClass}">${esc(a.prioridade||'A classificar')}</span><span class="status-pill">${esc((a.conformidade&&a.conformidade.percentual)||0)}% conformidade</span></div></div>
-        <div class="activity-body">
-          <div class="facts-row"><div class="fact-box"><b>ID</b><span>${esc(a.id)}</span></div><div class="fact-box"><b>Artista / grupo</b><span>${esc(a.artista||'Não informado')}</span></div><div class="fact-box"><b>Equipamento</b><span>${esc(a.tipoEquipamento||'Não informado')}</span></div><div class="fact-box"><b>Status</b><span>${esc(a.statusDocumental||'Não informado')}</span></div></div>
-          <div class="evidence-title">Evidências do dossiê</div><div class="evidence-list">${evidenceRows}</div>
-          <div class="finance-strip"><div><b>Valor programação</b><span>${esc(valProg)}</span></div><div><b>Valor NF</b><span>${esc(valNF)}</span></div><div><b>Nº NF</b><span>${esc(a.nf||'Não localizada')}</span></div><div><b>Situação fiscal</b><span>${esc(a.situacaoNF||'Sem documento fiscal')}</span></div></div>
-          <div class="agent-box"><div class="agent-label">Leitura do AGENTE_PULSA_V1</div><p>${esc(a.leituraAgente||'Leitura indisponível na fonte oficial.')}</p></div>
-          <div class="agent-box next-action"><div class="agent-label">Próxima ação</div><p>${esc(a.proximaAcao||'Sem recomendação disponível.')}</p></div>
-          <div class="card-buttons">${buttons.join('')}</div>
-        </div></article>`;
+      return `<article class="activity-card st-${a.prioridade==='ALTA'?'erro':a.prioridade==='MEDIA'?'alerta':'ok'} priority-${esc(priority)}" id="activity-${esc(a.id)}">
+        <div class="activity-card-head"><div><div class="activity-card-kicker">${esc(a.id)} · ${esc(a.data||'Data não informada')}</div><div class="activity-card-title">${esc(a.nome||a.id)}</div><div class="activity-card-sub">${esc(a.artista||'Artista não informado')} · ${esc(a.local||'Local não informado')} · ${esc(a.hora||'Horário não informado')}</div></div><div class="chips"><span class="badge ${pClass}">${esc(a.prioridade||'A classificar')}</span><span class="badge ${statusClass}">${esc(a.statusDocumental||'Sem status')}</span></div></div>
+        <div class="activity-card-evidence">${renderActivityEvidenceMini(ev)}</div>
+        <div class="activity-card-total"><span>Conformidade documental</span><strong>${esc((a.conformidade&&a.conformidade.percentual)||0)}%</strong></div>
+        <div class="evidence-title">Evidências do dossiê</div><div class="evidence-list">${evidenceRows}</div>
+        <div class="finance-mini"><div><span>Programação</span><strong>${esc(valProg)}</strong></div><div><span>Valor NF</span><strong>${esc(valNF)}</strong></div><div><span>Nº NF</span><strong>${esc(a.nf||'Não localizada')}</strong></div></div>
+        <div class="activity-card-reading"><strong>Leitura do Agente</strong><br>${esc(a.leituraAgente||'Leitura indisponível na fonte oficial.')}</div>
+        <div class="activity-next"><strong>Próxima ação</strong><br>${esc(a.proximaAcao||'Sem recomendação disponível.')}</div>
+        <div class="drive-actions">${buttons.join('')||'<div class="drive-nolink">Nenhum link documental disponível neste registro.</div>'}</div>
+      </article>`;
+    }
+
+    function renderActivityEvidenceMini(ev){
+      const specs=[['NF',ev.nf],['Fotos',ev.fotoApresentacao],['Público',ev.fotoPublico],['Borderô',ev.bordero],['Relatório',ev.relatorio]];
+      return specs.map(([label,e])=>{const state=String((e&&e.estado)||'NAO_LOCALIZADO');const ok=state==='VALIDADO';const pending=state==='RECEBIDO_NAO_VERIFICADO';const diver=state==='DIVERGENTE';const mark=ok?'Sim':pending?'Pendente':diver?'Diverg.':'Não';return `<div class="activity-evidence-item ${ok?'ev-ok':pending?'ev-pending':diver?'ev-divergent':''}"><div class="n">${esc(mark)}</div><div class="l">${esc(label)}</div></div>`;}).join('');
     }
 
     function renderSemaforoEvidencia(evidence,label){
@@ -644,13 +736,13 @@
     function renderEvidencias(res){
       const root=document.getElementById('evidenceContent'); res=res||{items:[],total:0,page:1,pages:1};
       if(res.available===false){root.innerHTML='<div class="empty-state">A aba EVIDENCIAS_EMAIL está indisponível na fonte oficial.</div>';return;}
-      const rows=(res.items||[]).map(r=>{
+      const cards=(res.items||[]).map(r=>{
         const spec=evidenceStateSpec(r.estado);
-        const source=r.fonteOriginalUrl?`<a class="inline-link" href="${esc(r.fonteOriginalUrl)}" target="_blank" rel="noopener">Abrir origem</a>`:'Origem sem link';
-        const dossier=r.pastaDestinoUrl?`<a class="inline-link" href="${esc(r.pastaDestinoUrl)}" target="_blank" rel="noopener">Abrir destino</a>`:'Destino sem link';
-        return `<tr><td>${esc(r.id)}</td><td>${esc(r.data)}</td><td><b>${esc(r.nome)}</b></td><td>${esc(r.origem)}</td><td>${esc(r.evidencia)}</td><td>${esc(r.qtd)}</td><td><span class="state-badge ${spec.cls}"><span class="signal"></span>${esc(spec.text)}</span><div style="margin-top:4px;color:var(--muted);font-size:9px">${esc(r.situacaoPacote)}</div></td><td>${dossier}</td><td>${source}</td><td>${esc(r.proximoPasso)}</td><td>${esc(r.auditoria)}</td></tr>`;
+        const source=r.fonteOriginalUrl?`<a class="drive-open secondary" href="${esc(r.fonteOriginalUrl)}" target="_blank" rel="noopener">Abrir origem</a>`:'';
+        const dossier=r.pastaDestinoUrl?`<a class="drive-open" href="${esc(r.pastaDestinoUrl)}" target="_blank" rel="noopener">Abrir dossiê</a>`:'';
+        return `<article class="evidence-card ${spec.cls}"><div class="evidence-card-head"><div><div class="evidence-card-kicker">${esc(r.id)} · ${esc(r.data)}</div><h3>${esc(r.nome)}</h3><div class="evidence-card-origin">Fonte: ${esc(r.origem||'Não informada')}</div></div><span class="state-badge ${spec.cls}"><span class="signal"></span>${esc(spec.text)}</span></div><div class="evidence-package"><div class="package-number">${esc(r.qtd||0)}</div><div><strong>item(ns) identificado(s)</strong><span>${esc(r.evidencia||'Evidência sem descrição')}</span></div></div><div class="evidence-detail"><strong>Situação do pacote</strong><span>${esc(r.situacaoPacote||'Não informada')}</span></div><div class="activity-card-reading"><strong>Leitura do Agente</strong><br>${esc(r.auditoria||'Sem observação de auditoria.')}</div><div class="activity-next"><strong>Próxima ação</strong><br>${esc(r.proximoPasso||'Sem próxima ação registrada.')}</div><div class="drive-actions">${dossier}${source||''}${!dossier&&!source?'<div class="drive-nolink">Sem link disponível neste registro.</div>':''}</div></article>`;
       }).join('');
-      root.innerHTML=`<div class="data-toolbar"><span class="updated">${numberBR(res.total||0)} registro(s) de rastreabilidade</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>Data</th><th>Atividade</th><th>Origem</th><th>Evidência recebida</th><th>Qtd.</th><th>Situação</th><th>Destino</th><th>Fonte / original</th><th>Próximo passo</th><th>Auditoria</th></tr></thead><tbody>${rows||'<tr><td colspan="11">Nenhum registro.</td></tr>'}</tbody></table></div>${renderGenericPagination(res,'loadEvidencias')}`;
+      root.innerHTML=`<div class="data-toolbar"><span class="updated">${numberBR(res.total||0)} registro(s) de rastreabilidade</span></div><div class="evidence-card-grid">${cards||'<div class="empty-state">Nenhum registro.</div>'}</div>${renderGenericPagination(res,'loadEvidencias')}`;
     }
 
     function evidenceStateSpec(estado){
@@ -672,12 +764,13 @@
       const root=document.getElementById('financeContent'); res=res||{items:[],kpis:{},total:0,page:1,pages:1}; const k=res.kpis||{};
       if(res.available===false){root.innerHTML='<div class="empty-state">A aba FINANCEIRO_NF está indisponível na fonte oficial.</div>';return;}
       const kpis=[['NFs / links recebidos',k.recebidos||0],['PDFs com valor',k.pdfsComValor||0],['Valor fiscal',moneyBR(k.valorVerificado||0)],['PIX explícito na NF',k.pixNaNF||0],['Divergências',k.divergencias||0],['Pendentes de validação',k.pendentesValidacao||0]];
-      const rows=(res.items||[]).map(r=>{
-        const state=r.bloqueio?'<span class="state-badge divergente"><span class="signal"></span>Requer atenção</span>':'<span class="state-badge validado"><span class="signal"></span>Localizada</span>';
-        const links=[r.nfUrl?`<a class="inline-link" href="${esc(r.nfUrl)}" target="_blank" rel="noopener">NF</a>`:'',r.dossieUrl?`<a class="inline-link" href="${esc(r.dossieUrl)}" target="_blank" rel="noopener">Dossiê</a>`:''].filter(Boolean).join(' · ');
-        return `<tr><td>${esc(r.data)}</td><td><b>${esc(r.nome)}</b></td><td>${esc(r.prestador)}</td><td>${esc(r.cnpj)}</td><td>${r.valorReferencia==null?'—':moneyBR(r.valorReferencia)}</td><td>${r.valorNF==null?'—':moneyBR(r.valorNF)}</td><td>${r.diferenca==null?'—':moneyBR(r.diferenca)}</td><td>${esc(r.numeroNF)}</td><td>${esc(r.pix||'Não informado')}</td><td>${esc(r.origemPix||'Não informada')}</td><td>${state}<div style="margin-top:4px;font-size:9px;color:var(--muted)">${esc(r.situacao)}</div></td><td>${links}</td><td>${esc(r.observacao)}</td></tr>`;
+      const cards=(res.items||[]).map(r=>{
+        const hasDiff=r.diferenca!=null&&Math.abs(Number(r.diferenca||0))>0;
+        const danger=r.bloqueio||hasDiff;
+        const links=[r.nfUrl?`<a class="drive-open" href="${esc(r.nfUrl)}" target="_blank" rel="noopener">Abrir NF</a>`:'',r.dossieUrl?`<a class="drive-open secondary" href="${esc(r.dossieUrl)}" target="_blank" rel="noopener">Abrir dossiê</a>`:''].filter(Boolean).join('');
+        return `<article class="finance-card ${danger?'finance-alert':''}"><div class="finance-card-head"><div><div class="finance-card-kicker">${esc(r.data||'Data não informada')} · NF ${esc(r.numeroNF||'não localizada')}</div><h3>${esc(r.nome||'Atividade sem nome')}</h3><div class="finance-provider">${esc(r.prestador||'Prestador não informado')}</div></div><span class="badge ${danger?'bEr':'bCo'}">${danger?'Requer atenção':'Localizada'}</span></div><div class="finance-values"><div><span>Referência</span><strong>${r.valorReferencia==null?'—':moneyBR(r.valorReferencia)}</strong></div><div><span>Valor NF</span><strong>${r.valorNF==null?'—':moneyBR(r.valorNF)}</strong></div><div><span>Diferença</span><strong class="${hasDiff?'danger-text':''}">${r.diferenca==null?'—':moneyBR(r.diferenca)}</strong></div></div><div class="finance-data"><div><span>CPF/CNPJ</span><strong>${esc(r.cnpj||'Não informado')}</strong></div><div><span>PIX</span><strong>${esc(r.pix||'Não informado')}</strong></div><div><span>Origem do PIX</span><strong>${esc(r.origemPix||'Não informada')}</strong></div></div><div class="activity-card-reading"><strong>Leitura financeira do Agente</strong><br>${esc(r.observacao||r.situacao||'Sem observação financeira registrada.')}</div><div class="drive-actions">${links||'<div class="drive-nolink">Sem link financeiro disponível.</div>'}</div></article>`;
       }).join('');
-      root.innerHTML=`<div class="section-kpis">${kpis.map(([l,v])=>`<div class="mini-kpi"><span>${esc(l)}</span><b>${esc(v)}</b></div>`).join('')}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data</th><th>Atividade</th><th>Prestador</th><th>CPF/CNPJ</th><th>Referência</th><th>Valor NF</th><th>Diferença</th><th>Nº NF</th><th>PIX</th><th>Origem do PIX</th><th>Situação</th><th>Links</th><th>Observação</th></tr></thead><tbody>${rows||'<tr><td colspan="13">Nenhum registro financeiro.</td></tr>'}</tbody></table></div>${renderGenericPagination(res,'loadFinanceiro')}`;
+      root.innerHTML=`<div class="g3 finance-kpi-grid">${kpis.map(([l,v])=>`<div class="diag-card"><div class="n">${esc(v)}</div><div class="t">${esc(l)}</div></div>`).join('')}</div><div class="st">Contratações e Notas Fiscais</div><div class="finance-card-grid">${cards||'<div class="empty-state">Nenhum registro financeiro.</div>'}</div>${renderGenericPagination(res,'loadFinanceiro')}`;
     }
 
     async function loadAuditoria(){
@@ -690,12 +783,14 @@
     function renderAuditoria(res){
       const root=document.getElementById('auditContent'); res=res||{criteria:[],findings:[]};
       if(res.available===false){root.innerHTML='<div class="empty-state">A aba AUDITORIA está indisponível na fonte oficial.</div>';return;}
-      const criteria=(res.criteria||[]).map(c=>`<tr><td><b>${esc(c.criterio)}</b></td><td>${esc(c.obrigatorio)}</td><td>${esc(c.fonte)}</td><td>${esc(c.regraAgente)}</td><td>${esc(c.status)}</td><td>${esc(c.pendenciaGerada)}</td><td>${esc(c.responsavel)}</td><td>${esc(c.ultimaVerificacao)}</td></tr>`).join('');
+      const criteria=(res.criteria||[]).map(c=>`<article class="criteria-card"><div class="criteria-title">${esc(c.criterio)}</div><div class="criteria-line"><span>Obrigatório?</span><strong>${esc(c.obrigatorio)}</strong></div><div class="criteria-line"><span>Fonte</span><strong>${esc(c.fonte)}</strong></div><div class="criteria-line"><span>Status</span><strong>${esc(c.status)}</strong></div><div class="criteria-help">${esc(c.regraAgente)}</div><div class="criteria-next"><strong>Pendência:</strong> ${esc(c.pendenciaGerada)}<br><strong>Responsável:</strong> ${esc(c.responsavel)} · ${esc(c.ultimaVerificacao)}</div></article>`).join('');
       const findings=(res.findings||[]).map(f=>{
-        const critical=/cr[ií]tica|alta/i.test(String(f.prioridade||'')); const medium=/m[eé]dia/i.test(String(f.prioridade||''));
-        return `<article class="audit-card ${critical?'critical':medium?'medium':''}"><h4>${esc(f.nome||f.tema||f.idEscopo)}</h4><p><b>${esc(f.tema)}</b> · ${esc(f.situacao)}</p><p>${esc(f.evidenciaLocalizada)}</p><p><b>Próximo passo:</b> ${esc(f.proximoPasso)}</p><div class="audit-meta"><span class="scope-badge ${f.escopoGeral?'global':''}">${f.escopoGeral?'Escopo geral':'Atividade específica'}</span><span class="scope-badge">${esc(f.prioridade||'Sem prioridade')}</span><span class="scope-badge">${esc(f.verificacao)}</span></div></article>`;
+        const p=String(f.prioridade||'').toLowerCase(); const critical=/cr[ií]tica/.test(p), high=/alta/.test(p), medium=/m[eé]dia/.test(p), ok=/conforme/.test(p);
+        const cls=critical||high?'critical':medium?'medium':ok?'ok':'';
+        const badge=critical?'bEr':high?'bAl':medium?'bIn':ok?'bCo':'bPe';
+        return `<article class="audit-card ${cls}"><div class="audit-card-top"><div><div class="audit-kicker">${esc(f.idEscopo||'Auditoria')}</div><h4>${esc(f.nome||f.tema||f.idEscopo)}</h4></div><span class="badge ${badge}">${esc(f.prioridade||'Sem prioridade')}</span></div><p><b>${esc(f.tema)}</b> · ${esc(f.situacao)}</p><p>${esc(f.evidenciaLocalizada)}</p><div class="activity-next"><strong>Próximo passo</strong><br>${esc(f.proximoPasso)}</div><div class="audit-meta"><span class="scope-badge ${f.escopoGeral?'global':''}">${f.escopoGeral?'Escopo geral':'Atividade específica'}</span><span class="scope-badge">${esc(f.verificacao)}</span></div></article>`;
       }).join('');
-      root.innerHTML=`<div class="audit-section"><div class="panel-head" style="background:#fff;border:1px solid var(--linha);border-radius:14px 14px 0 0"><h3>Critérios de auditoria</h3></div><div class="table-wrap" style="border-radius:0 0 14px 14px"><table class="data-table"><thead><tr><th>Critério</th><th>Obrigatório?</th><th>Fonte</th><th>Regra do agente</th><th>Status</th><th>Pendência</th><th>Responsável</th><th>Verificação</th></tr></thead><tbody>${criteria}</tbody></table></div></div><div class="panel-head" style="background:#fff;border:1px solid var(--linha);border-radius:14px;margin-bottom:10px"><h3>Pendências e divergências identificadas</h3><span class="mini">${numberBR((res.findings||[]).length)} achado(s)</span></div><div class="audit-cards">${findings||'<div class="empty-state">Nenhum achado para o filtro selecionado.</div>'}</div>`;
+      root.innerHTML=`<div class="st">Critérios de Auditoria</div><div class="criteria-card-grid">${criteria||'<div class="empty-state">Nenhum critério cadastrado.</div>'}</div><div class="st">Pendências e Divergências Identificadas</div><div class="audit-card-grid">${findings||'<div class="empty-state">Nenhum achado para o filtro selecionado.</div>'}</div>`;
     }
 
     async function loadMetas(){
@@ -711,9 +806,9 @@
         const isPublico=/p[uú]blico/i.test(String(m.nome||'')+' '+String(m.indicador||''));
         const current=isPublico?null:Number(res.totalMapeadas||0); const target=Number(m.metaFisicaNumero||0);
         const prog=!isPublico&&target?Math.min(100,current/target*100):0;
-        return `<article class="goal-card"><h3>${esc(m.nome)}</h3><div class="goal-status">${esc(m.status||'Status não informado')}</div><p>${esc(m.resultadoEsperado)}</p><p><b>Indicador:</b> ${esc(m.indicador)}</p><p><b>Meio de verificação:</b> ${esc(m.meioVerificacao)}</p>${isPublico?`<div class="agent-box next-action"><div class="agent-label">Público consolidado</div><p>${esc(res.publicoStatus||'Aguardando borderôs/relatórios')}</p></div>`:`<div class="goal-progress"><span style="width:${prog}%"></span></div><div class="goal-numbers"><span>${numberBR(current)} mapeadas</span><span>${numberBR(target)} previstas</span></div>`}<p>${esc(m.observacao)}</p></article>`;
+        return `<article class="goal-card meta-card-juntos"><h3>${esc(m.nome)}</h3><div class="goal-status">${esc(m.status||'Status não informado')}</div><p>${esc(m.resultadoEsperado)}</p><p><b>Indicador:</b> ${esc(m.indicador)}</p><p><b>Meio de verificação:</b> ${esc(m.meioVerificacao)}</p>${isPublico?`<div class="agent-box next-action"><div class="agent-label">Público consolidado</div><p>${esc(res.publicoStatus||'Aguardando borderôs/relatórios')}</p></div>`:`<div class="goal-progress"><span style="width:${prog}%"></span></div><div class="goal-numbers"><span>${numberBR(current)} mapeadas</span><span>${numberBR(target)} previstas</span></div>`}<p>${esc(m.observacao)}</p></article>`;
       }).join('');
-      root.innerHTML=`<div class="goal-grid">${cards||'<div class="empty-state">Nenhuma meta cadastrada.</div>'}</div>`;
+      root.innerHTML=`<div class="meta-card-grid">${cards||'<div class="empty-state">Nenhuma meta cadastrada.</div>'}</div>`;
     }
 
     function renderGenericPagination(res,fn){
