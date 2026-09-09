@@ -54,8 +54,6 @@
     .topbar{position:sticky;top:0;z-index:50;background:linear-gradient(120deg,var(--azul-escuro),var(--azul));color:#fff;box-shadow:0 7px 24px rgba(2,23,56,.22)}
     .topbar-inner{max-width:1560px;margin:auto;padding:16px 24px 12px;display:flex;gap:20px;align-items:center;justify-content:space-between}
     .brand-cluster{display:flex;align-items:center;gap:14px;min-width:0}
-    .institution-logo{width:76px;height:52px;flex:0 0 auto;background:#fff;border:1px solid rgba(255,255,255,.3);border-radius:11px;padding:5px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.14)}
-    .institution-logo img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
     .brand{min-width:0}
     .brand-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .brand h1{margin:0;font:800 21px/1.2 'Montserrat',sans-serif;letter-spacing:-.02em}
@@ -230,7 +228,7 @@
     @media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.section-kpis{grid-template-columns:repeat(3,1fr)}.summary-grid{grid-template-columns:1fr}.rank-grid{grid-template-columns:1fr}.filters-grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:900px){.activity-grid{grid-template-columns:1fr}.audit-cards,.goal-grid{grid-template-columns:1fr}.facts-row{grid-template-columns:repeat(2,1fr)}.filters-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:760px){.topbar-inner{align-items:flex-start;flex-direction:column}.header-actions{justify-content:flex-start}.kpi-grid{grid-template-columns:repeat(2,1fr)}.page-head{flex-direction:column}.coverage-row{grid-template-columns:130px 1fr 42px}main{padding:18px 14px 50px}.topbar-inner,.nav-shell{padding-left:14px;padding-right:14px}}
-    @media(max-width:520px){.kpi-grid{grid-template-columns:1fr}.section-kpis{grid-template-columns:1fr 1fr}.filters-grid{grid-template-columns:1fr}.evidence-row{grid-template-columns:13px 1fr}.evidence-row .evidence-state,.evidence-link{grid-column:2}.finance-strip{grid-template-columns:repeat(2,1fr)}.coverage-row{grid-template-columns:1fr}.bar-value{text-align:left}.brand-cluster{gap:10px}.institution-logo{width:66px;height:46px}.brand h1{font-size:18px}.page-head h2{font-size:20px}.login-card{padding:24px}}
+    @media(max-width:520px){.kpi-grid{grid-template-columns:1fr}.section-kpis{grid-template-columns:1fr 1fr}.filters-grid{grid-template-columns:1fr}.evidence-row{grid-template-columns:13px 1fr}.evidence-row .evidence-state,.evidence-link{grid-column:2}.finance-strip{grid-template-columns:repeat(2,1fr)}.coverage-row{grid-template-columns:1fr}.bar-value{text-align:left}.brand-cluster{gap:10px}.brand h1{font-size:18px}.page-head h2{font-size:20px}.login-card{padding:24px}}
 
 
     /* ===== PULSA SP — PADRÃO VISUAL JUNTOS ===== */
@@ -250,8 +248,8 @@
 
     .hdr.topbar{background:var(--az);box-shadow:0 2px 10px rgba(0,0,0,.3)}
     .hdri.topbar-inner{max-width:1220px;min-height:68px;padding:8px 24px;gap:18px}
-    .brandwrap{gap:14px}.institution-logo{background:transparent;border:0;box-shadow:none;width:auto;height:auto;padding:0;border-radius:0}
-    .hlogo{height:43px;max-width:150px;object-fit:contain;background:var(--br);border-radius:8px;padding:5px 10px}
+    .brandwrap{gap:14px}
+    .hlogo{display:block;width:72px;height:52px;flex:0 0 72px;object-fit:contain;background:var(--br);border-radius:8px;padding:4px}
     .hdiv{width:1px;height:34px;background:rgba(255,255,255,.2)}
     .htit{color:var(--am)!important;font:700 15px 'Montserrat',sans-serif!important;letter-spacing:.5px!important}
     .hsub{color:rgba(255,255,255,.62)!important;font-size:10.5px!important;margin-top:2px!important}
@@ -295,8 +293,28 @@
     .meta-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.meta-card-juntos.goal-card{background:#fff;border:1.5px solid var(--bd);border-radius:14px;padding:18px;box-shadow:none;min-height:280px}.meta-card-juntos.goal-card h3{font:700 13px Montserrat;color:var(--az)}.goal-progress{height:11px}.goal-progress span{background:var(--ci)}
 
     @media(max-width:1000px){.diag-top{grid-template-columns:repeat(2,1fr)}.g4,.g3{grid-template-columns:repeat(2,1fr)}.activity-card-grid,.activity-grid,.evidence-card-grid,.finance-card-grid,.criteria-card-grid,.audit-card-grid,.meta-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.header-actions{display:none}.activity-card-evidence{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:650px){.diag-top,.g4,.g3,.g2,.activity-card-grid,.activity-grid,.evidence-card-grid,.finance-card-grid,.criteria-card-grid,.audit-card-grid,.meta-card-grid{grid-template-columns:1fr}.hdri.topbar-inner{padding:8px 14px}.hlogo{height:38px;max-width:105px}.hsub{display:none}.wrap{padding:18px 12px}.activity-card-evidence{grid-template-columns:repeat(2,1fr)}.finance-values,.finance-data,.finance-mini{grid-template-columns:1fr}.pbox.login-card{padding:30px 24px}.nav-shell{padding-left:12px;padding-right:12px}.page-head{flex-direction:column}}
+    @media(max-width:650px){.diag-top,.g4,.g3,.g2,.activity-card-grid,.activity-grid,.evidence-card-grid,.finance-card-grid,.criteria-card-grid,.audit-card-grid,.meta-card-grid{grid-template-columns:1fr}.hdri.topbar-inner{padding:8px 14px}.hlogo{width:62px;height:46px;flex-basis:62px}.hsub{display:none}.wrap{padding:18px 12px}.activity-card-evidence{grid-template-columns:repeat(2,1fr)}.finance-values,.finance-data,.finance-mini{grid-template-columns:1fr}.pbox.login-card{padding:30px 24px}.nav-shell{padding-left:12px;padding-right:12px}.page-head{flex-direction:column}}
 
+
+    /* CABEÇALHO PULSA — estrutura idêntica ao padrão Juntos */
+    .hdr.topbar{background:var(--az);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+    .hdri.topbar-inner{max-width:1220px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;min-height:68px;padding:8px 24px;gap:18px}
+    .brand-cluster.brandwrap{display:flex;align-items:center;gap:14px;min-width:0}
+    .hlogo{display:block;width:72px;height:52px;flex:0 0 72px;max-width:72px;max-height:52px;object-fit:contain;background:#fff;border-radius:8px;padding:4px}
+    .hdiv{width:1px;height:34px;background:rgba(255,255,255,.2);flex:0 0 1px}
+    .brand{min-width:0}
+    .htit{color:var(--am)!important;font:700 15px 'Montserrat',sans-serif!important;letter-spacing:.5px!important;white-space:nowrap}
+    .hsub{color:rgba(255,255,255,.62)!important;font-size:10.5px!important;margin-top:2px!important;max-width:520px;line-height:1.35}
+    .agent-hidden{display:none!important}
+    .hnav{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+    .nbtn.nav-tab{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.65);font-size:10.5px;font-weight:700;letter-spacing:.45px;padding:8px 11px;border-radius:8px;text-transform:uppercase;box-shadow:none}
+    .nbtn.nav-tab:hover{color:#fff;background:rgba(255,255,255,.1)}
+    .nbtn.nav-tab.on,.nbtn.nav-tab.active{color:var(--am);background:rgba(236,194,3,.15);box-shadow:none}
+    .nbtn.nav-logout{border-left:1px solid rgba(255,255,255,.18);border-radius:0 8px 8px 0;margin-left:4px}
+    .quick-links{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px;padding:10px 12px}
+    .quick-link{font:700 9.5px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.25px;text-decoration:none;color:var(--az);background:#e8f7fb;border:1px solid #a8deea;border-radius:8px;padding:7px 10px}
+    .quick-link:hover{background:var(--az);border-color:var(--az);color:var(--am)}
+    @media(max-width:950px){.hnav{display:none}.hdri.topbar-inner{padding:8px 14px}.hlogo{width:62px;height:46px;flex-basis:62px;max-width:62px;max-height:46px}.hsub{display:none}}
   </style>
 </head>
 <body>
@@ -317,24 +335,14 @@
   <header class="topbar hdr">
     <div class="topbar-inner hdri">
       <div class="brand-cluster brandwrap">
-        <div class="institution-logo" aria-label="Instituto BR"><img class="hlogo" src="./assets/logo-instituto-br.png" alt="Instituto BR"></div>
+        <img class="hlogo" src="./assets/logo-instituto-br.png" alt="Instituto BR">
         <div class="hdiv"></div>
         <div class="brand">
-          <div class="brand-line">
-            <h1 class="htit">PULSA SP · SMPC</h1>
-            <span id="agentBadge" class="agent-badge">AGENTE_PULSA_V1</span>
-          </div>
-          <p class="hsub">Periferias Urbanas, Linguagens, Saberes e Arte · Sistema de Monitoramento e Prestação de Contas</p>
+          <div class="htit">PULSA SP · SMPC</div>
+          <div class="hsub">Periferias Urbanas, Linguagens, Saberes e Arte · Sistema de Monitoramento e Prestação de Contas</div>
+          <span id="agentBadge" class="agent-hidden">AGENTE_PULSA_V1</span>
         </div>
       </div>
-      <div class="header-actions">
-        <a id="driveLink" class="link-action" href="#" target="_blank" rel="noopener">Drive PULSA</a>
-        <a id="sheetLink" class="link-action" href="#" target="_blank" rel="noopener">Planilha de Conformidade</a>
-        <a id="programLink" class="link-action" href="#" target="_blank" rel="noopener">Programação Oficial</a>
-        <button class="ghost-btn" onclick="sair()">Sair</button>
-      </div>
-    </div>
-    <div class="nav-shell">
       <nav class="nav-tabs hnav" aria-label="Navegação principal">
         <button class="nav-tab nbtn active on" data-tab="resumo" onclick="trocarAba('resumo',this)">Resumo</button>
         <button class="nav-tab nbtn" data-tab="espetaculos" onclick="trocarAba('espetaculos',this)">Espetáculos</button>
@@ -342,6 +350,7 @@
         <button class="nav-tab nbtn" data-tab="financeiro" onclick="trocarAba('financeiro',this)">Financeiro</button>
         <button class="nav-tab nbtn" data-tab="auditoria" onclick="trocarAba('auditoria',this)">Auditoria</button>
         <button class="nav-tab nbtn" data-tab="metas" onclick="trocarAba('metas',this)">Metas</button>
+        <button class="nav-tab nbtn nav-logout" onclick="sair()">Sair</button>
       </nav>
     </div>
   </header>
@@ -353,6 +362,11 @@
       <div class="page-head">
         <div><h2 class="st">Resumo executivo</h2><p>Visão consolidada de execução, conformidade documental, evidências e alertas prioritários.</p></div>
         <div id="updatedAt" class="updated">Atualização: --</div>
+      </div>
+      <div class="quick-links card" aria-label="Acessos institucionais">
+        <a id="driveLink" class="quick-link" href="#" target="_blank" rel="noopener">Drive PULSA</a>
+        <a id="sheetLink" class="quick-link" href="#" target="_blank" rel="noopener">Planilha de Conformidade</a>
+        <a id="programLink" class="quick-link" href="#" target="_blank" rel="noopener">Programação Oficial</a>
       </div>
       <div id="summaryContent"></div>
     </section>
