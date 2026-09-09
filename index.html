@@ -840,9 +840,16 @@
     function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),4200);}
 
     window.addEventListener('load',()=>{
-      TOKEN=sessionStorage.getItem('pulsaPainelToken')||'';
-      document.getElementById('senha').addEventListener('keydown',e=>{if(e.key==='Enter')entrar();});
-      if(TOKEN){document.getElementById('login').classList.add('hidden');carregarBootstrap();}
+      TOKEN='';
+      BOOT=null;
+      sessionStorage.removeItem('pulsaPainelToken');
+      document.getElementById('login').classList.remove('hidden');
+      const senha=document.getElementById('senha');
+      if(senha){
+        senha.value='';
+        senha.addEventListener('keydown',e=>{if(e.key==='Enter')entrar();});
+        setTimeout(()=>senha.focus(),80);
+      }
     });
   </script>
 </body>
