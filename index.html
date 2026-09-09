@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>PULSA SP | SMPC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --azul:#092040;
+      --ciano:#00B7D7;
+      --amarelo:#ECC203;
+      --cinza:#EFF1F3;
+      --azul-escuro:#021738;
+      --branco:#FFFFFF;
+      --verde:#2E7D5B;
+      --ambar:#B78318;
+      --vermelho:#A74444;
+      --neutro:#AEB7C2;
+      --texto:#1D2D3F;
+      --muted:#6E7E8F;
+      --linha:#DDE4EA;
+      --shadow:0 10px 34px rgba(2,23,56,.08);
+      --shadow-lg:0 18px 52px rgba(2,23,56,.16);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:#F7F9FB;color:var(--texto);font:14px/1.55 'Open Sans',Arial,sans-serif}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
+    .montserrat{font-family:'Montserrat',Arial,sans-serif}
+
+    #login{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 15% 15%,rgba(0,183,215,.22),transparent 30%),linear-gradient(135deg,var(--azul-escuro),var(--azul));display:grid;place-items:center;padding:22px}
+    .login-card{width:min(430px,100%);background:var(--branco);border-radius:24px;padding:30px;box-shadow:0 30px 80px rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.45)}
+    .login-kicker{font:700 11px/1 'Montserrat',sans-serif;letter-spacing:.13em;text-transform:uppercase;color:var(--ciano);margin-bottom:10px}
+    .login-card h1{font:800 28px/1.15 'Montserrat',sans-serif;margin:0;color:var(--azul-escuro)}
+    .login-card p{color:var(--muted);margin:10px 0 20px}
+    .login-card label{display:block;font-weight:700;color:var(--azul);font-size:12px;margin-bottom:7px}
+    .login-card input{width:100%;border:1px solid var(--linha);border-radius:12px;padding:13px 14px;outline:none;background:#FBFCFD}
+    .login-card input:focus{border-color:var(--ciano);box-shadow:0 0 0 3px rgba(0,183,215,.12)}
+    .primary-btn{border:0;background:linear-gradient(135deg,var(--ciano),#008FAF);color:#fff;font:700 13px 'Montserrat',sans-serif;border-radius:11px;padding:12px 16px;box-shadow:0 8px 20px rgba(0,183,215,.22)}
+    .login-card .primary-btn{width:100%;margin-top:12px}
+    .login-error{min-height:18px;color:var(--vermelho);font-size:12px;margin-top:9px}
+
+    .topbar{position:sticky;top:0;z-index:50;background:linear-gradient(120deg,var(--azul-escuro),var(--azul));color:#fff;box-shadow:0 7px 24px rgba(2,23,56,.22)}
+    .topbar-inner{max-width:1560px;margin:auto;padding:16px 24px 12px;display:flex;gap:20px;align-items:center;justify-content:space-between}
+    .brand-cluster{display:flex;align-items:center;gap:14px;min-width:0}
+    .institution-logo{width:76px;height:52px;flex:0 0 auto;background:#fff;border:1px solid rgba(255,255,255,.3);border-radius:11px;padding:5px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.14)}
+    .institution-logo img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+    .brand{min-width:0}
+    .brand-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .brand h1{margin:0;font:800 21px/1.2 'Montserrat',sans-serif;letter-spacing:-.02em}
+    .brand p{margin:4px 0 0;color:#CFDCEA;font-size:12px}
+    .agent-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);padding:6px 9px;border-radius:999px;font:700 10px 'Montserrat',sans-serif;letter-spacing:.04em}
+    .agent-badge:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--ciano);box-shadow:0 0 0 3px rgba(0,183,215,.17)}
+    .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .ghost-btn,.link-action{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:8px 10px;text-decoration:none;font-weight:700;font-size:11px}
+    .ghost-btn:hover,.link-action:hover{background:rgba(255,255,255,.14)}
+
+    .nav-shell{max-width:1560px;margin:auto;padding:0 24px 10px;overflow-x:auto}
+    .nav-tabs{display:flex;gap:6px;min-width:max-content}
+    .nav-tab{border:0;background:transparent;color:#C9D7E4;padding:9px 12px;border-radius:9px;font:700 11px 'Montserrat',sans-serif;letter-spacing:.01em}
+    .nav-tab.active{background:#fff;color:var(--azul);box-shadow:0 4px 14px rgba(0,0,0,.15)}
+
+    main{max-width:1560px;margin:0 auto;padding:22px 24px 60px}
+    .page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:18px}
+    .page-head h2{font:800 24px/1.2 'Montserrat',sans-serif;color:var(--azul-escuro);margin:0}
+    .page-head p{margin:5px 0 0;color:var(--muted)}
+    .updated{font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--linha);padding:7px 9px;border-radius:999px;white-space:nowrap}
+
+    .kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+    .kpi-card{position:relative;background:#fff;border:1px solid var(--linha);border-radius:16px;padding:16px;box-shadow:var(--shadow);overflow:hidden;min-height:112px;text-align:left;width:100%}
+    button.kpi-card{appearance:none}
+    .kpi-card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ciano)}
+    .kpi-card.warn:before{background:var(--amarelo)}
+    .kpi-card.danger:before{background:var(--vermelho)}
+    .kpi-card .kpi-value{font:800 27px 'Montserrat',sans-serif;color:var(--azul-escuro);margin-top:6px}
+    .kpi-card .kpi-label{font:700 11px 'Montserrat',sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.035em}
+    .kpi-card .kpi-hint{font-size:10px;color:#8C98A6;margin-top:6px}
+    button.kpi-card:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(2,23,56,.12)}
+
+    .summary-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(310px,.8fr);gap:16px;margin-bottom:16px}
+    .panel{background:#fff;border:1px solid var(--linha);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .panel-head{padding:16px 18px;border-bottom:1px solid var(--linha);display:flex;justify-content:space-between;gap:14px;align-items:center}
+    .panel-head h3{margin:0;font:800 15px 'Montserrat',sans-serif;color:var(--azul-escuro)}
+    .panel-head .mini{color:var(--muted);font-size:10px}
+    .panel-body{padding:17px 18px}
+
+    .coverage-list{display:grid;gap:13px}
+    .coverage-row{display:grid;grid-template-columns:minmax(150px,210px) 1fr 52px;gap:12px;align-items:center}
+    .coverage-label{font-size:12px;font-weight:700;color:#31465D}
+    .bar{height:9px;background:var(--cinza);border-radius:999px;overflow:hidden;position:relative}
+    .bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--ciano),#068CAA);border-radius:inherit;min-width:0}
+    .bar-value{font:700 11px 'Montserrat',sans-serif;color:var(--azul);text-align:right}
+
+    .meta-card{background:linear-gradient(145deg,var(--azul-escuro),var(--azul));color:#fff;border-radius:15px;padding:18px;min-height:100%}
+    .meta-card .small{color:#C9D7E4;font-size:11px;text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+    .meta-card .big{font:800 31px 'Montserrat',sans-serif;margin:8px 0 2px}
+    .meta-card .sub{color:#D9E5EE;font-size:11px}
+    .meta-track{height:8px;background:rgba(255,255,255,.13);border-radius:999px;overflow:hidden;margin:15px 0 8px}
+    .meta-track span{display:block;height:100%;background:var(--amarelo);border-radius:999px}
+
+    .rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+    .rank-list{display:grid;gap:8px}
+    .rank-item{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;border:1px solid #E7ECF1;border-radius:11px;padding:10px 11px;background:#FCFDFE}
+    .rank-num{width:30px;height:30px;border-radius:9px;background:var(--cinza);display:grid;place-items:center;font:800 11px 'Montserrat',sans-serif;color:var(--azul)}
+    .rank-title{font-weight:700;font-size:12px;color:#2C4158}
+    .rank-meta{font-size:10px;color:var(--muted);margin-top:2px}
+    .rank-score{font:800 12px 'Montserrat',sans-serif;color:var(--azul)}
+    .rank-item button{all:unset;cursor:pointer;display:contents}
+
+    .alert-list{display:grid;gap:9px}
+    .alert-row{border-left:4px solid var(--vermelho);background:#FFF9F9;border-radius:9px;padding:10px 12px}
+    .alert-row.medium{border-left-color:var(--amarelo);background:#FFFCF4}
+    .alert-row .alert-title{font-weight:800;font-size:12px;color:#33485E}
+    .alert-row .alert-desc{font-size:11px;color:var(--muted);margin-top:3px}
+
+    .empty-state{padding:36px 18px;text-align:center;color:var(--muted)}
+    .loading{padding:44px;text-align:center;color:var(--muted)}
+    .loader-dot{width:9px;height:9px;background:var(--ciano);border-radius:50%;display:inline-block;margin-right:7px;animation:pulse 1s infinite alternate}
+    @keyframes pulse{to{transform:scale(1.65);opacity:.35}}
+    .toast{position:fixed;right:20px;bottom:20px;z-index:80;background:var(--azul-escuro);color:#fff;border-radius:12px;padding:11px 14px;box-shadow:var(--shadow-lg);font-size:12px;max-width:360px}
+
+
+
+    .data-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .table-wrap{overflow:auto;border:1px solid var(--linha);border-radius:14px;background:#fff;box-shadow:var(--shadow)}
+    .data-table{width:100%;border-collapse:collapse;min-width:900px}
+    .data-table th{position:sticky;top:0;background:var(--azul);color:#fff;text-align:left;padding:10px 11px;font:700 10px 'Montserrat',sans-serif;letter-spacing:.025em;white-space:nowrap}
+    .data-table td{padding:10px 11px;border-bottom:1px solid #EDF1F4;vertical-align:top;font-size:10.5px;color:#3B5065}
+    .data-table tr:last-child td{border-bottom:0}
+    .data-table tr:hover td{background:#FBFDFE}
+    .state-badge{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:5px 8px;border:1px solid var(--linha);background:#F7F9FB;font:700 9px 'Montserrat',sans-serif;white-space:nowrap;color:#55687B}
+    .state-badge .signal{width:7px;height:7px;border-radius:50%;background:var(--neutro)}
+    .state-badge.validado .signal{background:var(--verde)}
+    .state-badge.nao-verificado .signal{background:var(--ambar)}
+    .state-badge.divergente .signal{background:var(--vermelho)}
+    .section-kpis{display:grid;grid-template-columns:repeat(5,minmax(135px,1fr));gap:10px;margin-bottom:14px}
+    .mini-kpi{background:#fff;border:1px solid var(--linha);border-radius:13px;padding:12px;box-shadow:var(--shadow)}
+    .mini-kpi b{display:block;font:800 19px 'Montserrat',sans-serif;color:var(--azul-escuro);margin-top:4px}
+    .mini-kpi span{font:700 9px 'Montserrat',sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.035em}
+    .audit-section{margin-bottom:16px}
+    .audit-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+    .audit-card{background:#fff;border:1px solid var(--linha);border-radius:14px;padding:13px;box-shadow:var(--shadow)}
+    .audit-card.critical{border-left:4px solid var(--vermelho)}
+    .audit-card.medium{border-left:4px solid var(--amarelo)}
+    .audit-card h4{font:800 12px 'Montserrat',sans-serif;margin:0;color:var(--azul-escuro)}
+    .audit-card p{font-size:10.5px;color:var(--muted);margin:6px 0}
+    .audit-card .audit-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+    .scope-badge{display:inline-flex;border:1px solid #DCE4EA;border-radius:999px;padding:4px 7px;background:#F7F9FB;font:700 8.5px 'Montserrat',sans-serif;color:#57697B;text-transform:uppercase}
+    .scope-badge.global{background:#EEF8FA;border-color:#CDECF2;color:#087B91}
+    .goal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .goal-card{background:#fff;border:1px solid var(--linha);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+    .goal-card h3{font:800 14px 'Montserrat',sans-serif;margin:0;color:var(--azul-escuro)}
+    .goal-card .goal-status{font:700 9px 'Montserrat',sans-serif;color:#65778A;text-transform:uppercase;margin-top:5px}
+    .goal-card p{font-size:10.5px;color:var(--muted);margin:9px 0}
+    .goal-progress{height:9px;background:var(--cinza);border-radius:999px;overflow:hidden;margin:11px 0 6px}
+    .goal-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--ciano),#078FA9);border-radius:inherit}
+    .goal-numbers{display:flex;justify-content:space-between;gap:12px;font:700 10px 'Montserrat',sans-serif;color:var(--azul)}
+    .inline-link{color:var(--azul);font-weight:700;text-decoration:none}
+
+    .filters-panel{background:#fff;border:1px solid var(--linha);border-radius:16px;padding:14px;box-shadow:var(--shadow);margin-bottom:16px}
+    .filters-grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px}
+    .filter-field label{display:block;font:700 10px 'Montserrat',sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 5px}
+    .filter-field input,.filter-field select{width:100%;border:1px solid var(--linha);border-radius:10px;background:#FBFCFD;padding:9px 10px;color:var(--texto);outline:none}
+    .filter-field input:focus,.filter-field select:focus{border-color:var(--ciano);box-shadow:0 0 0 3px rgba(0,183,215,.09)}
+    .filter-actions{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;margin-top:10px}
+    .secondary-btn{border:1px solid var(--linha);background:#fff;color:var(--azul);font-weight:700;border-radius:10px;padding:9px 12px}
+    .advanced{margin-top:10px;border-top:1px solid #EDF1F4;padding-top:10px}
+    .advanced summary{cursor:pointer;font:700 11px 'Montserrat',sans-serif;color:var(--azul);margin-bottom:10px}
+    .activity-meta-line{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:4px 0 12px;color:var(--muted);font-size:11px}
+    .activity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+    .activity-card{background:#fff;border:1px solid var(--linha);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+    .activity-card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ciano)}
+    .activity-card.priority-alta:before{background:var(--vermelho)}
+    .activity-card.priority-media:before{background:var(--amarelo)}
+    .activity-card-head{padding:16px 17px 13px;border-bottom:1px solid #EDF1F4;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .activity-card h3{font:800 16px/1.35 'Montserrat',sans-serif;color:var(--azul-escuro);margin:0}
+    .activity-sub{font-size:11px;color:var(--muted);margin-top:5px}
+    .status-stack{display:flex;flex-direction:column;gap:5px;align-items:flex-end;min-width:128px}
+    .status-pill{border-radius:999px;padding:5px 8px;font:700 9px 'Montserrat',sans-serif;letter-spacing:.025em;text-transform:uppercase;border:1px solid var(--linha);background:#F7F9FB;color:#526477;white-space:nowrap}
+    .status-pill.high{border-color:#E9CACA;background:#FFF5F5;color:#8E3838}
+    .status-pill.medium{border-color:#EADDB9;background:#FFFBF0;color:#82600C}
+    .status-pill.good{border-color:#CDE2D8;background:#F4FAF7;color:#28694E}
+    .activity-body{padding:15px 17px 17px}
+    .facts-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:13px}
+    .fact-box{border:1px solid #E8EDF1;background:#FAFBFC;border-radius:10px;padding:8px 9px;min-width:0}
+    .fact-box b{display:block;font:700 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.035em;color:var(--muted);margin-bottom:3px}
+    .fact-box span{font-size:11px;color:#2C4158;display:block;overflow:hidden;text-overflow:ellipsis}
+    .evidence-title{font:800 12px 'Montserrat',sans-serif;color:var(--azul);margin:3px 0 8px}
+    .evidence-list{display:grid;gap:6px}
+    .evidence-row{display:grid;grid-template-columns:13px minmax(125px,.8fr) 1.35fr auto;gap:8px;align-items:center;border:1px solid #E8EDF1;border-radius:9px;padding:7px 9px;background:#FCFDFE;min-height:36px}
+    .evidence-row .signal{display:block;width:8px;height:8px;border-radius:50%;background:var(--neutro);box-shadow:0 0 0 3px rgba(174,183,194,.13)}
+    .evidence-row b{font-size:10px;color:#344A60}
+    .evidence-row .evidence-state{font-size:10px;color:var(--muted)}
+    .evidence-row.state-validado .signal{background:var(--verde);box-shadow:0 0 0 3px rgba(46,125,91,.12)}
+    .evidence-row.state-nao-verificado .signal{background:var(--ambar);box-shadow:0 0 0 3px rgba(183,131,24,.13)}
+    .evidence-row.state-ausente .signal{background:var(--neutro)}
+    .evidence-row.state-divergente .signal{background:var(--vermelho);box-shadow:0 0 0 3px rgba(167,68,68,.12)}
+    .evidence-link{font:700 9px 'Montserrat',sans-serif;color:var(--azul);text-decoration:none;border:1px solid #DCE5EB;padding:4px 6px;border-radius:7px;background:#fff;white-space:nowrap}
+    .finance-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:linear-gradient(135deg,#F4F8FB,#F8FAFC);border:1px solid #E0E8EE;border-radius:10px;padding:9px;margin:12px 0}
+    .finance-strip b{font:700 9px 'Montserrat',sans-serif;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px}
+    .finance-strip span{font-size:10px;color:#2C4158}
+    .agent-box{border-left:3px solid var(--ciano);background:#F5FBFC;border-radius:8px;padding:10px 11px;margin-top:10px}
+    .agent-box .agent-label{font:800 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.04em;color:#087E96;margin-bottom:4px}
+    .agent-box p{margin:0;font-size:10.5px;color:#40556A}
+    .next-action{border-left-color:var(--amarelo);background:#FFFCF4;margin-top:7px}
+    .next-action .agent-label{color:#81610B}
+    .card-buttons{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+    .card-link{font:700 10px 'Montserrat',sans-serif;text-decoration:none;color:#fff;background:var(--azul);border-radius:8px;padding:7px 9px}
+    .card-link.alt{background:#EAF2F6;color:var(--azul);border:1px solid #D8E3EA}
+    .pagination{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:15px;padding:11px 13px;background:#fff;border:1px solid var(--linha);border-radius:13px}
+    .pagination-info{color:var(--muted);font-size:10px}
+    .pagination-buttons{display:flex;gap:6px;flex-wrap:wrap}
+    .page-btn{border:1px solid var(--linha);background:#fff;color:var(--azul);border-radius:8px;min-width:32px;padding:6px 8px;font-weight:700;font-size:10px}
+    .page-btn.active{background:var(--azul);color:#fff;border-color:var(--azul)}
+    .page-btn:disabled{opacity:.4;cursor:default}
+
+    .placeholder{padding:50px 20px;text-align:center;background:#fff;border:1px dashed #CBD5DE;border-radius:16px;color:var(--muted)}
+
+    @media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.section-kpis{grid-template-columns:repeat(3,1fr)}.summary-grid{grid-template-columns:1fr}.rank-grid{grid-template-columns:1fr}.filters-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:900px){.activity-grid{grid-template-columns:1fr}.audit-cards,.goal-grid{grid-template-columns:1fr}.facts-row{grid-template-columns:repeat(2,1fr)}.filters-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.topbar-inner{align-items:flex-start;flex-direction:column}.header-actions{justify-content:flex-start}.kpi-grid{grid-template-columns:repeat(2,1fr)}.page-head{flex-direction:column}.coverage-row{grid-template-columns:130px 1fr 42px}main{padding:18px 14px 50px}.topbar-inner,.nav-shell{padding-left:14px;padding-right:14px}}
+    @media(max-width:520px){.kpi-grid{grid-template-columns:1fr}.section-kpis{grid-template-columns:1fr 1fr}.filters-grid{grid-template-columns:1fr}.evidence-row{grid-template-columns:13px 1fr}.evidence-row .evidence-state,.evidence-link{grid-column:2}.finance-strip{grid-template-columns:repeat(2,1fr)}.coverage-row{grid-template-columns:1fr}.bar-value{text-align:left}.brand-cluster{gap:10px}.institution-logo{width:66px;height:46px}.brand h1{font-size:18px}.page-head h2{font-size:20px}.login-card{padding:24px}}
+  </style>
+</head>
+<body>
+  <section id="login">
+    <div class="login-card">
+      <div class="login-kicker">Acesso institucional</div>
+      <h1>PULSA SP</h1>
+      <p>Sistema de Monitoramento e Prestação de Contas</p>
+      <label for="senha">Senha de acesso</label>
+      <input id="senha" type="password" autocomplete="current-password" placeholder="Informe sua senha">
+      <button class="primary-btn" onclick="entrar()">Entrar no painel</button>
+      <div id="erroLogin" class="login-error"></div>
+    </div>
+  </section>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-cluster">
+        <div class="institution-logo" aria-label="Instituto BR">
+          <img src="./assets/logo-instituto-br.png" alt="Instituto BR">
+        </div>
+        <div class="brand">
+          <div class="brand-line">
+            <h1>PULSA SP</h1>
+            <span id="agentBadge" class="agent-badge">AGENTE_PULSA_V1</span>
+          </div>
+          <p>Periferias Urbanas, Linguagens, Saberes e Arte · SMPC</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a id="driveLink" class="link-action" href="#" target="_blank" rel="noopener">Drive PULSA</a>
+        <a id="sheetLink" class="link-action" href="#" target="_blank" rel="noopener">Planilha de Conformidade</a>
+        <a id="programLink" class="link-action" href="#" target="_blank" rel="noopener">Programação Oficial</a>
+        <button class="ghost-btn" onclick="sair()">Sair</button>
+      </div>
+    </div>
+    <div class="nav-shell">
+      <nav class="nav-tabs" aria-label="Navegação principal">
+        <button class="nav-tab active" data-tab="resumo" onclick="trocarAba('resumo',this)">Resumo</button>
+        <button class="nav-tab" data-tab="espetaculos" onclick="trocarAba('espetaculos',this)">Espetáculos</button>
+        <button class="nav-tab" data-tab="evidencias" onclick="trocarAba('evidencias',this)">Evidências</button>
+        <button class="nav-tab" data-tab="financeiro" onclick="trocarAba('financeiro',this)">Financeiro</button>
+        <button class="nav-tab" data-tab="auditoria" onclick="trocarAba('auditoria',this)">Auditoria</button>
+        <button class="nav-tab" data-tab="metas" onclick="trocarAba('metas',this)">Metas</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div id="globalLoading" class="loading hidden"><span class="loader-dot"></span>Carregando dados oficiais do PULSA SP...</div>
+
+    <section id="pane-resumo" class="pane">
+      <div class="page-head">
+        <div><h2>Resumo executivo</h2><p>Visão consolidada de execução, conformidade documental, evidências e alertas prioritários.</p></div>
+        <div id="updatedAt" class="updated">Atualização: --</div>
+      </div>
+      <div id="summaryContent"></div>
+    </section>
+
+    <section id="pane-espetaculos" class="pane hidden">
+      <div class="page-head">
+        <div><h2>Espetáculos e atividades</h2><p>Dossiês documentais com evidências recebidas, lacunas, divergências e próxima ação do agente.</p></div>
+        <div class="updated">25 por página</div>
+      </div>
+      <div class="filters-panel">
+        <div class="filters-grid">
+          <div class="filter-field"><label>Busca</label><input id="filtroBusca" placeholder="Nome, artista, local, ID"></div>
+          <div class="filter-field"><label>Período</label><select id="filtroPeriodo"><option value="TODAS">Todas as apresentações</option><option value="SEMANA_ATUAL">Semana atual</option><option value="SEMANA_ANTERIOR">Semana anterior</option><option value="MES_ATUAL">Mês atual</option><option value="PERSONALIZADO">Período personalizado</option></select></div>
+          <div class="filter-field"><label>Prioridade</label><select id="filtroPrioridade"><option value="">Todas</option><option value="ALTA">Alta</option><option value="MEDIA">Média</option><option value="BAIXA">Baixa</option><option value="SEM_ACAO_IMEDIATA">Sem ação imediata</option></select></div>
+          <div class="filter-field"><label>Status documental</label><input id="filtroStatus" placeholder="Parcial, atenção, conforme"></div>
+        </div>
+        <details class="advanced">
+          <summary>Filtros avançados</summary>
+          <div class="filters-grid">
+            <div class="filter-field"><label>Atividade</label><input id="filtroAtividade" placeholder="Nome da atividade"></div>
+            <div class="filter-field"><label>Artista / grupo</label><input id="filtroArtista" placeholder="Artista ou grupo"></div>
+            <div class="filter-field"><label>Tipo de equipamento</label><input id="filtroEquipamento" placeholder="Centro Cultural, Casa de Cultura"></div>
+            <div class="filter-field"><label>Local</label><input id="filtroLocal" placeholder="Olido, Juventude..."></div>
+            <div class="filter-field"><label>Conformidade mínima</label><input id="filtroConformidadeMin" type="number" min="0" max="100" placeholder="0"></div>
+            <div class="filter-field"><label>Conformidade máxima</label><input id="filtroConformidadeMax" type="number" min="0" max="100" placeholder="100"></div>
+            <div class="filter-field"><label>Data inicial</label><input id="filtroDataInicio" type="date"></div>
+            <div class="filter-field"><label>Data final</label><input id="filtroDataFim" type="date"></div>
+            <div class="filter-field"><label>Nota Fiscal</label><select id="filtroNF"><option value="">Indiferente</option><option value="sim">Com NF</option></select></div>
+            <div class="filter-field"><label>Foto apresentação</label><select id="filtroFoto"><option value="">Indiferente</option><option value="sim">Com foto</option></select></div>
+            <div class="filter-field"><label>Borderô</label><select id="filtroBordero"><option value="">Indiferente</option><option value="sim">Com borderô</option></select></div>
+            <div class="filter-field"><label>Relatório físico</label><select id="filtroRelatorio"><option value="">Indiferente</option><option value="sim">Com relatório</option></select></div>
+            <div class="filter-field"><label>Divergência</label><select id="filtroDivergencia"><option value="">Indiferente</option><option value="sim">Somente divergentes</option></select></div>
+            <div class="filter-field"><label>Pendência financeira</label><select id="filtroFinanceiro"><option value="">Indiferente</option><option value="sim">Somente pendentes</option></select></div>
+          </div>
+        </details>
+        <div class="filter-actions"><button class="primary-btn" onclick="loadAtividades(1)">Aplicar filtros</button><button class="secondary-btn" onclick="resetAtividadeFiltros()">Limpar filtros</button></div>
+      </div>
+      <div id="activityMeta" class="activity-meta-line"><span>Carregue os dados para visualizar os dossiês.</span></div>
+      <div id="activityList" class="activity-grid"></div>
+      <div id="activityPagination"></div>
+    </section>
+    <section id="pane-evidencias" class="pane hidden">
+      <div class="page-head"><div><h2>Evidências recebidas</h2><p>Inventário de rastreabilidade: origem, pacote recebido, destino, pendência e situação de auditoria.</p></div><div class="updated">Fonte: EVIDENCIAS_EMAIL</div></div>
+      <div id="evidenceContent"></div>
+    </section>
+    <section id="pane-financeiro" class="pane hidden">
+      <div class="page-head"><div><h2>Financeiro e Notas Fiscais</h2><p>Conferência de valores, documentos fiscais e origem do PIX sem inferência de dados.</p></div><div class="updated">Fonte: FINANCEIRO_NF</div></div>
+      <div id="financeContent"></div>
+    </section>
+    <section id="pane-auditoria" class="pane hidden">
+      <div class="page-head"><div><h2>Auditoria e pendências</h2><p>Critérios documentais, achados, divergências e próximos passos de regularização.</p></div><div class="filter-field" style="min-width:180px"><label>Prioridade</label><select id="auditPriority" onchange="loadAuditoria()"><option value="">Todas</option><option value="CRÍTICA">Crítica</option><option value="ALTA">Alta</option><option value="MÉDIA">Média</option><option value="BAIXA">Baixa</option><option value="CONFORME">Conforme</option></select></div></div>
+      <div id="auditContent"></div>
+    </section>
+    <section id="pane-metas" class="pane hidden">
+      <div class="page-head"><div><h2>Metas e monitoramento</h2><p>Meta física, indicadores, meios de verificação e avanço acumulado do projeto.</p></div><div class="updated">Fonte: METAS</div></div>
+      <div id="goalsContent"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script>
+    const PULSA_API_URL = 'COLE_AQUI_URL_DO_WEB_APP_APPS_SCRIPT';
+    let TOKEN = '';
+    let BOOT = null;
+    let ACTIVE_TAB = 'resumo';
+    let KPI_FILTER = null;
+    const PAGE_SIZE = 25;
+    let ACTIVITY_PAGE = 1;
+    let ACTIVITY_RESULT = null;
+    let EVIDENCE_PAGE = 1;
+    let FINANCE_PAGE = 1;
+
+    const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const pct = value => `${Number(value || 0).toLocaleString('pt-BR',{maximumFractionDigits:2})}%`;
+    const numberBR = value => Number(value || 0).toLocaleString('pt-BR');
+    const moneyBR = value => Number(value || 0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+
+    function apiUrlConfigurada(){
+      return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:[?#].*)?$/i.test(String(PULSA_API_URL||'').trim());
+    }
+
+    async function apiPost(action, payload={}){
+      if(!apiUrlConfigurada()){
+        throw new Error('Configure PULSA_API_URL no index.html com a URL /exec do Web App do Apps Script.');
+      }
+      let response;
+      try{
+        response = await fetch(PULSA_API_URL,{
+          method:'POST',
+          redirect:'follow',
+          cache:'no-store',
+          credentials:'omit',
+          referrerPolicy:'no-referrer',
+          headers:{'Content-Type':'text/plain;charset=utf-8'},
+          body:JSON.stringify({action,...payload})
+        });
+      }catch(_err){
+        throw new Error('Não foi possível acessar a API do PULSA. Verifique a publicação do Apps Script e a conexão com a internet.');
+      }
+      const text = await response.text();
+      let json;
+      try{json=JSON.parse(text);}catch(_err){throw new Error('A API do PULSA retornou uma resposta inválida. Verifique a URL e a implantação do Web App.');}
+      if(!json || json.ok!==true) throw new Error((json&& (json.error||json.mensagem)) || 'Falha na API do PULSA.');
+      return json;
+    }
+
+    async function entrar(){
+      const senha = document.getElementById('senha').value;
+      const erro = document.getElementById('erroLogin');
+      erro.textContent = '';
+      if(!senha){erro.textContent='Informe a senha de acesso.';return;}
+      try{
+        const res = await apiPost('login',{senha});
+        if(!res || !res.ok){erro.textContent=(res&&res.mensagem)||'Acesso não autorizado.';return;}
+        TOKEN = res.token;
+        sessionStorage.setItem('pulsaPainelToken',TOKEN);
+        document.getElementById('login').classList.add('hidden');
+        await carregarBootstrap();
+      }catch(err){erro.textContent=err.message||String(err);}
+    }
+
+    async function sair(){
+      try{if(TOKEN) await apiPost('logout',{token:TOKEN});}catch(_e){}
+      TOKEN=''; BOOT=null; sessionStorage.removeItem('pulsaPainelToken'); location.reload();
+    }
+
+    async function carregarBootstrap(){
+      setLoading(true);
+      try{
+        BOOT = (await apiPost('bootstrap',{token:TOKEN})).data;
+        aplicarConfig(BOOT.config||{});
+        renderResumo(BOOT.resumo||{});
+        document.getElementById('updatedAt').textContent='Atualização: '+(BOOT.geradoEm||'fonte oficial');
+      }catch(err){
+        sessionStorage.removeItem('pulsaPainelToken');
+        TOKEN='';
+        document.getElementById('login').classList.remove('hidden');
+        showToast(err.message||String(err));
+      }finally{setLoading(false);}
+    }
+
+    function aplicarConfig(c){
+      document.getElementById('agentBadge').textContent=c.agente||'AGENTE_PULSA_V1';
+      setHref('driveLink',c.pastaRaiz);
+      setHref('sheetLink',c.planilha);
+      setHref('programLink',c.programacaoOficial);
+    }
+
+    function setHref(id,url){
+      const el=document.getElementById(id);
+      if(url){el.href=url;el.classList.remove('hidden');}else{el.href='#';el.classList.add('hidden');}
+    }
+
+    function renderResumo(r){
+      const root=document.getElementById('summaryContent');
+      const target=r.metaApresentacoes||0;
+      const metaPct=r.progressoMetaPercentual==null?0:r.progressoMetaPercentual;
+      const kpis=[
+        ['total',r.totalMapeadas||0,'Apresentações mapeadas','Base cumulativa de atividades',''],
+        ['conformidade',pct(r.conformidadeMedia),'Conformidade média','Sete requisitos centrais',''],
+        ['nf',r.nfs||0,'NFs recebidas','Documentos fiscais localizados',''],
+        ['fotos',r.atividadesComFotos||0,'Com evidência fotográfica','Atividades com foto da apresentação',''],
+        ['completos',r.completos||0,'Dossiês completos','Conformidade documental integral',''],
+        ['pendentes',r.pendentes||0,'Pendências documentais','Atividades ainda incompletas','warn'],
+        ['divergencia',r.divergencias||0,'Divergências críticas','Conflitos que exigem saneamento','danger'],
+        ['naoVerificados',r.naoVerificados||0,'Arquivos não verificados','Recebidos, mas com validação técnica pendente','warn'],
+        ['financeiro',moneyBR(r.valorFiscalVerificado||0),'Valor fiscal localizado','Soma dos valores fiscais carregados','']
+      ];
+      root.innerHTML=`
+        <div class="kpi-grid">${kpis.map(k=>kpiCard(...k)).join('')}</div>
+        <div class="summary-grid">
+          <article class="panel">
+            <div class="panel-head"><div><h3>Cobertura por tipo de evidência</h3><div class="mini">Cobertura validada nos sete requisitos centrais</div></div></div>
+            <div class="panel-body"><div class="coverage-list">${renderCoverage(r.cobertura||{})}</div></div>
+          </article>
+          <article class="panel"><div class="panel-body"><div class="meta-card">
+            <div class="small">Meta de apresentações</div>
+            <div class="big">${numberBR(r.totalMapeadas||0)} <span style="font-size:14px;font-weight:600;color:#C9D7E4">/ ${numberBR(target||0)}</span></div>
+            <div class="sub">Avanço acumulado do projeto conforme a fonte oficial</div>
+            <div class="meta-track"><span style="width:${Math.min(100,Math.max(0,metaPct))}%"></span></div>
+            <div class="sub">${pct(metaPct)} da meta física cadastrada</div>
+          </div></div></article>
+        </div>
+        <div class="rank-grid">
+          <article class="panel"><div class="panel-head"><h3>Dossiês mais completos</h3></div><div class="panel-body"><div class="rank-list">${renderRank(r.topCompletos||[],false)}</div></div></article>
+          <article class="panel"><div class="panel-head"><h3>Prioridade de saneamento</h3></div><div class="panel-body"><div class="rank-list">${renderRank(r.topCriticos||[],true)}</div></div></article>
+        </div>
+        <article class="panel"><div class="panel-head"><div><h3>Alertas críticos do agente</h3><div class="mini">Achados prioritários da trilha de auditoria</div></div></div><div class="panel-body"><div class="alert-list">${renderAlerts(r.alertasCriticos||[])}</div></div></article>`;
+      root.querySelectorAll('[data-kpi-filter]').forEach(el=>el.addEventListener('click',()=>onKpiClick(el.dataset.kpiFilter)));
+    }
+
+    function kpiCard(filter,value,label,hint,cls){
+      return `<button class="kpi-card ${esc(cls||'')}" data-kpi-filter="${esc(filter)}"><div class="kpi-label">${esc(label)}</div><div class="kpi-value">${esc(value)}</div><div class="kpi-hint">${esc(hint)}</div></button>`;
+    }
+
+    function renderCoverage(cobertura){
+      const order=['nf','contrato','fotoApresentacao','fotoPublico','bordero','relatorio','programacao'];
+      return order.map(key=>{
+        const item=cobertura[key]||{label:key,coberturaValidada:0,validados:0,total:0};
+        return `<div class="coverage-row"><div class="coverage-label">${esc(item.label)}</div><div class="bar"><span style="width:${Math.max(0,Math.min(100,Number(item.coberturaValidada||0)))}%"></span></div><div class="bar-value">${esc(item.coberturaValidada||0)}%</div></div>`;
+      }).join('');
+    }
+
+    function renderRank(items,critical){
+      if(!items.length) return '<div class="empty-state">Sem registros suficientes para este ranking.</div>';
+      return items.map((a,i)=>`<div class="rank-item" data-activity-id="${esc(a.id)}"><div class="rank-num">${i+1}</div><div><div class="rank-title">${esc(a.nome||a.id)}</div><div class="rank-meta">${esc(a.data||'')} · ${critical?'Prioridade '+esc(a.prioridade||''):'Conformidade documental'}</div></div><div class="rank-score">${esc(a.conformidade||0)}%</div></div>`).join('');
+    }
+
+    function renderAlerts(items){
+      if(!items.length) return '<div class="empty-state">Nenhum alerta crítico retornado pela fonte oficial.</div>';
+      return items.map(raw=>{
+        const r=raw.values||raw;
+        const title=r['Espetáculo / Ação']||r['ID / Escopo']||r.Tema||'Achado de auditoria';
+        const desc=r['Próximo passo']||r.Situação||r.situacao||'';
+        const medium=/m[eé]dia|baixa/i.test(String(r.Prioridade||''));
+        return `<div class="alert-row ${medium?'medium':''}"><div class="alert-title">${esc(title)}</div><div class="alert-desc">${esc(desc)}</div></div>`;
+      }).join('');
+    }
+
+    function onKpiClick(filter){
+      KPI_FILTER=filter;
+      const btn=document.querySelector('.nav-tab[data-tab="espetaculos"]');
+      trocarAba('espetaculos',btn);
+    }
+
+    function trocarAba(nome,btn){
+      ACTIVE_TAB=nome;
+      document.querySelectorAll('.nav-tab').forEach(x=>x.classList.toggle('active',x===btn));
+      document.querySelectorAll('.pane').forEach(x=>x.classList.add('hidden'));
+      const pane=document.getElementById('pane-'+nome); if(pane) pane.classList.remove('hidden');
+      if(nome==='resumo' && BOOT) renderResumo(BOOT.resumo||{});
+      if(nome==='espetaculos') loadAtividades(1);
+      if(nome==='evidencias') loadEvidencias(1);
+      if(nome==='financeiro') loadFinanceiro(1);
+      if(nome==='auditoria') loadAuditoria();
+      if(nome==='metas') loadMetas();
+    }
+
+
+    function coletarFiltrosAtividades(){
+      const value=id=>{const el=document.getElementById(id);return el?el.value:''};
+      const bool=id=>value(id)==='sim';
+      const filtros={
+        busca:value('filtroBusca'), periodo:value('filtroPeriodo')||'TODAS', prioridade:value('filtroPrioridade'), status:value('filtroStatus'),
+        nome:value('filtroAtividade'), artista:value('filtroArtista'), tipoEquipamento:value('filtroEquipamento'), local:value('filtroLocal'),
+        dataInicio:value('filtroDataInicio'), dataFim:value('filtroDataFim'),
+        temNF:bool('filtroNF')||undefined, temFoto:bool('filtroFoto')||undefined, temBordero:bool('filtroBordero')||undefined,
+        temRelatorio:bool('filtroRelatorio')||undefined, divergencia:bool('filtroDivergencia')||undefined,
+        pendenciaFinanceira:bool('filtroFinanceiro')||undefined
+      };
+      const min=value('filtroConformidadeMin'),max=value('filtroConformidadeMax');
+      if(min!=='') filtros.minConformidade=Number(min);
+      if(max!=='') filtros.maxConformidade=Number(max);
+      aplicarFiltroKpi(filtros);
+      return filtros;
+    }
+
+    function aplicarFiltroKpi(f){
+      if(!KPI_FILTER) return;
+      if(KPI_FILTER==='nf') f.temNF=true;
+      if(KPI_FILTER==='fotos') f.temFoto=true;
+      if(KPI_FILTER==='completos'){f.minConformidade=100;f.maxConformidade=100;}
+      if(KPI_FILTER==='pendentes') f.maxConformidade=99;
+      if(KPI_FILTER==='divergencia') f.divergencia=true;
+      if(KPI_FILTER==='naoVerificados') f.prioridade='MEDIA';
+      if(KPI_FILTER==='financeiro') f.pendenciaFinanceira=true;
+      KPI_FILTER=null;
+    }
+
+    function resetAtividadeFiltros(){
+      ['filtroBusca','filtroStatus','filtroAtividade','filtroArtista','filtroEquipamento','filtroLocal','filtroConformidadeMin','filtroConformidadeMax','filtroDataInicio','filtroDataFim'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+      ['filtroPrioridade','filtroNF','filtroFoto','filtroBordero','filtroRelatorio','filtroDivergencia','filtroFinanceiro'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+      const periodo=document.getElementById('filtroPeriodo'); if(periodo)periodo.value='TODAS';
+      KPI_FILTER=null; loadAtividades(1);
+    }
+
+    async function loadAtividades(page=1){
+      ACTIVITY_PAGE=page;
+      const list=document.getElementById('activityList');
+      const meta=document.getElementById('activityMeta');
+      if(list) list.innerHTML='<div class="loading" style="grid-column:1/-1"><span class="loader-dot"></span>Carregando dossiês...</div>';
+      try{
+        const res=(await apiPost('atividades',{token:TOKEN,filtros:coletarFiltrosAtividades(),page,pageSize:PAGE_SIZE})).data;
+        ACTIVITY_RESULT=res; renderAtividades(res);
+      }catch(err){
+        if(meta) meta.innerHTML='<span>Falha ao carregar atividades.</span>';
+        if(list) list.innerHTML=`<div class="empty-state" style="grid-column:1/-1">${esc(err.message||String(err))}</div>`;
+      }
+    }
+
+    function renderAtividades(res){
+      res=res||{items:[],page:1,pages:1,total:0,pageSize:PAGE_SIZE};
+      const meta=document.getElementById('activityMeta'),list=document.getElementById('activityList'),pag=document.getElementById('activityPagination');
+      if(meta) meta.innerHTML=`<span><b>${numberBR(res.total||0)}</b> atividade(s) no filtro atual</span><span>Página ${res.page||1} de ${res.pages||1}</span>`;
+      if(list) list.innerHTML=(res.items||[]).length?(res.items||[]).map(renderCardAtividade).join(''):'<div class="empty-state" style="grid-column:1/-1">Nenhuma atividade encontrada para os filtros selecionados.</div>';
+      if(pag) pag.innerHTML=renderPagination(res);
+    }
+
+    function renderCardAtividade(a){
+      const priority=String(a.prioridade||'').toLowerCase().replace(/_/g,'-');
+      const pClass=a.prioridade==='ALTA'?'high':a.prioridade==='MEDIA'?'medium':'good';
+      const ev=a.evidencias||{};
+      const evidenceRows=[
+        ['Nota Fiscal',ev.nf],['Contrato / cachê',ev.contrato],['Fotos da apresentação',ev.fotoApresentacao],['Fotos do público',ev.fotoPublico],
+        ['Borderô',ev.bordero],['Relatório de execução física',ev.relatorio],['Programação / divulgação',ev.programacao],['Vídeos',ev.videos],['Acessibilidade / outros',ev.acessibilidadeOutros]
+      ].map(([label,e])=>renderSemaforoEvidencia(e,label)).join('');
+      const buttons=[];
+      if(a.dossieUrl)buttons.push(`<a class="card-link" href="${esc(a.dossieUrl)}" target="_blank" rel="noopener">Abrir dossiê</a>`);
+      if(a.nfUrl)buttons.push(`<a class="card-link alt" href="${esc(a.nfUrl)}" target="_blank" rel="noopener">Abrir NF</a>`);
+      if(a.fonteBrutaUrl)buttons.push(`<a class="card-link alt" href="${esc(a.fonteBrutaUrl)}" target="_blank" rel="noopener">Abrir fonte bruta</a>`);
+      const valProg=a.valorProgramacao==null?'Não informado':moneyBR(a.valorProgramacao);
+      const valNF=a.valorNF==null?'Não informado':moneyBR(a.valorNF);
+      return `<article class="activity-card priority-${esc(priority)}" id="activity-${esc(a.id)}">
+        <div class="activity-card-head"><div><h3>${esc(a.nome||a.id)}</h3><div class="activity-sub">${esc(a.data||'Data não informada')} · ${esc(a.hora||'Horário não informado')} · ${esc(a.local||'Local não informado')}</div></div>
+        <div class="status-stack"><span class="status-pill ${pClass}">${esc(a.prioridade||'A classificar')}</span><span class="status-pill">${esc((a.conformidade&&a.conformidade.percentual)||0)}% conformidade</span></div></div>
+        <div class="activity-body">
+          <div class="facts-row"><div class="fact-box"><b>ID</b><span>${esc(a.id)}</span></div><div class="fact-box"><b>Artista / grupo</b><span>${esc(a.artista||'Não informado')}</span></div><div class="fact-box"><b>Equipamento</b><span>${esc(a.tipoEquipamento||'Não informado')}</span></div><div class="fact-box"><b>Status</b><span>${esc(a.statusDocumental||'Não informado')}</span></div></div>
+          <div class="evidence-title">Evidências do dossiê</div><div class="evidence-list">${evidenceRows}</div>
+          <div class="finance-strip"><div><b>Valor programação</b><span>${esc(valProg)}</span></div><div><b>Valor NF</b><span>${esc(valNF)}</span></div><div><b>Nº NF</b><span>${esc(a.nf||'Não localizada')}</span></div><div><b>Situação fiscal</b><span>${esc(a.situacaoNF||'Sem documento fiscal')}</span></div></div>
+          <div class="agent-box"><div class="agent-label">Leitura do AGENTE_PULSA_V1</div><p>${esc(a.leituraAgente||'Leitura indisponível na fonte oficial.')}</p></div>
+          <div class="agent-box next-action"><div class="agent-label">Próxima ação</div><p>${esc(a.proximaAcao||'Sem recomendação disponível.')}</p></div>
+          <div class="card-buttons">${buttons.join('')}</div>
+        </div></article>`;
+    }
+
+    function renderSemaforoEvidencia(evidence,label){
+      const e=evidence||{}; const estado=String(e.estado||'NAO_LOCALIZADO');
+      const map={
+        VALIDADO:['state-validado','Recebido e validado'],
+        RECEBIDO_NAO_VERIFICADO:['state-nao-verificado','Recebido — verificação pendente'],
+        NAO_LOCALIZADO:['state-ausente','Não localizado'],
+        DIVERGENTE:['state-divergente','Divergência documental']
+      };
+      const spec=map[estado]||map.NAO_LOCALIZADO;
+      const link=e.link&&estado!=='NAO_LOCALIZADO'?`<a class="evidence-link" href="${esc(e.link)}" target="_blank" rel="noopener">Abrir</a>`:'';
+      return `<div class="evidence-row ${spec[0]}"><span class="signal"></span><b>${esc(label)}</b><span class="evidence-state">${esc(spec[1])}</span>${link}</div>`;
+    }
+
+    function renderPagination(res){
+      const page=Number(res.page||1),pages=Number(res.pages||1),total=Number(res.total||0);
+      if(pages<=1)return `<div class="pagination"><div class="pagination-info">${numberBR(total)} registro(s) · 25 por página</div></div>`;
+      const nums=[]; const start=Math.max(1,page-2),end=Math.min(pages,page+2);
+      for(let i=start;i<=end;i++)nums.push(`<button class="page-btn ${i===page?'active':''}" onclick="loadAtividades(${i})">${i}</button>`);
+      return `<div class="pagination"><div class="pagination-info">${numberBR(total)} registro(s) · 25 por página</div><div class="pagination-buttons"><button class="page-btn" ${page<=1?'disabled':''} onclick="loadAtividades(${page-1})">Anterior</button>${nums.join('')}<button class="page-btn" ${page>=pages?'disabled':''} onclick="loadAtividades(${page+1})">Próxima</button></div></div>`;
+    }
+
+
+    async function loadEvidencias(page=1){
+      EVIDENCE_PAGE=page; const root=document.getElementById('evidenceContent');
+      root.innerHTML='<div class="loading"><span class="loader-dot"></span>Carregando inventário de evidências...</div>';
+      try{renderEvidencias((await apiPost('evidencias',{token:TOKEN,filtros:{},page,pageSize:PAGE_SIZE})).data);}
+      catch(err){root.innerHTML=`<div class="empty-state">${esc(err.message||String(err))}</div>`;}
+    }
+
+    function renderEvidencias(res){
+      const root=document.getElementById('evidenceContent'); res=res||{items:[],total:0,page:1,pages:1};
+      if(res.available===false){root.innerHTML='<div class="empty-state">A aba EVIDENCIAS_EMAIL está indisponível na fonte oficial.</div>';return;}
+      const rows=(res.items||[]).map(r=>{
+        const spec=evidenceStateSpec(r.estado);
+        const source=r.fonteOriginalUrl?`<a class="inline-link" href="${esc(r.fonteOriginalUrl)}" target="_blank" rel="noopener">Abrir origem</a>`:'Origem sem link';
+        const dossier=r.pastaDestinoUrl?`<a class="inline-link" href="${esc(r.pastaDestinoUrl)}" target="_blank" rel="noopener">Abrir destino</a>`:'Destino sem link';
+        return `<tr><td>${esc(r.id)}</td><td>${esc(r.data)}</td><td><b>${esc(r.nome)}</b></td><td>${esc(r.origem)}</td><td>${esc(r.evidencia)}</td><td>${esc(r.qtd)}</td><td><span class="state-badge ${spec.cls}"><span class="signal"></span>${esc(spec.text)}</span><div style="margin-top:4px;color:var(--muted);font-size:9px">${esc(r.situacaoPacote)}</div></td><td>${dossier}</td><td>${source}</td><td>${esc(r.proximoPasso)}</td><td>${esc(r.auditoria)}</td></tr>`;
+      }).join('');
+      root.innerHTML=`<div class="data-toolbar"><span class="updated">${numberBR(res.total||0)} registro(s) de rastreabilidade</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>ID</th><th>Data</th><th>Atividade</th><th>Origem</th><th>Evidência recebida</th><th>Qtd.</th><th>Situação</th><th>Destino</th><th>Fonte / original</th><th>Próximo passo</th><th>Auditoria</th></tr></thead><tbody>${rows||'<tr><td colspan="11">Nenhum registro.</td></tr>'}</tbody></table></div>${renderGenericPagination(res,'loadEvidencias')}`;
+    }
+
+    function evidenceStateSpec(estado){
+      const e=String(estado||'NAO_LOCALIZADO');
+      if(e==='VALIDADO')return{cls:'validado',text:'Recebido e validado'};
+      if(e==='RECEBIDO_NAO_VERIFICADO')return{cls:'nao-verificado',text:'Recebido — verificação pendente'};
+      if(e==='DIVERGENTE')return{cls:'divergente',text:'Divergência documental'};
+      return{cls:'',text:'Não localizado'};
+    }
+
+    async function loadFinanceiro(page=1){
+      FINANCE_PAGE=page; const root=document.getElementById('financeContent');
+      root.innerHTML='<div class="loading"><span class="loader-dot"></span>Carregando controle financeiro...</div>';
+      try{renderFinanceiro((await apiPost('financeiro',{token:TOKEN,filtros:{},page,pageSize:PAGE_SIZE})).data);}
+      catch(err){root.innerHTML=`<div class="empty-state">${esc(err.message||String(err))}</div>`;}
+    }
+
+    function renderFinanceiro(res){
+      const root=document.getElementById('financeContent'); res=res||{items:[],kpis:{},total:0,page:1,pages:1}; const k=res.kpis||{};
+      if(res.available===false){root.innerHTML='<div class="empty-state">A aba FINANCEIRO_NF está indisponível na fonte oficial.</div>';return;}
+      const kpis=[['NFs / links recebidos',k.recebidos||0],['PDFs com valor',k.pdfsComValor||0],['Valor fiscal',moneyBR(k.valorVerificado||0)],['PIX explícito na NF',k.pixNaNF||0],['Divergências',k.divergencias||0],['Pendentes de validação',k.pendentesValidacao||0]];
+      const rows=(res.items||[]).map(r=>{
+        const state=r.bloqueio?'<span class="state-badge divergente"><span class="signal"></span>Requer atenção</span>':'<span class="state-badge validado"><span class="signal"></span>Localizada</span>';
+        const links=[r.nfUrl?`<a class="inline-link" href="${esc(r.nfUrl)}" target="_blank" rel="noopener">NF</a>`:'',r.dossieUrl?`<a class="inline-link" href="${esc(r.dossieUrl)}" target="_blank" rel="noopener">Dossiê</a>`:''].filter(Boolean).join(' · ');
+        return `<tr><td>${esc(r.data)}</td><td><b>${esc(r.nome)}</b></td><td>${esc(r.prestador)}</td><td>${esc(r.cnpj)}</td><td>${r.valorReferencia==null?'—':moneyBR(r.valorReferencia)}</td><td>${r.valorNF==null?'—':moneyBR(r.valorNF)}</td><td>${r.diferenca==null?'—':moneyBR(r.diferenca)}</td><td>${esc(r.numeroNF)}</td><td>${esc(r.pix||'Não informado')}</td><td>${esc(r.origemPix||'Não informada')}</td><td>${state}<div style="margin-top:4px;font-size:9px;color:var(--muted)">${esc(r.situacao)}</div></td><td>${links}</td><td>${esc(r.observacao)}</td></tr>`;
+      }).join('');
+      root.innerHTML=`<div class="section-kpis">${kpis.map(([l,v])=>`<div class="mini-kpi"><span>${esc(l)}</span><b>${esc(v)}</b></div>`).join('')}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data</th><th>Atividade</th><th>Prestador</th><th>CPF/CNPJ</th><th>Referência</th><th>Valor NF</th><th>Diferença</th><th>Nº NF</th><th>PIX</th><th>Origem do PIX</th><th>Situação</th><th>Links</th><th>Observação</th></tr></thead><tbody>${rows||'<tr><td colspan="13">Nenhum registro financeiro.</td></tr>'}</tbody></table></div>${renderGenericPagination(res,'loadFinanceiro')}`;
+    }
+
+    async function loadAuditoria(){
+      const root=document.getElementById('auditContent'); const priority=document.getElementById('auditPriority').value;
+      root.innerHTML='<div class="loading"><span class="loader-dot"></span>Carregando trilha de auditoria...</div>';
+      try{renderAuditoria((await apiPost('auditoria',{token:TOKEN,filtros:{prioridade:priority}})).data);}
+      catch(err){root.innerHTML=`<div class="empty-state">${esc(err.message||String(err))}</div>`;}
+    }
+
+    function renderAuditoria(res){
+      const root=document.getElementById('auditContent'); res=res||{criteria:[],findings:[]};
+      if(res.available===false){root.innerHTML='<div class="empty-state">A aba AUDITORIA está indisponível na fonte oficial.</div>';return;}
+      const criteria=(res.criteria||[]).map(c=>`<tr><td><b>${esc(c.criterio)}</b></td><td>${esc(c.obrigatorio)}</td><td>${esc(c.fonte)}</td><td>${esc(c.regraAgente)}</td><td>${esc(c.status)}</td><td>${esc(c.pendenciaGerada)}</td><td>${esc(c.responsavel)}</td><td>${esc(c.ultimaVerificacao)}</td></tr>`).join('');
+      const findings=(res.findings||[]).map(f=>{
+        const critical=/cr[ií]tica|alta/i.test(String(f.prioridade||'')); const medium=/m[eé]dia/i.test(String(f.prioridade||''));
+        return `<article class="audit-card ${critical?'critical':medium?'medium':''}"><h4>${esc(f.nome||f.tema||f.idEscopo)}</h4><p><b>${esc(f.tema)}</b> · ${esc(f.situacao)}</p><p>${esc(f.evidenciaLocalizada)}</p><p><b>Próximo passo:</b> ${esc(f.proximoPasso)}</p><div class="audit-meta"><span class="scope-badge ${f.escopoGeral?'global':''}">${f.escopoGeral?'Escopo geral':'Atividade específica'}</span><span class="scope-badge">${esc(f.prioridade||'Sem prioridade')}</span><span class="scope-badge">${esc(f.verificacao)}</span></div></article>`;
+      }).join('');
+      root.innerHTML=`<div class="audit-section"><div class="panel-head" style="background:#fff;border:1px solid var(--linha);border-radius:14px 14px 0 0"><h3>Critérios de auditoria</h3></div><div class="table-wrap" style="border-radius:0 0 14px 14px"><table class="data-table"><thead><tr><th>Critério</th><th>Obrigatório?</th><th>Fonte</th><th>Regra do agente</th><th>Status</th><th>Pendência</th><th>Responsável</th><th>Verificação</th></tr></thead><tbody>${criteria}</tbody></table></div></div><div class="panel-head" style="background:#fff;border:1px solid var(--linha);border-radius:14px;margin-bottom:10px"><h3>Pendências e divergências identificadas</h3><span class="mini">${numberBR((res.findings||[]).length)} achado(s)</span></div><div class="audit-cards">${findings||'<div class="empty-state">Nenhum achado para o filtro selecionado.</div>'}</div>`;
+    }
+
+    async function loadMetas(){
+      const root=document.getElementById('goalsContent'); root.innerHTML='<div class="loading"><span class="loader-dot"></span>Carregando metas...</div>';
+      try{renderMetas((await apiPost('metas',{token:TOKEN})).data);}
+      catch(err){root.innerHTML=`<div class="empty-state">${esc(err.message||String(err))}</div>`;}
+    }
+
+    function renderMetas(res){
+      const root=document.getElementById('goalsContent'); res=res||{metas:[],totalMapeadas:0,publicoStatus:'Aguardando borderôs/relatórios'};
+      if(res.available===false){root.innerHTML='<div class="empty-state">A aba METAS está indisponível na fonte oficial.</div>';return;}
+      const cards=(res.metas||[]).map(m=>{
+        const isPublico=/p[uú]blico/i.test(String(m.nome||'')+' '+String(m.indicador||''));
+        const current=isPublico?null:Number(res.totalMapeadas||0); const target=Number(m.metaFisicaNumero||0);
+        const prog=!isPublico&&target?Math.min(100,current/target*100):0;
+        return `<article class="goal-card"><h3>${esc(m.nome)}</h3><div class="goal-status">${esc(m.status||'Status não informado')}</div><p>${esc(m.resultadoEsperado)}</p><p><b>Indicador:</b> ${esc(m.indicador)}</p><p><b>Meio de verificação:</b> ${esc(m.meioVerificacao)}</p>${isPublico?`<div class="agent-box next-action"><div class="agent-label">Público consolidado</div><p>${esc(res.publicoStatus||'Aguardando borderôs/relatórios')}</p></div>`:`<div class="goal-progress"><span style="width:${prog}%"></span></div><div class="goal-numbers"><span>${numberBR(current)} mapeadas</span><span>${numberBR(target)} previstas</span></div>`}<p>${esc(m.observacao)}</p></article>`;
+      }).join('');
+      root.innerHTML=`<div class="goal-grid">${cards||'<div class="empty-state">Nenhuma meta cadastrada.</div>'}</div>`;
+    }
+
+    function renderGenericPagination(res,fn){
+      const page=Number(res.page||1),pages=Number(res.pages||1),total=Number(res.total||0);
+      return `<div class="pagination"><div class="pagination-info">${numberBR(total)} registro(s) · 25 por página</div><div class="pagination-buttons"><button class="page-btn" ${page<=1?'disabled':''} onclick="${fn}(${Math.max(1,page-1)})">Anterior</button><span class="page-btn active">${page}</span><button class="page-btn" ${page>=pages?'disabled':''} onclick="${fn}(${Math.min(pages,page+1)})">Próxima</button></div></div>`;
+    }
+
+    function setLoading(on){document.getElementById('globalLoading').classList.toggle('hidden',!on);}
+    function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),4200);}
+
+    window.addEventListener('load',()=>{
+      TOKEN=sessionStorage.getItem('pulsaPainelToken')||'';
+      document.getElementById('senha').addEventListener('keydown',e=>{if(e.key==='Enter')entrar();});
+      if(TOKEN){document.getElementById('login').classList.add('hidden');carregarBootstrap();}
+    });
+  </script>
+</body>
+</html>
