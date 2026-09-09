@@ -36,6 +36,8 @@
 
     #login{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 15% 15%,rgba(0,183,215,.22),transparent 30%),linear-gradient(135deg,var(--azul-escuro),var(--azul));display:grid;place-items:center;padding:22px}
     .login-card{width:min(430px,100%);background:var(--branco);border-radius:24px;padding:30px;box-shadow:0 30px 80px rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.45)}
+    .login-logo{width:110px;height:76px;margin:0 auto 18px;background:#fff;border:1px solid var(--linha);border-radius:14px;padding:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(2,23,56,.08)}
+    .login-logo img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
     .login-kicker{font:700 11px/1 'Montserrat',sans-serif;letter-spacing:.13em;text-transform:uppercase;color:var(--ciano);margin-bottom:10px}
     .login-card h1{font:800 28px/1.15 'Montserrat',sans-serif;margin:0;color:var(--azul-escuro)}
     .login-card p{color:var(--muted);margin:10px 0 20px}
@@ -231,6 +233,9 @@
 <body>
   <section id="login">
     <div class="login-card">
+      <div class="login-logo" aria-label="Instituto BR">
+        <img src="./assets/logo-instituto-br.png" alt="Instituto BR">
+      </div>
       <div class="login-kicker">Acesso institucional</div>
       <h1>PULSA SP</h1>
       <p>Sistema de Monitoramento e Prestação de Contas</p>
