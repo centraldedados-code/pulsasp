@@ -573,10 +573,10 @@
       const metaPct=r.progressoMetaPercentual==null?0:r.progressoMetaPercentual;
       const kpis=[
         ['total',r.totalMapeadas||0,'Apresentações mapeadas','Base cumulativa de atividades',''],
-        ['conformidade',pct(r.conformidadeMedia),'Conformidade média','Sete requisitos centrais',''],
+        ['conformidade',pct(r.conformidadeMedia),'Validação formal média','Documentos ainda aguardam conferência registrada',''],
         ['nf',r.nfs||0,'NFs recebidas','Documentos fiscais localizados',''],
         ['fotos',r.atividadesComFotos||0,'Com evidência fotográfica','Atividades com foto da apresentação',''],
-        ['completos',r.completos||0,'Dossiês completos','Conformidade documental integral',''],
+        ['completos',r.completos||0,'Dossiês validados','Somente conferências formalmente documentadas',''],
         ['pendentes',r.pendentes||0,'Pendências documentais','Atividades ainda incompletas','warn'],
         ['divergencia',r.divergencias||0,'Divergências críticas','Conflitos que exigem saneamento','danger'],
         ['naoVerificados',r.naoVerificados||0,'Arquivos não verificados','Recebidos, mas com validação técnica pendente','warn']
@@ -637,8 +637,9 @@
     }
 
     function renderRank(items,critical){
+      if(!critical && items.length && items.every(a=>Number(a.conformidade||0)===0)) return '<div class="empty-state">Nenhuma validação formal foi registrada ainda. Existem documentos recebidos que aguardam conferência.</div>';
       if(!items.length) return '<div class="empty-state">Sem registros suficientes para este ranking.</div>';
-      return items.map((a,i)=>`<div class="rank-item" data-activity-id="${esc(a.id)}"><div class="rank-num">${i+1}</div><div><div class="rank-title">${esc(a.nome||a.id)}</div><div class="rank-meta">${esc(a.data||'')} · ${critical?'Prioridade '+esc(a.prioridade||''):'Conformidade documental'}</div></div><div class="rank-score">${esc(a.conformidade||0)}%</div></div>`).join('');
+      return items.map((a,i)=>`<div class="rank-item" data-activity-id="${esc(a.id)}"><div class="rank-num">${i+1}</div><div><div class="rank-title">${esc(a.nome||a.id)}</div><div class="rank-meta">${esc(a.data||'')} · ${critical?'Prioridade '+esc(a.prioridade||''):'Validação formal'}</div></div><div class="rank-score">${esc(a.conformidade||0)}%</div></div>`).join('');
     }
 
     function renderAlerts(items){
@@ -760,7 +761,7 @@
       return `<article class="activity-card st-${a.prioridade==='ALTA'?'erro':a.prioridade==='MEDIA'?'alerta':'ok'} priority-${esc(priority)}" id="activity-${esc(a.id)}">
         <div class="activity-card-head"><div><div class="activity-card-kicker">${esc(a.id)} · ${esc(a.data||'Data não informada')}</div><div class="activity-card-title">${esc(a.nome||a.id)}</div><div class="activity-card-sub">${esc(a.artista||'Artista não informado')} · ${esc(a.local||'Local não informado')} · ${esc(a.hora||'Horário não informado')}</div></div><div class="chips"><span class="badge ${pClass}">${esc(a.prioridade||'A classificar')}</span><span class="badge ${statusClass}">${esc(a.statusDocumental||'Sem status')}</span></div></div>
         <div class="activity-card-evidence">${renderActivityEvidenceMini(ev)}</div>
-        <div class="activity-card-total"><span>Conformidade documental</span><strong>${esc((a.conformidade&&a.conformidade.percentual)||0)}%</strong></div>
+        <div class="activity-card-total"><span>Validação formal</span><strong>${esc((a.conformidade&&a.conformidade.percentual)||0)}%</strong></div>
         <div class="evidence-title">Evidências do dossiê</div><div class="evidence-list">${evidenceRows}</div>
         ${renderAuditoriaRigorosaCard(a)}
         <div class="finance-mini"><div><span>Programação</span><strong>${esc(valProg)}</strong></div><div><span>Valor NF</span><strong>${esc(valNF)}</strong></div><div><span>Nº NF</span><strong>${esc(a.nf||'Não localizada')}</strong></div></div>
@@ -819,16 +820,19 @@
         const first=(await apiPost('atividades',{token:TOKEN,filtros:{},page:1,pageSize:100})).data;
         let items=[...(first.items||[])];
         const pages=Number(first.pages||1);
-        for(let page=2;page<=pages;page++){
-          const next=(await apiPost('atividades',{token:TOKEN,filtros:{},page,pageSize:100})).data;
-          items.push(...(next.items||[]));
+        // Consulta páginas em lotes pequenos; evita uma sequência muito longa de espera.
+        for(let i=2;i<=pages;i+=3){
+          const ps=Array.from({length:Math.min(3,pages-i+1)},(_,j)=>i+j);
+          const rs=await Promise.all(ps.map(page=>apiPost('atividades',{token:TOKEN,filtros:{},page,pageSize:100})));
+          rs.forEach(r=>items.push(...((r.data||{}).items||[])));
         }
-        for(let i=0;i<items.length;i+=80){
-          const lote=items.slice(i,i+80);
-          const ids=lote.map(a=>String(a.id||'')).filter(Boolean);
-          if(!ids.length)continue;
-          const res=(await apiPost('auditoria_rigorosa',{token:TOKEN,ids})).data||{};
-          lote.forEach(a=>{a.auditoriaRigorosa=res[String(a.id||'')]||null;});
+        // Máximo de 3 chamadas simultâneas de auditoria por lote, com carga reduzida.
+        for(let i=0;i<items.length;i+=75){
+          const lotes=[items.slice(i,i+25),items.slice(i+25,i+50),items.slice(i+50,i+75)].filter(x=>x.length);
+          const rs=await Promise.all(lotes.map(lote=>apiPost('auditoria_rigorosa',{
+            token:TOKEN,ids:lote.map(a=>String(a.id||'')).filter(Boolean)
+          }).then(r=>r.data||{}).catch(e=>({__erro:String(e.message||e)}))));
+          lotes.forEach((lote,j)=>lote.forEach(a=>{a.auditoriaRigorosa=rs[j][String(a.id||'')]||{erro:rs[j].__erro||'Inventário não encontrado'};}));
         }
         PULSA_INDICE_CACHE=items;pulsaFiltrarIndice();
       })().catch(err=>{
