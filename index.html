@@ -322,6 +322,14 @@
     .quick-link:hover{background:var(--az);border-color:var(--az);color:var(--am)}
     @media(max-width:950px){.hnav{display:none}.hdri.topbar-inner{padding:8px 14px}.hlogo{width:62px;height:46px;flex-basis:62px;max-width:62px;max-height:46px}.hsub{display:none}}
   </style>
+<style>
+.rig-box{border:1px solid #dce4ea;background:#fbfcfe;border-radius:12px;padding:12px;margin-top:12px;color:#092040}
+.rig-box>strong{font:700 11px Montserrat,sans-serif}.rig-box p{font-size:10px;color:#657488;margin:7px 0}
+.rig-stats{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0}.rig-stats span{background:#eaf5f8;color:#09586b;padding:4px 7px;border-radius:8px;font-size:9px;font-weight:bold}
+.rig-box details{border-top:1px solid #e2e8ed;padding:8px 0}.rig-box summary{font-size:10.5px;font-weight:700;cursor:pointer}
+.rig-box ul{padding-left:17px;max-height:220px;overflow:auto}.rig-box li{font-size:10px;margin:6px 0;overflow-wrap:anywhere}.rig-box li div{color:#697483;margin-top:2px}
+.rig-box a{color:#087a95}.rig-box .rig-pend li{padding:5px 0}.rig-box .rig-note{color:#885c0e}
+</style>
 </head>
 <body>
   <section id="login">
@@ -677,6 +685,16 @@
       if(list) list.innerHTML='<div class="loading" style="grid-column:1/-1"><span class="loader-dot"></span>Carregando dossiês...</div>';
       try{
         const res=(await apiPost('atividades',{token:TOKEN,filtros:coletarFiltrosAtividades(),page,pageSize:PAGE_SIZE})).data;
+        
+        try {
+          const ids=(res.items||[]).map(a=>String(a.id||'')).filter(Boolean);
+          if(ids.length){
+            const auditoria=(await apiPost('auditoria_rigorosa',{token:TOKEN,ids})).data||{};
+            (res.items||[]).forEach(a=>{a.auditoriaRigorosa=auditoria[String(a.id||'')]||null;});
+          }
+        } catch (auditError) {
+          (res.items||[]).forEach(a=>{a.auditoriaRigorosa={erro:'Auditoria detalhada indisponível: '+String(auditError.message||auditError)};});
+        }
         ACTIVITY_RESULT=res; renderAtividades(res);
       }catch(err){
         if(meta) meta.innerHTML='<span>Falha ao carregar atividades.</span>';
@@ -712,11 +730,31 @@
         <div class="activity-card-evidence">${renderActivityEvidenceMini(ev)}</div>
         <div class="activity-card-total"><span>Conformidade documental</span><strong>${esc((a.conformidade&&a.conformidade.percentual)||0)}%</strong></div>
         <div class="evidence-title">Evidências do dossiê</div><div class="evidence-list">${evidenceRows}</div>
+        ${renderAuditoriaRigorosaCard(a)}
         <div class="finance-mini"><div><span>Programação</span><strong>${esc(valProg)}</strong></div><div><span>Valor NF</span><strong>${esc(valNF)}</strong></div><div><span>Nº NF</span><strong>${esc(a.nf||'Não localizada')}</strong></div></div>
         <div class="activity-card-reading"><strong>Leitura do Agente</strong><br>${esc(a.leituraAgente||'Leitura indisponível na fonte oficial.')}</div>
         <div class="activity-next"><strong>Próxima ação</strong><br>${esc(a.proximaAcao||'Sem recomendação disponível.')}</div>
         <div class="drive-actions">${buttons.join('')||'<div class="drive-nolink">Nenhum link documental disponível neste registro.</div>'}</div>
       </article>`;
+    }
+
+
+    function renderAuditoriaRigorosaCard(a){
+      const d=a.auditoriaRigorosa;
+      if(!d)return '<section class="rig-box"><strong>Pastas e pendências individualizadas</strong><p>Inventário ainda não carregado ou não gerado.</p></section>';
+      if(d.erro)return `<section class="rig-box"><strong>Auditoria detalhada</strong><p>${esc(d.erro)}</p></section>`;
+      const pastas=d.pastas||[],arquivos=d.arquivos||[],pend=d.pendencias||[],fotos=d.analiseFotos||[];
+      const pastaHtml=pastas.length?pastas.map(p=>`<li><a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">📁 ${esc(p.caminho||p.nome)}</a></li>`).join(''):'<li>Nenhuma subpasta identificada no inventário.</li>';
+      const pendHtml=pend.length?pend.map(p=>`<li><b>${esc(p.nome||'Pendência')}</b> — ${esc(p.estado||'Pendente')}<div>${esc(p.acao||'Conferir documentação')}</div></li>`).join(''):'<li>Nenhuma pendência registrada no último inventário. Isso não comprova validação sem conferência.</li>';
+      const arqHtml=arquivos.length?arquivos.map(p=>`<li><a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${esc(p.nome)}</a> <small>(${esc(p.tipo||'Não classificado')})</small></li>`).join(''):'<li>Nenhum arquivo listado.</li>';
+      const fotoHtml=fotos.length?fotos.map(f=>`<li><a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer">Abrir fotografia</a> — ${esc(f.identificacao)} — ${esc(f.banner)} — ${esc(f.estado)}</li>`).join(''):'<li>A análise automática das imagens ainda não foi executada.</li>';
+      return `<section class="rig-box"><strong>Auditoria documental por espetáculo</strong>
+        <div class="rig-stats"><span>${pastas.length} pasta(s)</span><span>${arquivos.length} arquivo(s)</span><span>${pend.length} pendência(s)</span></div>
+        <details><summary>Ver todas as pastas (${pastas.length})</summary><ul>${pastaHtml}</ul></details>
+        <details><summary>Ver arquivos encontrados (${arquivos.length})</summary><ul>${arqHtml}</ul></details>
+        <details><summary>Conferência automática de fotos (${fotos.length})</summary><ul>${fotoHtml}</ul></details>
+        <details open><summary>Pendências deste espetáculo (${pend.length})</summary><ul class="rig-pend">${pendHtml}</ul></details>
+        <p class="rig-note">OCR automático identifica possíveis referências ao PULSA, mas a presença, legibilidade e correspondência do banner seguem pendentes de verificação visual documentada.</p></section>`;
     }
 
     function renderActivityEvidenceMini(ev){
