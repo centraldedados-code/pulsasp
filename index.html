@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PULSA SP · Central de Monitoramento</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#092040;--deep:#06162e;--cyan:#00a8ca;--yellow:#ecc203;--paper:#f3f6f9;--line:#dce5ee;--ink:#18304b;--muted:#64758a;--white:#fff;--red:#a6373d;--amber:#946016;--green:#287853;--shadow:0 9px 26px rgba(9,32,64,.06)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.5 'DM Sans',Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:#087991;text-decoration:none}a:hover{text-decoration:underline}.hidden{display:none!important}.mono{font-variant-numeric:tabular-nums}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
@@ -24,6 +24,83 @@ main{max-width:1420px;margin:auto;padding:28px 25px 70px}.eyebrow{font:800 11px 
 @media(max-width:1060px){.head-inner{flex-direction:column;align-items:flex-start}.brand{min-width:auto}.financial-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:780px){.head-inner{padding:12px 15px}.brand-sub{max-width:none}nav{width:100%;overflow-x:auto;flex-wrap:nowrap}.nav-btn{padding:9px 10px}main{padding:22px 14px 60px}.kpi-grid{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.finance-cards{grid-template-columns:repeat(2,1fr)}.financial-grid{grid-template-columns:1fr}.coverage-row{grid-template-columns:100px 1fr auto;gap:8px}.coverage-caption{min-width:65px}.drawer-head,.drawer-main{padding-left:15px;padding-right:15px}}
 @media(max-width:430px){.kpi-grid{grid-template-columns:1fr 1fr}.kpi{padding:13px}.kpi .num{font-size:25px}.finance-cards{grid-template-columns:1fr}.event-top{display:block}.event-top .chip{margin-top:8px}}
+
+/* PULSA SP — SISTEMA DE DESIGN INSTITUCIONAL | Azul 092040, ciano 00B7D7, amarelo ECC203 */
+:root{--navy:#092040;--deep:#021738;--cyan:#00B7D7;--yellow:#ECC203;--paper:#EFF1F3;
+ --line:#D9E3EB;--ink:#092040;--muted:#59718A;--white:#FFFFFF;--green:#287853;
+ --red:#a6373d;--amber:#92600d;--shadow:0 12px 34px rgba(2,23,56,.07)}
+html{scroll-behavior:smooth}body{font-family:'Open Sans',Arial,sans-serif;background:var(--paper);color:var(--ink);font-size:13px}
+button,input,select,.chip,.pill-count{font-family:'Open Sans',Arial,sans-serif}
+h1,h2,h3,h4,.brand-name,.nav-btn,.eyebrow,.tag{font-family:'Montserrat',Arial,sans-serif}
+*{min-width:0}a,button{transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease}
+:focus-visible{outline:3px solid #00B7D7;outline-offset:3px}
+header{background:linear-gradient(112deg,#021738 0%,#092040 75%);border-bottom:3px solid rgba(0,183,215,.48)}
+.head-inner{max-width:1550px;min-height:85px;padding:12px 26px;gap:24px}
+.logo{width:58px;height:58px;border-radius:14px;padding:7px;box-shadow:0 7px 16px rgba(0,0,0,.12)}
+.brand{min-width:285px}.brand-name{font-size:19px;letter-spacing:-.02em}.brand-sub{font-size:10px;color:#bfcfdf;max-width:290px}
+nav{flex-wrap:nowrap;justify-content:flex-end;gap:4px}
+.nav-btn{padding:11px 13px;font-size:10.5px;line-height:1.45;letter-spacing:.005em;max-width:none}
+.nav-btn.active{color:var(--yellow);background:#1a3756;border:1px solid rgba(0,183,215,.33)}
+.nav-btn:hover{background:#183552;color:white}.logout{margin-left:6px;border-left:1px solid #426079}
+.pill-count{font-size:10px;background:#174c68;color:#d7f5fa;vertical-align:middle}
+main{max-width:1550px;padding:31px 28px 80px}
+.eyebrow{color:#027e9b;letter-spacing:.12em;font-size:10px}
+.page-head h1{font-size:clamp(24px,2.6vw,34px);font-weight:800;line-height:1.2}
+.page-head p{font-size:12px;max-width:780px}
+.source-line{overflow-wrap:anywhere;word-break:break-word}
+.panel,.event-card,.pending-card,.fin-card,.toolbar,.kpi{border-color:#D7E3EB;box-shadow:var(--shadow)}
+.panel{padding:23px 25px;border-radius:17px}.panel h2{font-size:15px}.panel-lead{font-size:11px}
+.grid{grid-template-columns:minmax(0,1.38fr) minmax(320px,.9fr)}
+.kpi-grid{gap:16px;margin:19px 0 22px}
+.kpi{min-height:168px;position:relative;overflow:hidden;background:linear-gradient(135deg,#092040,#0b3356);
+ color:white;border:1px solid rgba(0,183,215,.25);box-shadow:0 12px 28px rgba(2,23,56,.14);padding:23px;border-radius:17px}
+.kpi:nth-child(2){background:linear-gradient(135deg,#092b4f,#125077)}
+.kpi:nth-child(3){background:linear-gradient(135deg,#021738,#0a315b)}
+.kpi:nth-child(4){background:linear-gradient(135deg,#0a3558,#096080)}
+.kpi:after{content:'';position:absolute;right:-48px;bottom:-83px;width:175px;height:175px;border:1px solid rgba(0,183,215,.22);border-radius:50%;box-shadow:0 0 0 31px rgba(0,183,215,.045)}
+.kpi .tag{position:relative;z-index:1;color:#cbdde9;font-size:10px;font-weight:700;line-height:1.45;text-transform:uppercase;letter-spacing:.06em}
+.kpi .num,.kpi.urgent .num,.kpi.wait .num{position:relative;z-index:1;color:#ECC203;font-size:clamp(27px,3vw,37px);letter-spacing:-.025em;margin:14px 0 7px;font-weight:800}
+.kpi:nth-child(4) .num{color:#56d9ee}.kpi .note{position:relative;z-index:1;color:#c3d8e7;font-size:10.5px;line-height:1.5}
+.btn{font-weight:700;border-radius:10px}.btn.primary{background:#092040;color:#ECC203}.btn.primary:hover{background:#0e385d}
+.btn.soft{background:#eaf9fc;color:#086b80;border-color:#bfe5ef}
+.toolbar{padding:18px 20px;border-radius:15px;gap:15px}
+.field label{font-family:'Open Sans',Arial,sans-serif;font-weight:700;color:#4d6075}
+.field input,.field select{border-radius:10px;padding:12px 13px}
+.event-card{padding:20px 22px;border-radius:16px;border-left:4px solid var(--cyan)}
+.event-card h3{font-size:14px}.event-sub{line-height:1.6}
+.chip{font-size:10px;font-weight:700;line-height:1.45;white-space:normal;overflow-wrap:anywhere;word-break:normal;max-width:100%;text-align:left}
+.event-top{grid-template-columns:minmax(0,1fr) minmax(0,max-content)}
+.event-top>div,.event-top>span,.pending-head>div{min-width:0}
+.pending-card{border-radius:15px}.pending-head{background:#F8FBFD}.pending-name{line-height:1.5}
+.pending-line>*{min-width:0}.pending-line .chip{flex-shrink:0;max-width:40%}.pending-tools .btn{max-width:100%}
+.fin-card{border-radius:14px;padding:18px 18px 20px;gap:11px;overflow:hidden}
+.fin-card .chip{align-self:flex-start;max-width:100%;width:fit-content;line-height:1.6;padding:7px 11px}
+.fin-card h3,.fin-meta,.fin-note,.fin-metric b{overflow-wrap:anywhere;word-break:break-word}
+.fin-note{font-size:11px}.fin-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+.fin-metric{min-width:0;overflow:hidden}.fin-metric b{font-weight:700}
+.fin-card .actions{margin-top:auto;align-items:flex-start}
+.financial-grid{align-items:stretch}.finance-card{background:linear-gradient(135deg,#092040,#103a61);position:relative;overflow:hidden}
+.finance-card:nth-child(2){background:linear-gradient(135deg,#021738,#0a3b62)}
+.finance-card.warn{background:linear-gradient(135deg,#632c33,#853d42)}
+.finance-card .n{font-size:clamp(24px,2.5vw,32px);overflow-wrap:anywhere}
+.finance-card .l{font-size:10px;letter-spacing:.05em;text-transform:uppercase}
+#drawer{background:rgba(2,23,56,.62);backdrop-filter:blur(3px)}
+.drawer-inner{width:min(935px,100vw)}.drawer-head{padding:24px 28px;background:#fff}
+.drawer-head>div{min-width:0}.drawer-head h2{font-size:19px;line-height:1.36;overflow-wrap:anywhere}
+.drawer-head .btn{flex-shrink:0}.drawer-main{padding:20px 28px 70px}
+.drawer-section{background:white;border:1px solid #DFE7EE;border-radius:13px;padding:18px;margin:16px 0}
+.drawer-section h3{font-size:11px;color:#153c61}
+.doc-row{align-items:flex-start;gap:16px}.doc-row>div:first-child{flex:1;min-width:0}
+.doc-row .actions{flex:0 1 auto;justify-content:flex-end;max-width:60%}
+.file-item{border-color:#e0e9ef;padding:11px 13px;align-items:flex-start}
+.file-item span{overflow-wrap:anywhere;flex:1}.file-item .btn{flex-shrink:0}
+.photo-item,.fin-note,.quick-title,.pending-line .desc{overflow-wrap:anywhere}
+.error-box{line-height:1.55}.error-box p{overflow-wrap:anywhere}
+@media(max-width:1180px){.head-inner{flex-direction:column;align-items:stretch}.brand{min-width:0}nav{width:100%;justify-content:flex-start;overflow-x:auto;padding-bottom:5px}.grid{grid-template-columns:1fr}.financial-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.financial-grid{grid-template-columns:1fr}.finance-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:17px}.head-inner{padding:12px 17px}.nav-btn{flex-shrink:0}}
+@media(max-width:580px){main{padding:22px 13px 60px}.kpi-grid{gap:9px}.kpi{padding:15px;min-height:138px}.kpi .num{font-size:27px}.kpi .tag{font-size:9px}.kpi .note{font-size:9px}.finance-cards{grid-template-columns:1fr}.event-top{display:flex;flex-wrap:wrap}.drawer-head,.drawer-main{padding-left:14px;padding-right:14px}.drawer-head h2{font-size:15px}.doc-row{flex-direction:column}.doc-row .actions{max-width:100%;width:100%;justify-content:flex-start}.coverage-row{grid-template-columns:100px minmax(0,1fr) auto}.coverage-caption{min-width:55px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -78,7 +155,7 @@ async function atualizar(){if(!STATE.token)return;if(STATE.loading)return STATE.
   STATE.loading=(async()=>{try{
     const res=await api('central_operacional',{token:STATE.token,modo:'resumo'});
     if(!res.data||!Array.isArray(res.data.espetaculos))throw new Error('A API não retornou a lista de espetáculos.');
-    STATE.data=res.data;STATE.detahes=null;STATE.detalhes={};
+    STATE.data=res.data;STATE.detalhes={};
     $('updated').textContent='Inventário consultado em '+text(STATE.data.geradoEm);
     $('navCount').textContent=fmt(STATE.data.resumo.comPendencias||0);$('navCount').classList.remove('hidden');
     renderHome();renderEvidencias();renderPendencias();
@@ -172,7 +249,7 @@ function abrirDetalhe(id){const e=STATE.data?.espetaculos.find(x=>x.id===id);if(
   const d=STATE.detalhes[id];if(d){renderDetalhe(e,d);return;}
   $('drawerContent').innerHTML='<div class="load-block"><span class="spin"></span>Buscando somente as pastas, arquivos e fotos deste espetáculo...</div>';
   api('central_operacional',{token:STATE.token,modo:'detalhe',id}).then(res=>{STATE.detalhes[id]=res.data;if($('drawer').classList.contains('open')&&$('drawerMeta').textContent.startsWith(id))renderDetalhe(e,res.data);})
-  .catch(err=>{$('drawerContent').innerHTML=erroHtml(err.message);});
+  .catch(err=>{const m=/ID inv[aá]lido|Formato de ID n[aã]o reconhecido/i.test(err.message)?'O serviço de dossiês ainda não reconhece o ID deste espetáculo. É necessário publicar a versão corrigida de PulsaCentralOperacional.gs no Apps Script.':err.message;$('drawerContent').innerHTML=erroHtml(m);});
 }
 function fecharDetalhe(){$('drawer').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharDetalhe();});
