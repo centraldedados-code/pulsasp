@@ -1,1060 +1,221 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>PULSA SP | SMPC</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --azul:#092040;
-      --ciano:#00B7D7;
-      --amarelo:#ECC203;
-      --cinza:#EFF1F3;
-      --azul-escuro:#021738;
-      --branco:#FFFFFF;
-      --verde:#2E7D5B;
-      --ambar:#B78318;
-      --vermelho:#A74444;
-      --neutro:#AEB7C2;
-      --texto:#1D2D3F;
-      --muted:#6E7E8F;
-      --linha:#DDE4EA;
-      --shadow:0 10px 34px rgba(2,23,56,.08);
-      --shadow-lg:0 18px 52px rgba(2,23,56,.16);
-      --radius:18px;
-      /* aliases do padrão Juntos */
-      --az:#092040; --ci:#00B7D7; --am:#ECC203; --cz:#EFF1F3; --es:#021738; --br:#FFFFFF;
-      --gv:#1A6B3C; --gvb:#ebf7eb; --aw:#7A4F00; --awb:#fff8e0; --rd:#8B1A1A; --rdb:#fce8e8; --bd:#dde4ee; --mut:#718096; --txt:#2f3b48;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;background:#F7F9FB;color:var(--texto);font:14px/1.55 'Open Sans',Arial,sans-serif}
-    button,input,select{font:inherit}
-    button{cursor:pointer}
-    .hidden{display:none!important}
-    .montserrat{font-family:'Montserrat',Arial,sans-serif}
-
-    #login{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 15% 15%,rgba(0,183,215,.22),transparent 30%),linear-gradient(135deg,var(--azul-escuro),var(--azul));display:grid;place-items:center;padding:22px}
-    .login-card{width:min(430px,100%);background:var(--branco);border-radius:24px;padding:30px;box-shadow:0 30px 80px rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.45)}
-    .login-logo{width:110px;height:76px;margin:0 auto 18px;background:#fff;border:1px solid var(--linha);border-radius:14px;padding:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(2,23,56,.08)}
-    .login-logo img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
-    .login-kicker{font:700 11px/1 'Montserrat',sans-serif;letter-spacing:.13em;text-transform:uppercase;color:var(--ciano);margin-bottom:10px}
-    .login-card h1{font:800 28px/1.15 'Montserrat',sans-serif;margin:0;color:var(--azul-escuro)}
-    .login-card p{color:var(--muted);margin:10px 0 20px}
-    .login-card label{display:block;font-weight:700;color:var(--azul);font-size:12px;margin-bottom:7px}
-    .login-card input{width:100%;border:1px solid var(--linha);border-radius:12px;padding:13px 14px;outline:none;background:#FBFCFD}
-    .login-card input:focus{border-color:var(--ciano);box-shadow:0 0 0 3px rgba(0,183,215,.12)}
-    .primary-btn{border:0;background:linear-gradient(135deg,var(--ciano),#008FAF);color:#fff;font:700 13px 'Montserrat',sans-serif;border-radius:11px;padding:12px 16px;box-shadow:0 8px 20px rgba(0,183,215,.22)}
-    .login-card .primary-btn{width:100%;margin-top:12px}
-    .login-error{min-height:18px;color:var(--vermelho);font-size:12px;margin-top:9px}
-
-    .topbar{position:sticky;top:0;z-index:50;background:linear-gradient(120deg,var(--azul-escuro),var(--azul));color:#fff;box-shadow:0 7px 24px rgba(2,23,56,.22)}
-    .topbar-inner{max-width:1560px;margin:auto;padding:16px 24px 12px;display:flex;gap:20px;align-items:center;justify-content:space-between}
-    .brand-cluster{display:flex;align-items:center;gap:14px;min-width:0}
-    .brand{min-width:0}
-    .brand-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-    .brand h1{margin:0;font:800 21px/1.2 'Montserrat',sans-serif;letter-spacing:-.02em}
-    .brand p{margin:4px 0 0;color:#CFDCEA;font-size:12px}
-    .agent-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);padding:6px 9px;border-radius:999px;font:700 10px 'Montserrat',sans-serif;letter-spacing:.04em}
-    .agent-badge:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--ciano);box-shadow:0 0 0 3px rgba(0,183,215,.17)}
-    .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-    .ghost-btn,.link-action{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:8px 10px;text-decoration:none;font-weight:700;font-size:11px}
-    .ghost-btn:hover,.link-action:hover{background:rgba(255,255,255,.14)}
-
-    .nav-shell{max-width:1560px;margin:auto;padding:0 24px 10px;overflow-x:auto}
-    .nav-tabs{display:flex;gap:6px;min-width:max-content}
-    .nav-tab{border:0;background:transparent;color:#C9D7E4;padding:9px 12px;border-radius:9px;font:700 11px 'Montserrat',sans-serif;letter-spacing:.01em}
-    .nav-tab.active{background:#fff;color:var(--azul);box-shadow:0 4px 14px rgba(0,0,0,.15)}
-
-    main{max-width:1560px;margin:0 auto;padding:22px 24px 60px}
-    .page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:18px}
-    .page-head h2{font:800 24px/1.2 'Montserrat',sans-serif;color:var(--azul-escuro);margin:0}
-    .page-head p{margin:5px 0 0;color:var(--muted)}
-    .updated{font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--linha);padding:7px 9px;border-radius:999px;white-space:nowrap}
-
-    .kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:12px;margin-bottom:20px}
-    .kpi-card{position:relative;background:#fff;border:1px solid var(--linha);border-radius:16px;padding:16px;box-shadow:var(--shadow);overflow:hidden;min-height:112px;text-align:left;width:100%}
-    button.kpi-card{appearance:none}
-    .kpi-card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ciano)}
-    .kpi-card.warn:before{background:var(--amarelo)}
-    .kpi-card.danger:before{background:var(--vermelho)}
-    .kpi-card .kpi-value{font:800 27px 'Montserrat',sans-serif;color:var(--azul-escuro);margin-top:6px}
-    .kpi-card .kpi-label{font:700 11px 'Montserrat',sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.035em}
-    .kpi-card .kpi-hint{font-size:10px;color:#8C98A6;margin-top:6px}
-    button.kpi-card:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(2,23,56,.12)}
-
-    .summary-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(310px,.8fr);gap:16px;margin-bottom:16px}
-    .panel{background:#fff;border:1px solid var(--linha);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    .panel-head{padding:16px 18px;border-bottom:1px solid var(--linha);display:flex;justify-content:space-between;gap:14px;align-items:center}
-    .panel-head h3{margin:0;font:800 15px 'Montserrat',sans-serif;color:var(--azul-escuro)}
-    .panel-head .mini{color:var(--muted);font-size:10px}
-    .panel-body{padding:17px 18px}
-
-    .coverage-list{display:grid;gap:13px}
-    .coverage-row{display:grid;grid-template-columns:minmax(150px,210px) 1fr 52px;gap:12px;align-items:center}
-    .coverage-label{font-size:12px;font-weight:700;color:#31465D}
-    .bar{height:9px;background:var(--cinza);border-radius:999px;overflow:hidden;position:relative}
-    .bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--ciano),#068CAA);border-radius:inherit;min-width:0}
-    .bar-value{font:700 11px 'Montserrat',sans-serif;color:var(--azul);text-align:right}
-
-    .meta-card{background:linear-gradient(145deg,var(--azul-escuro),var(--azul));color:#fff;border-radius:15px;padding:18px;min-height:100%}
-    .meta-card .small{color:#C9D7E4;font-size:11px;text-transform:uppercase;letter-spacing:.05em;font-weight:700}
-    .meta-card .big{font:800 31px 'Montserrat',sans-serif;margin:8px 0 2px}
-    .meta-card .sub{color:#D9E5EE;font-size:11px}
-    .meta-track{height:8px;background:rgba(255,255,255,.13);border-radius:999px;overflow:hidden;margin:15px 0 8px}
-    .meta-track span{display:block;height:100%;background:var(--amarelo);border-radius:999px}
-
-    .rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-    .rank-list{display:grid;gap:8px}
-    .rank-item{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;border:1px solid #E7ECF1;border-radius:11px;padding:10px 11px;background:#FCFDFE}
-    .rank-num{width:30px;height:30px;border-radius:9px;background:var(--cinza);display:grid;place-items:center;font:800 11px 'Montserrat',sans-serif;color:var(--azul)}
-    .rank-title{font-weight:700;font-size:12px;color:#2C4158}
-    .rank-meta{font-size:10px;color:var(--muted);margin-top:2px}
-    .rank-score{font:800 12px 'Montserrat',sans-serif;color:var(--azul)}
-    .rank-item button{all:unset;cursor:pointer;display:contents}
-
-    .alert-list{display:grid;gap:9px}
-    .alert-row{border-left:4px solid var(--vermelho);background:#FFF9F9;border-radius:9px;padding:10px 12px}
-    .alert-row.medium{border-left-color:var(--amarelo);background:#FFFCF4}
-    .alert-row .alert-title{font-weight:800;font-size:12px;color:#33485E}
-    .alert-row .alert-desc{font-size:11px;color:var(--muted);margin-top:3px}
-
-    .empty-state{padding:36px 18px;text-align:center;color:var(--muted)}
-    .loading{padding:44px;text-align:center;color:var(--muted)}
-    .loader-dot{width:9px;height:9px;background:var(--ciano);border-radius:50%;display:inline-block;margin-right:7px;animation:pulse 1s infinite alternate}
-    @keyframes pulse{to{transform:scale(1.65);opacity:.35}}
-    .toast{position:fixed;right:20px;bottom:20px;z-index:80;background:var(--azul-escuro);color:#fff;border-radius:12px;padding:11px 14px;box-shadow:var(--shadow-lg);font-size:12px;max-width:360px}
-
-
-
-    .data-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-    .table-wrap{overflow:auto;border:1px solid var(--linha);border-radius:14px;background:#fff;box-shadow:var(--shadow)}
-    .data-table{width:100%;border-collapse:collapse;min-width:900px}
-    .data-table th{position:sticky;top:0;background:var(--azul);color:#fff;text-align:left;padding:10px 11px;font:700 10px 'Montserrat',sans-serif;letter-spacing:.025em;white-space:nowrap}
-    .data-table td{padding:10px 11px;border-bottom:1px solid #EDF1F4;vertical-align:top;font-size:10.5px;color:#3B5065}
-    .data-table tr:last-child td{border-bottom:0}
-    .data-table tr:hover td{background:#FBFDFE}
-    .state-badge{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:5px 8px;border:1px solid var(--linha);background:#F7F9FB;font:700 9px 'Montserrat',sans-serif;white-space:nowrap;color:#55687B}
-    .state-badge .signal{width:7px;height:7px;border-radius:50%;background:var(--neutro)}
-    .state-badge.validado .signal{background:var(--verde)}
-    .state-badge.nao-verificado .signal{background:var(--ambar)}
-    .state-badge.divergente .signal{background:var(--vermelho)}
-    .section-kpis{display:grid;grid-template-columns:repeat(5,minmax(135px,1fr));gap:10px;margin-bottom:14px}
-    .mini-kpi{background:#fff;border:1px solid var(--linha);border-radius:13px;padding:12px;box-shadow:var(--shadow)}
-    .mini-kpi b{display:block;font:800 19px 'Montserrat',sans-serif;color:var(--azul-escuro);margin-top:4px}
-    .mini-kpi span{font:700 9px 'Montserrat',sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.035em}
-    .audit-section{margin-bottom:16px}
-    .audit-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-    .audit-card{background:#fff;border:1px solid var(--linha);border-radius:14px;padding:13px;box-shadow:var(--shadow)}
-    .audit-card.critical{border-left:4px solid var(--vermelho)}
-    .audit-card.medium{border-left:4px solid var(--amarelo)}
-    .audit-card h4{font:800 12px 'Montserrat',sans-serif;margin:0;color:var(--azul-escuro)}
-    .audit-card p{font-size:10.5px;color:var(--muted);margin:6px 0}
-    .audit-card .audit-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-    .scope-badge{display:inline-flex;border:1px solid #DCE4EA;border-radius:999px;padding:4px 7px;background:#F7F9FB;font:700 8.5px 'Montserrat',sans-serif;color:#57697B;text-transform:uppercase}
-    .scope-badge.global{background:#EEF8FA;border-color:#CDECF2;color:#087B91}
-    .goal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .goal-card{background:#fff;border:1px solid var(--linha);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
-    .goal-card h3{font:800 14px 'Montserrat',sans-serif;margin:0;color:var(--azul-escuro)}
-    .goal-card .goal-status{font:700 9px 'Montserrat',sans-serif;color:#65778A;text-transform:uppercase;margin-top:5px}
-    .goal-card p{font-size:10.5px;color:var(--muted);margin:9px 0}
-    .goal-progress{height:9px;background:var(--cinza);border-radius:999px;overflow:hidden;margin:11px 0 6px}
-    .goal-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--ciano),#078FA9);border-radius:inherit}
-    .goal-numbers{display:flex;justify-content:space-between;gap:12px;font:700 10px 'Montserrat',sans-serif;color:var(--azul)}
-    .inline-link{color:var(--azul);font-weight:700;text-decoration:none}
-
-    .filters-panel{background:#fff;border:1px solid var(--linha);border-radius:16px;padding:14px;box-shadow:var(--shadow);margin-bottom:16px}
-    .filters-grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px}
-    .filter-field label{display:block;font:700 10px 'Montserrat',sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 5px}
-    .filter-field input,.filter-field select{width:100%;border:1px solid var(--linha);border-radius:10px;background:#FBFCFD;padding:9px 10px;color:var(--texto);outline:none}
-    .filter-field input:focus,.filter-field select:focus{border-color:var(--ciano);box-shadow:0 0 0 3px rgba(0,183,215,.09)}
-    .filter-actions{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;margin-top:10px}
-    .secondary-btn{border:1px solid var(--linha);background:#fff;color:var(--azul);font-weight:700;border-radius:10px;padding:9px 12px}
-    .advanced{margin-top:10px;border-top:1px solid #EDF1F4;padding-top:10px}
-    .advanced summary{cursor:pointer;font:700 11px 'Montserrat',sans-serif;color:var(--azul);margin-bottom:10px}
-    .activity-meta-line{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:4px 0 12px;color:var(--muted);font-size:11px}
-    .activity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-    .activity-card{background:#fff;border:1px solid var(--linha);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;position:relative}
-    .activity-card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ciano)}
-    .activity-card.priority-alta:before{background:var(--vermelho)}
-    .activity-card.priority-media:before{background:var(--amarelo)}
-    .activity-card-head{padding:16px 17px 13px;border-bottom:1px solid #EDF1F4;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-    .activity-card h3{font:800 16px/1.35 'Montserrat',sans-serif;color:var(--azul-escuro);margin:0}
-    .activity-sub{font-size:11px;color:var(--muted);margin-top:5px}
-    .status-stack{display:flex;flex-direction:column;gap:5px;align-items:flex-end;min-width:128px}
-    .status-pill{border-radius:999px;padding:5px 8px;font:700 9px 'Montserrat',sans-serif;letter-spacing:.025em;text-transform:uppercase;border:1px solid var(--linha);background:#F7F9FB;color:#526477;white-space:nowrap}
-    .status-pill.high{border-color:#E9CACA;background:#FFF5F5;color:#8E3838}
-    .status-pill.medium{border-color:#EADDB9;background:#FFFBF0;color:#82600C}
-    .status-pill.good{border-color:#CDE2D8;background:#F4FAF7;color:#28694E}
-    .activity-body{padding:15px 17px 17px}
-    .facts-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:13px}
-    .fact-box{border:1px solid #E8EDF1;background:#FAFBFC;border-radius:10px;padding:8px 9px;min-width:0}
-    .fact-box b{display:block;font:700 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.035em;color:var(--muted);margin-bottom:3px}
-    .fact-box span{font-size:11px;color:#2C4158;display:block;overflow:hidden;text-overflow:ellipsis}
-    .evidence-title{font:800 12px 'Montserrat',sans-serif;color:var(--azul);margin:3px 0 8px}
-    .evidence-list{display:grid;gap:6px}
-    .evidence-row{display:grid;grid-template-columns:13px minmax(125px,.8fr) 1.35fr auto;gap:8px;align-items:center;border:1px solid #E8EDF1;border-radius:9px;padding:7px 9px;background:#FCFDFE;min-height:36px}
-    .evidence-row .signal{display:block;width:8px;height:8px;border-radius:50%;background:var(--neutro);box-shadow:0 0 0 3px rgba(174,183,194,.13)}
-    .evidence-row b{font-size:10px;color:#344A60}
-    .evidence-row .evidence-state{font-size:10px;color:var(--muted)}
-    .evidence-row.state-validado .signal{background:var(--verde);box-shadow:0 0 0 3px rgba(46,125,91,.12)}
-    .evidence-row.state-nao-verificado .signal{background:var(--ambar);box-shadow:0 0 0 3px rgba(183,131,24,.13)}
-    .evidence-row.state-ausente .signal{background:var(--neutro)}
-    .evidence-row.state-divergente .signal{background:var(--vermelho);box-shadow:0 0 0 3px rgba(167,68,68,.12)}
-    .evidence-link{font:700 9px 'Montserrat',sans-serif;color:var(--azul);text-decoration:none;border:1px solid #DCE5EB;padding:4px 6px;border-radius:7px;background:#fff;white-space:nowrap}
-    .finance-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:linear-gradient(135deg,#F4F8FB,#F8FAFC);border:1px solid #E0E8EE;border-radius:10px;padding:9px;margin:12px 0}
-    .finance-strip b{font:700 9px 'Montserrat',sans-serif;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px}
-    .finance-strip span{font-size:10px;color:#2C4158}
-    .agent-box{border-left:3px solid var(--ciano);background:#F5FBFC;border-radius:8px;padding:10px 11px;margin-top:10px}
-    .agent-box .agent-label{font:800 9px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.04em;color:#087E96;margin-bottom:4px}
-    .agent-box p{margin:0;font-size:10.5px;color:#40556A}
-    .next-action{border-left-color:var(--amarelo);background:#FFFCF4;margin-top:7px}
-    .next-action .agent-label{color:#81610B}
-    .card-buttons{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
-    .card-link{font:700 10px 'Montserrat',sans-serif;text-decoration:none;color:#fff;background:var(--azul);border-radius:8px;padding:7px 9px}
-    .card-link.alt{background:#EAF2F6;color:var(--azul);border:1px solid #D8E3EA}
-    .pagination{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:15px;padding:11px 13px;background:#fff;border:1px solid var(--linha);border-radius:13px}
-    .pagination-info{color:var(--muted);font-size:10px}
-    .pagination-buttons{display:flex;gap:6px;flex-wrap:wrap}
-    .page-btn{border:1px solid var(--linha);background:#fff;color:var(--azul);border-radius:8px;min-width:32px;padding:6px 8px;font-weight:700;font-size:10px}
-    .page-btn.active{background:var(--azul);color:#fff;border-color:var(--azul)}
-    .page-btn:disabled{opacity:.4;cursor:default}
-
-    .placeholder{padding:50px 20px;text-align:center;background:#fff;border:1px dashed #CBD5DE;border-radius:16px;color:var(--muted)}
-
-    @media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.section-kpis{grid-template-columns:repeat(3,1fr)}.summary-grid{grid-template-columns:1fr}.rank-grid{grid-template-columns:1fr}.filters-grid{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:900px){.activity-grid{grid-template-columns:1fr}.audit-cards,.goal-grid{grid-template-columns:1fr}.facts-row{grid-template-columns:repeat(2,1fr)}.filters-grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:760px){.topbar-inner{align-items:flex-start;flex-direction:column}.header-actions{justify-content:flex-start}.kpi-grid{grid-template-columns:repeat(2,1fr)}.page-head{flex-direction:column}.coverage-row{grid-template-columns:130px 1fr 42px}main{padding:18px 14px 50px}.topbar-inner,.nav-shell{padding-left:14px;padding-right:14px}}
-    @media(max-width:520px){.kpi-grid{grid-template-columns:1fr}.section-kpis{grid-template-columns:1fr 1fr}.filters-grid{grid-template-columns:1fr}.evidence-row{grid-template-columns:13px 1fr}.evidence-row .evidence-state,.evidence-link{grid-column:2}.finance-strip{grid-template-columns:repeat(2,1fr)}.coverage-row{grid-template-columns:1fr}.bar-value{text-align:left}.brand-cluster{gap:10px}.brand h1{font-size:18px}.page-head h2{font-size:20px}.login-card{padding:24px}}
-
-
-    /* ===== PULSA SP — PADRÃO VISUAL JUNTOS ===== */
-    body{background:var(--cz);color:var(--txt);font-family:'Open Sans',Arial,sans-serif}
-    h1,h2,h3,h4,button{font-family:'Montserrat',Arial,sans-serif}
-    .pwd,#login{background:var(--az);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-    .pbox.login-card{background:var(--br);border-radius:16px;padding:36px 40px;max-width:430px;width:100%;text-align:center;box-shadow:0 22px 60px rgba(0,0,0,.28);border:0}
-    .plogo-main{height:auto;max-height:88px;max-width:250px;object-fit:contain;display:block;margin:0 auto 22px;background:#fff}
-    .pkicker{color:var(--am);font:700 10.5px 'Montserrat',sans-serif;letter-spacing:1.25px;margin-bottom:8px;text-transform:uppercase}
-    .psub{color:var(--az)!important;font:700 16px/1.35 'Montserrat',sans-serif!important;margin:0 0 7px!important}
-    .phint{font-size:12px;color:#8390a0!important;margin:0 0 20px!important;line-height:1.5}
-    .pin{width:100%;padding:12px 16px!important;border:2px solid var(--bd)!important;border-radius:10px!important;font-size:15px!important;letter-spacing:2px;color:var(--az);outline:none;margin-bottom:12px;background:#fff!important}
-    .pin:focus{border-color:var(--ci)!important;box-shadow:none!important}
-    .pbtn{width:100%;padding:13px!important;background:var(--az)!important;color:var(--am)!important;border:0!important;border-radius:10px!important;font-size:14px!important;font-weight:700!important;letter-spacing:1px;box-shadow:none!important;margin:0!important}
-    .pbtn:hover{background:var(--ci)!important;color:var(--br)!important}
-    .pfoot{font-size:10px;color:rgba(255,255,255,.58);margin-top:18px;text-align:center;line-height:1.5}
-
-    .hdr.topbar{background:var(--az);box-shadow:0 2px 10px rgba(0,0,0,.3)}
-    .hdri.topbar-inner{max-width:1220px;min-height:68px;padding:8px 24px;gap:18px}
-    .brandwrap{gap:14px}
-    .hlogo{display:block;width:72px;height:52px;flex:0 0 72px;object-fit:contain;background:var(--br);border-radius:8px;padding:4px}
-    .hdiv{width:1px;height:34px;background:rgba(255,255,255,.2)}
-    .htit{color:var(--am)!important;font:700 15px 'Montserrat',sans-serif!important;letter-spacing:.5px!important}
-    .hsub{color:rgba(255,255,255,.62)!important;font-size:10.5px!important;margin-top:2px!important}
-    .agent-badge{border:0;background:rgba(236,194,3,.15);color:var(--am);padding:5px 8px;font-size:9px}
-    .header-actions{gap:5px}.link-action,.ghost-btn{font-size:9.5px;padding:6px 8px;border-radius:7px}
-    .nav-shell{max-width:1220px;padding:0 24px 8px}.hnav{gap:4px}
-    .nbtn.nav-tab{color:rgba(255,255,255,.65);font-size:10.5px;font-weight:700;letter-spacing:.45px;padding:8px 11px;border-radius:8px;text-transform:uppercase;background:none;box-shadow:none}
-    .nbtn.nav-tab:hover{color:#fff;background:rgba(255,255,255,.1)}
-    .nbtn.nav-tab.on,.nbtn.nav-tab.active{color:var(--am);background:rgba(236,194,3,.15);box-shadow:none}
-
-    .wrap{max-width:1220px;margin:0 auto;padding:24px 16px 60px}
-    .page-head{margin-bottom:10px}.page-head .st{font:700 11px 'Montserrat',sans-serif!important;color:var(--az)!important;text-transform:uppercase;letter-spacing:1.4px;margin:0 0 4px!important;padding-left:10px;border-left:4px solid var(--ci)}
-    .page-head p{font-size:11px}.st{font:700 11px 'Montserrat',sans-serif;color:var(--az);text-transform:uppercase;letter-spacing:1.4px;margin:22px 0 12px;padding-left:10px;border-left:4px solid var(--ci)}
-    .card{background:var(--br);border:1.5px solid var(--bd);border-radius:12px;padding:16px 18px;box-shadow:none}
-    .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-    .notice{background:#e0f7fb;border:1px solid #b8ecf5;border-radius:10px;padding:13px 16px;font-size:11px;color:#176377;line-height:1.55}
-
-    .ficha-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px 26px}.ficha-rot{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8592A3;margin-bottom:4px}.ficha-val{font:600 13px/1.45 'Montserrat',sans-serif;color:var(--az);overflow-wrap:anywhere}.ficha-span{grid-column:1/-1}
-    .diag-top{display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:12px}.diag-main,.diag-card{border:0;text-align:left;min-height:145px}
-    .diag-main{background:linear-gradient(135deg,#092040 0%,#0d3768 100%);border-radius:12px;padding:18px 20px;color:#fff}.diag-main .n{font:700 34px Montserrat;color:var(--am)}.diag-main .t{font:700 12px Montserrat;margin-top:2px}.diag-main .s{font-size:10.5px;color:rgba(255,255,255,.68);margin-top:6px;line-height:1.45}
-    .diag-card{background:#fff;border:1.5px solid var(--bd);border-radius:12px;padding:16px 18px}.diag-card .n{font:700 22px Montserrat;color:var(--ci)}.diag-card .t{font:700 10.5px Montserrat;color:var(--az);margin-top:3px;text-transform:uppercase;letter-spacing:.35px}.diag-card .s{font-size:10.5px;color:#718096;margin-top:6px;line-height:1.45}
-    .finance-kpi{background:var(--az);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:18px;min-height:116px;box-shadow:none;position:relative;overflow:hidden}
-    .finance-kpi:after{content:'';position:absolute;right:-28px;bottom:-34px;width:96px;height:96px;border-radius:50%;background:rgba(0,183,215,.10)}
-    .finance-kpi .n{position:relative;z-index:1;font:700 25px Montserrat;color:var(--am);line-height:1.15}
-    .finance-kpi .t{position:relative;z-index:1;font:700 10px Montserrat;color:rgba(255,255,255,.82);margin-top:7px;text-transform:uppercase;letter-spacing:.35px}
-    .finance-kpi.is-money .n{color:var(--ci)}
-    .finance-kpi.is-alert{background:#5f241f}.finance-kpi.is-alert .n{color:#ffdca8}
-    button.diag-main,button.diag-card{cursor:pointer}button.diag-main:hover,button.diag-card:hover{filter:brightness(1.02)}
-
-    .kpi{background:var(--az);border:0;border-radius:12px;padding:18px;text-align:center;min-height:110px}.knum{color:var(--am);font:700 26px Montserrat}.klab{color:rgba(255,255,255,.76);font-size:10.5px;margin-top:4px}.khelp{color:rgba(255,255,255,.48);font-size:9px;margin-top:7px;line-height:1.35}.kpi.warn{background:#745e08}.kpi.danger{background:#631f2a}
-    .sbw{height:14px;background:#dde4ee;border-radius:999px;overflow:hidden}.sb{height:100%;border-radius:999px;transition:width 1s ease}.smid{background:var(--ci)}
-    .badge{display:inline-block;font:700 9.5px/1.2 Montserrat;padding:4px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}.bCo{background:var(--gvb);color:var(--gv)}.bIn{background:var(--awb);color:var(--aw)}.bAl{background:#ffe8cc;color:#8B4A00}.bEr{background:var(--rdb);color:var(--rd)}.bPe{background:#edf2f7;color:#5b6572}.bAn{background:#e0f7fb;color:#176377}
-    .alerta-doc{background:#fff;border:2px solid var(--am);border-left:6px solid var(--am);border-radius:12px;padding:16px 18px;margin-bottom:14px}.alerta-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}.alerta-title{font:700 13px Montserrat;color:var(--az);text-transform:uppercase;letter-spacing:.5px}.alerta-count{font:700 24px Montserrat;color:#8B5A00}.alerta-help{font-size:11px;color:#657180;line-height:1.55;margin-top:4px}.alerta-list{margin-top:12px;display:grid;gap:8px}.alerta-item{background:#fffaf0;border:1px solid #f0dfaa;border-radius:9px;padding:10px 12px}.alerta-item strong{font:700 11px Montserrat;color:var(--az)}.alerta-meta{font-size:10.5px;color:#6f7884;margin-top:3px;line-height:1.45}
-    .execution-card{padding:18px 20px}.execution-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:12px}.execution-title{font:700 12px Montserrat;color:var(--az)}.execution-help{font-size:10px;color:#7b8490;margin-top:3px}.execution-number{font:700 26px Montserrat;color:var(--ci);white-space:nowrap}.execution-number small{font-size:11px;color:#738091}.execution-number.money{font-size:20px}.execution-foot{font:700 10px Montserrat;color:var(--az);margin-top:7px}.coverage-card{padding:20px 22px}
-    .card-title-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}.card-title-row h3{font:700 13px Montserrat;color:var(--az);margin:0}.rank-item{box-shadow:none;border:1px solid #e2e7ed;border-radius:9px}.rank-num{border-radius:7px}.rank-score{color:var(--ci)}
-
-    .filters-panel{border:1.5px solid var(--bd);border-radius:12px;padding:14px;box-shadow:none}.filter-field label{font-size:9.5px}.filter-field input,.filter-field select{border:1.5px solid var(--bd);border-radius:9px;font-size:11px;background:#fff}.primary-btn{background:var(--az);color:var(--am);box-shadow:none;border-radius:9px}.secondary-btn{border:1.5px solid var(--bd);border-radius:9px}
-    .activity-card-grid,.activity-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.activity-card{background:#fff;border:1.5px solid var(--bd);border-left:4px solid var(--ci);border-radius:14px;padding:16px 17px;min-height:285px;display:flex;flex-direction:column;box-shadow:none;overflow:visible}.activity-card:before{display:none}.activity-card.st-ok{border-left-color:var(--gv)}.activity-card.st-alerta{border-left-color:#E07B00}.activity-card.st-erro{border-left-color:#cc2222}.activity-card-head{padding:0;border:0;margin-bottom:10px}.activity-card-kicker{font:700 9.5px Montserrat;color:var(--ci);text-transform:uppercase;letter-spacing:.55px;margin-bottom:4px}.activity-card-title{font:700 13px/1.4 Montserrat;color:var(--az)}.activity-card-sub{font-size:10.5px;color:#68717d;line-height:1.45;margin-top:4px}.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:0;justify-content:flex-end}.activity-card-evidence{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}.activity-evidence-item{background:#f6f8fb;border:1px solid #e4e9ef;border-radius:9px;padding:8px 5px;text-align:center}.activity-evidence-item .n{font:700 10px Montserrat;color:var(--az)}.activity-evidence-item .l{font-size:8px;color:#75808c;text-transform:uppercase;letter-spacing:.2px;margin-top:2px}.activity-evidence-item.ev-ok .n{color:var(--gv)}.activity-evidence-item.ev-pending .n{color:var(--aw)}.activity-evidence-item.ev-divergent .n{color:var(--rd)}.activity-card-total{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:10px;padding:9px 10px;border-radius:9px;background:#eaf8fb;font-size:10.5px;color:#176377}.activity-card-total strong{font-family:Montserrat}.evidence-title{font:700 10px Montserrat;color:var(--az);text-transform:uppercase;letter-spacing:.35px;margin:11px 0 7px}.evidence-list{display:grid;gap:5px}.evidence-row{grid-template-columns:12px minmax(110px,.9fr) 1.1fr auto;padding:6px 8px;min-height:32px}.evidence-row b,.evidence-row .evidence-state{font-size:9px}.finance-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.finance-mini>div{background:#f6f8fb;border:1px solid #e4e9ef;border-radius:8px;padding:7px}.finance-mini span{display:block;font-size:8px;color:#7b8795;text-transform:uppercase}.finance-mini strong{font:700 9.5px Montserrat;color:var(--az);display:block;margin-top:2px}.activity-card-reading{margin-top:10px;border-left:3px solid var(--ci);background:#f7fafc;border-radius:8px;padding:9px 10px;font-size:10px;color:#596575;line-height:1.5}.activity-card-reading strong{color:var(--az)}.activity-next{margin-top:7px;border-left:3px solid var(--am);background:#fffaf0;border-radius:8px;padding:9px 10px;font-size:10px;color:#6d5a18;line-height:1.5}.activity-next strong{color:var(--az)}
-    .drive-actions{display:grid;grid-template-columns:1fr;gap:6px;margin-top:auto;padding-top:10px}.drive-open{display:block;text-align:center;text-decoration:none;background:var(--az);color:var(--am);border-radius:8px;padding:8px 9px;font:700 9.5px Montserrat;text-transform:uppercase;letter-spacing:.3px}.drive-open.secondary{background:#e8f7fb;color:#0f6072;border:1px solid #a8deea}.drive-nolink{font-size:9.5px;color:#8a939e;text-align:center;padding:7px;border:1px dashed #cfd6df;border-radius:8px}
-
-    .evidence-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.evidence-card{background:#fff;border:1.5px solid var(--bd);border-left:4px solid var(--ci);border-radius:14px;padding:16px 17px;display:flex;flex-direction:column;min-height:290px}.evidence-card.nao-verificado{border-left-color:#c9940a}.evidence-card.divergente{border-left-color:#cc2222}.evidence-card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.evidence-card-kicker{font:700 9px Montserrat;color:var(--ci);text-transform:uppercase;letter-spacing:.5px}.evidence-card h3{font:700 12.5px Montserrat;color:var(--az);line-height:1.4;margin:4px 0}.evidence-card-origin{font-size:9.5px;color:#74808d}.evidence-package{display:flex;gap:10px;align-items:center;background:#f6f8fb;border:1px solid #e4e9ef;border-radius:9px;padding:10px;margin-top:11px}.package-number{font:700 24px Montserrat;color:var(--ci)}.evidence-package strong{display:block;font:700 9px Montserrat;color:var(--az);text-transform:uppercase}.evidence-package span{display:block;font-size:10px;color:#68717d;margin-top:3px}.evidence-detail{display:grid;gap:3px;margin-top:9px;font-size:9.5px}.evidence-detail strong{font:700 9px Montserrat;color:var(--az);text-transform:uppercase}.evidence-detail span{color:#68717d}
-
-    .finance-kpi-grid{margin-bottom:16px}.finance-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.finance-card{background:#fff;border:1.5px solid var(--bd);border-left:4px solid var(--gv);border-radius:14px;padding:16px 17px;display:flex;flex-direction:column;min-height:310px}.finance-card.finance-alert{border-left-color:#cc2222}.finance-card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.finance-card-kicker{font:700 9px Montserrat;color:var(--ci);text-transform:uppercase;letter-spacing:.5px}.finance-card h3{font:700 12.5px Montserrat;color:var(--az);line-height:1.4;margin:4px 0}.finance-provider{font-size:9.5px;color:#74808d}.finance-values,.finance-data{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:11px}.finance-values>div,.finance-data>div{background:#f6f8fb;border:1px solid #e4e9ef;border-radius:8px;padding:8px;min-width:0}.finance-values span,.finance-data span{display:block;font-size:8px;color:#7b8795;text-transform:uppercase}.finance-values strong,.finance-data strong{display:block;font:700 9.5px Montserrat;color:var(--az);margin-top:2px;overflow-wrap:anywhere}.danger-text{color:var(--rd)!important}
-
-    .criteria-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.criteria-card{background:#fff;border:1.5px solid var(--bd);border-radius:12px;padding:14px}.criteria-title{font:700 11.5px Montserrat;color:var(--az);margin-bottom:9px}.criteria-line{display:flex;justify-content:space-between;gap:8px;font-size:9px;padding:5px 0;border-bottom:1px solid #edf1f4}.criteria-line span{color:#7b8795}.criteria-line strong{color:#4c5c6c;text-align:right}.criteria-help{font-size:9.5px;color:#68717d;line-height:1.45;margin-top:8px}.criteria-next{font-size:9px;color:#6d5a18;line-height:1.45;margin-top:8px;background:#fffaf0;border-radius:7px;padding:7px}.audit-card-grid,.audit-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.audit-card{box-shadow:none;border:1.5px solid var(--bd);border-left:4px solid var(--ci);border-radius:12px;padding:14px}.audit-card.critical{border-left-color:#cc2222}.audit-card.medium{border-left-color:#c9940a}.audit-card.ok{border-left-color:var(--gv)}.audit-card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.audit-kicker{font:700 9px Montserrat;color:var(--ci);text-transform:uppercase;letter-spacing:.5px}.audit-card h4{font:700 12px Montserrat;color:var(--az);margin:4px 0}.audit-card p{font-size:9.8px}
-
-    .meta-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.meta-card-juntos.goal-card{background:#fff;border:1.5px solid var(--bd);border-radius:14px;padding:18px;box-shadow:none;min-height:280px}.meta-card-juntos.goal-card h3{font:700 13px Montserrat;color:var(--az)}.goal-progress{height:11px}.goal-progress span{background:var(--ci)}
-
-    @media(max-width:1000px){.diag-top{grid-template-columns:repeat(2,1fr)}.g4,.g3{grid-template-columns:repeat(2,1fr)}.activity-card-grid,.activity-grid,.evidence-card-grid,.finance-card-grid,.criteria-card-grid,.audit-card-grid,.meta-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.header-actions{display:none}.activity-card-evidence{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:650px){.diag-top,.g4,.g3,.g2,.activity-card-grid,.activity-grid,.evidence-card-grid,.finance-card-grid,.criteria-card-grid,.audit-card-grid,.meta-card-grid{grid-template-columns:1fr}.hdri.topbar-inner{padding:8px 14px}.hlogo{width:62px;height:46px;flex-basis:62px}.hsub{display:none}.wrap{padding:18px 12px}.activity-card-evidence{grid-template-columns:repeat(2,1fr)}.finance-values,.finance-data,.finance-mini{grid-template-columns:1fr}.pbox.login-card{padding:30px 24px}.nav-shell{padding-left:12px;padding-right:12px}.page-head{flex-direction:column}}
-
-
-    /* CABEÇALHO PULSA — estrutura idêntica ao padrão Juntos */
-    .hdr.topbar{background:var(--az);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.3)}
-    .hdri.topbar-inner{max-width:1220px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;min-height:68px;padding:8px 24px;gap:18px}
-    .brand-cluster.brandwrap{display:flex;align-items:center;gap:14px;min-width:0}
-    .hlogo{display:block;width:72px;height:52px;flex:0 0 72px;max-width:72px;max-height:52px;object-fit:contain;background:#fff;border-radius:8px;padding:4px}
-    .hdiv{width:1px;height:34px;background:rgba(255,255,255,.2);flex:0 0 1px}
-    .brand{min-width:0}
-    .htit{color:var(--am)!important;font:700 15px 'Montserrat',sans-serif!important;letter-spacing:.5px!important;white-space:nowrap}
-    .hsub{color:rgba(255,255,255,.62)!important;font-size:10.5px!important;margin-top:2px!important;max-width:520px;line-height:1.35}
-    .agent-hidden{display:none!important}
-    .hnav{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
-    .nbtn.nav-tab{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.65);font-size:10.5px;font-weight:700;letter-spacing:.45px;padding:8px 11px;border-radius:8px;text-transform:uppercase;box-shadow:none}
-    .nbtn.nav-tab:hover{color:#fff;background:rgba(255,255,255,.1)}
-    .nbtn.nav-tab.on,.nbtn.nav-tab.active{color:var(--am);background:rgba(236,194,3,.15);box-shadow:none}
-    .nbtn.nav-logout{border-left:1px solid rgba(255,255,255,.18);border-radius:0 8px 8px 0;margin-left:4px}
-    .quick-links{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px;padding:10px 12px}
-    .quick-link{font:700 9.5px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.25px;text-decoration:none;color:var(--az);background:#e8f7fb;border:1px solid #a8deea;border-radius:8px;padding:7px 10px}
-    .quick-link:hover{background:var(--az);border-color:var(--az);color:var(--am)}
-    @media(max-width:950px){.hnav{display:none}.hdri.topbar-inner{padding:8px 14px}.hlogo{width:62px;height:46px;flex-basis:62px;max-width:62px;max-height:46px}.hsub{display:none}}
-
-    /* Mapa e pendências — padrão Conexões Empreendedoras */
-    .pulsa-folder-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:12px 0 22px}
-    .pulsa-folder-card,.pulsa-pend-card{background:#fff;border:1.5px solid #dde4ee;border-radius:12px;padding:16px 17px;overflow-wrap:anywhere}
-    .pulsa-folder-card h3,.pulsa-pend-card h3{font:700 13px/1.4 Montserrat,Arial;color:#092040;margin:0 0 8px}
-    .pulsa-folder-card .meta,.pulsa-pend-card .meta{color:#667584;font-size:10px;margin-bottom:9px}
-    .pulsa-folder-card a,.pulsa-pend-card a{color:#087a9b;text-decoration:none;font-weight:700;font-size:10.5px}
-    .pulsa-folder-card details{margin:9px 0;border-top:1px solid #e7ebf0;padding-top:8px}
-    .pulsa-folder-card summary{cursor:pointer;font-weight:700;color:#092040;font-size:11px}
-    .pulsa-folder-card li{margin:6px 0;font-size:10px}
-    .pulsa-pend-card{margin-bottom:13px;border-left:4px solid #ECC203}
-    .pulsa-pend-card.critica{border-left-color:#A74444}
-    .pulsa-pend-item{border-top:1px solid #e7ebf0;padding:10px 0;font-size:11px}
-    .pulsa-pend-item .estado{color:#965f00;font-weight:700;font-size:9px;text-transform:uppercase}
-    .pulsa-index-notice{background:#eef7f9;padding:12px 14px;border-radius:10px;margin:10px 0;font-size:11px;color:#315568}
-    @media(max-width:650px){.pulsa-folder-grid{grid-template-columns:1fr}}
-    .central-intro{background:#edf7fa;border:1px solid #c9e7ee;border-radius:12px;padding:14px;margin:12px 0;color:#244456;font-size:12px}
-    .central-top{display:grid;grid-template-columns:3fr 1fr;gap:12px;margin:18px 0}
-    .central-top input,.central-top select{width:100%;background:#fff;padding:12px;border:1px solid #d6e0e8;border-radius:10px}
-    .central-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
-    .central-stat{background:#fff;border:1px solid #dde4ea;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px}.central-stat strong{font-size:23px;color:#092040}.central-stat span{color:#64788a;font-size:11px}
-    .central-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .central-card{background:#fff;border:1px solid #dce5ed;border-radius:15px;padding:18px;min-width:0;box-shadow:0 4px 18px rgba(9,32,64,.04)}
-    .central-head{display:flex;justify-content:space-between;gap:10px;align-items:start}.central-head h3{font:700 15px Montserrat,sans-serif;margin:0 0 5px;color:#092040}.central-head small{color:#607386}.central-count{white-space:nowrap;background:#fff3e6;border:1px solid #f0dcbb;border-radius:40px;padding:5px 9px;font-size:10px;color:#795318;font-weight:bold}
-    .central-open{display:flex;justify-content:space-between;gap:10px;align-items:center;background:#eaf8fb;border-radius:8px;padding:10px;margin:13px 0;font-size:11px}.central-open a{font-weight:700;color:#006b87}.central-open span{color:#4d6776}
-    .central-evidences{display:grid;gap:3px}.central-evid{border-bottom:1px solid #edf1f4;padding:7px 0;display:flex;align-items:center;gap:8px;font-size:11px}.central-evid span{flex:1}.central-evid b{font-size:10px;font-weight:700}.central-evid a{font-size:10px;color:#007c99}.central-ok{color:#167747}.central-err{color:#b33131}.central-wait{color:#9b620d}.central-muted{color:#718096}
-    .central-detail{border-top:1px solid #e8edf2;padding-top:9px;margin-top:10px;font-size:11px}.central-detail summary{font-weight:700;color:#092040;cursor:pointer}.central-detail li{margin:8px 0;overflow-wrap:anywhere}.central-detail a{color:#007c9e}.central-photo{margin-top:12px;color:#607386;font-size:10px}
-    @media(max-width:900px){.central-grid{grid-template-columns:1fr}.central-top{grid-template-columns:1fr}.central-kpis{grid-template-columns:repeat(2,1fr)}}
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PULSA SP · Central de Monitoramento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-.rig-box{border:1px solid #dce4ea;background:#fbfcfe;border-radius:12px;padding:12px;margin-top:12px;color:#092040}
-.rig-box>strong{font:700 11px Montserrat,sans-serif}.rig-box p{font-size:10px;color:#657488;margin:7px 0}
-.rig-stats{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0}.rig-stats span{background:#eaf5f8;color:#09586b;padding:4px 7px;border-radius:8px;font-size:9px;font-weight:bold}
-.rig-box details{border-top:1px solid #e2e8ed;padding:8px 0}.rig-box summary{font-size:10.5px;font-weight:700;cursor:pointer}
-.rig-box ul{padding-left:17px;max-height:220px;overflow:auto}.rig-box li{font-size:10px;margin:6px 0;overflow-wrap:anywhere}.rig-box li div{color:#697483;margin-top:2px}
-.rig-box a{color:#087a95}.rig-box .rig-pend li{padding:5px 0}.rig-box .rig-note{color:#885c0e}
+:root{--navy:#092040;--deep:#06162e;--cyan:#00a8ca;--yellow:#ecc203;--paper:#f3f6f9;--line:#dce5ee;--ink:#18304b;--muted:#64758a;--white:#fff;--red:#a6373d;--amber:#946016;--green:#287853;--shadow:0 9px 26px rgba(9,32,64,.06)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.5 'DM Sans',Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:#087991;text-decoration:none}a:hover{text-decoration:underline}.hidden{display:none!important}.mono{font-variant-numeric:tabular-nums}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+header{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;box-shadow:0 5px 18px rgba(5,20,42,.15)}.head-inner{max-width:1420px;padding:13px 25px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:22px}.brand{display:flex;align-items:center;gap:13px;min-width:235px}.logo{width:55px;height:55px;object-fit:contain;background:white;border-radius:12px;padding:5px}.brand-name{font:800 18px/1.2 Montserrat,sans-serif;color:var(--yellow)}.brand-sub{font-size:10px;color:#c9d7e6;max-width:250px;line-height:1.4;margin-top:4px}nav{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.nav-btn{border:1px solid transparent;background:transparent;color:#c4d3e1;font:700 11px Montserrat,sans-serif;padding:12px 13px;border-radius:9px;white-space:nowrap}.nav-btn.active{color:var(--yellow);background:#233d4d;border-color:#345268}.nav-btn:hover{color:white}.logout{border-left:1px solid #496078;border-radius:0;margin-left:12px}.pill-count{font:700 10px 'DM Sans';border-radius:20px;background:#5b2c2d;color:white;margin-left:6px;padding:2px 6px}
+main{max-width:1420px;margin:auto;padding:28px 25px 70px}.eyebrow{font:800 11px Montserrat,sans-serif;letter-spacing:.13em;text-transform:uppercase;color:#057fa0}.page-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}.page-head h1{font:800 clamp(22px,3vw,32px)/1.2 Montserrat,sans-serif;color:var(--navy);margin:7px 0 7px;letter-spacing:-.025em}.page-head p{margin:0;color:var(--muted);font-size:13px}.source-line{font-size:11px;color:var(--muted)}.page{display:none}.page.active{display:block}.btn{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:10px;padding:10px 14px;font-weight:700;font-size:12px;display:inline-flex;justify-content:center;align-items:center;gap:7px}.btn:hover{background:#eff8fb;text-decoration:none}.btn.primary{background:var(--navy);border-color:var(--navy);color:var(--yellow)}.btn.primary:hover{background:#1a4166}.btn.soft{background:#ebf8fb;border-color:#cde8ee;color:#006985}.btn.tiny{padding:7px 10px;font-size:11px}.btn:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}.kpi{border:1px solid var(--line);border-radius:17px;background:white;padding:18px 20px;box-shadow:var(--shadow)}.kpi .tag{font-weight:700;letter-spacing:.03em;color:var(--muted);font-size:11px}.kpi .num{font:800 30px Montserrat,sans-serif;color:var(--navy);margin:8px 0 2px}.kpi .note{font-size:10.5px;color:var(--muted)}.kpi.urgent .num{color:var(--red)}.kpi.wait .num{color:var(--amber)}
+.grid{display:grid;grid-template-columns:1.22fr .78fr;gap:16px}.panel{border:1px solid var(--line);border-radius:17px;background:#fff;box-shadow:var(--shadow);padding:20px;margin-bottom:15px}.panel h2{font:800 15px Montserrat,sans-serif;color:var(--navy);margin:0 0 7px}.panel-lead{font-size:11px;color:var(--muted);margin:0 0 15px}.callout{border-left:3px solid var(--cyan);padding:12px 15px;background:#eef8fb;border-radius:0 10px 10px 0;margin:12px 0 18px;font-size:12px;color:#34596b}.sec-title{font:800 13px Montserrat,sans-serif;color:var(--navy);margin:24px 0 14px}.coverage{display:grid;gap:14px}.coverage-row{display:grid;grid-template-columns:minmax(145px,1fr) minmax(150px,2.2fr) auto;align-items:center;gap:15px;font-size:11px}.coverage-label{font-weight:700}.track{height:9px;background:#edf1f5;border-radius:20px;overflow:hidden;display:flex}.fill-received{background:#e5b65a}.fill-verified{background:var(--green)}.fill-divergent{background:var(--red)}.coverage-caption{text-align:right;min-width:88px;color:var(--muted)}.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;color:var(--muted);font-size:10px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}.dot.rec{background:#e5b65a}.dot.val{background:var(--green)}.dot.div{background:var(--red)}
+.quick-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:13px 0;border-bottom:1px solid #eef2f6}.quick-row:last-child{border-bottom:none}.quick-title{font-weight:700;color:var(--navy);font-size:12px}.quick-sub{font-size:10.5px;color:var(--muted);margin-top:3px}.count{font-size:11px;font-weight:800;color:var(--red);align-self:center}
+.toolbar{display:flex;gap:12px;align-items:end;flex-wrap:wrap;padding:16px;border:1px solid var(--line);background:white;border-radius:14px;margin:0 0 16px}.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:180px}.field.small{flex:0 1 245px}.field label{font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:10px;color:#627389}.field input,.field select{width:100%;padding:11px 12px;border:1px solid #d8e3eb;border-radius:9px;color:var(--navy);background:white;outline:0}.field input:focus,.field select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #c4e9f2}.results-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:10px 0 12px;color:var(--muted);font-size:11px}
+.event-list{display:grid;gap:12px}.event-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px;box-shadow:var(--shadow)}.event-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:start}.event-card h3{font:800 14px/1.42 Montserrat,sans-serif;color:var(--navy);margin:0 0 5px}.event-sub{font-size:11px;color:var(--muted)}.chip{display:inline-flex;border-radius:99px;padding:5px 9px;font:700 10px 'DM Sans';background:#f0f3f6;color:#53657b;white-space:nowrap}.chip.missing{background:#f9e7e6;color:#9b3333}.chip.received{background:#fff2d7;color:#845409}.chip.ok{background:#e8f5ec;color:#286b48}.chip.divergent{background:#fae0e2;color:#9b272c}.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.event-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}.micro{font-size:10.5px;color:var(--muted)}
+.pending-groups{display:grid;gap:12px}.pending-card{border:1px solid var(--line);background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}.pending-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;background:#fbfcfe;flex-wrap:wrap}.pending-name{font:800 13px Montserrat,sans-serif;color:var(--navy)}.pending-list{padding:0 17px}.pending-line{border-top:1px solid #edf1f4;padding:10px 0;display:flex;gap:10px;justify-content:space-between;align-items:start}.pending-line .desc{font-size:11px;color:#566d82;margin-top:3px}.pending-tools{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:12px 17px;background:#f9fbfd}
+.finance-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}.finance-card{background:var(--navy);color:white;border-radius:15px;padding:19px}.finance-card .n{font:800 25px Montserrat,sans-serif;color:var(--yellow)}.finance-card .l{font-size:10px;font-weight:700;color:#b8cde0;margin-top:8px}.finance-card.warn{background:#6c3030}.finance-card.warn .n{color:#ffe09b}.financial-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.fin-card{background:white;border:1px solid var(--line);border-left:4px solid var(--cyan);padding:17px;border-radius:12px;display:flex;flex-direction:column;gap:10px}.fin-card.warn{border-left-color:var(--red)}.fin-card h3{font:800 13px/1.4 Montserrat,sans-serif;margin:0;color:var(--navy)}.fin-meta{color:var(--muted);font-size:10px}.fin-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.fin-metric{background:#f2f5f8;padding:9px 8px;border-radius:9px}.fin-metric b{display:block;color:var(--navy);font-size:11px;overflow-wrap:anywhere}.fin-metric small{font-size:8px;display:block;color:#748398;text-transform:uppercase}.fin-note{color:#4e6a7f;font-size:11px;line-height:1.5;background:#f8fbfd;padding:10px;border-left:3px solid var(--cyan);border-radius:5px}
+.pagination{display:flex;align-items:center;justify-content:center;gap:13px;padding:22px;font-size:12px;color:#667e8a}.empty{padding:40px 20px;text-align:center;border:1px dashed #cbdbe5;border-radius:12px;color:var(--muted);background:white}.load-block{padding:42px 20px;text-align:center;background:white;border:1px solid var(--line);border-radius:14px;color:#5e7388}.spin{display:inline-block;width:15px;height:15px;border-radius:100%;border:3px solid #d8eaf0;border-top-color:var(--cyan);animation:rotate .85s linear infinite;vertical-align:middle;margin-right:7px}@keyframes rotate{to{transform:rotate(360deg)}}.error-box{border:1px solid #ecc7c7;background:#fff7f7;color:#832f34;border-radius:12px;padding:20px}.error-box h3{margin:0 0 6px;font:800 13px Montserrat,sans-serif}
+#login{position:fixed;z-index:80;inset:0;background:linear-gradient(130deg,#06152b,#102f50);display:flex;align-items:center;justify-content:center;padding:18px}.login-card{background:#fff;width:min(420px,100%);border-radius:21px;padding:33px;box-shadow:0 30px 80px rgba(0,0,0,.22)}.login-card h1{font:800 21px Montserrat,sans-serif;color:var(--navy);margin:12px 0 5px}.login-card p{font-size:12px;color:var(--muted);margin:0 0 18px}.login-card input{width:100%;border:1px solid var(--line);border-radius:9px;padding:13px;margin:8px 0 11px}.login-card .btn{width:100%;padding:13px}.login-error{font-size:11px;color:#a7333d;min-height:18px;margin-top:10px}
+#drawer{position:fixed;inset:0;background:rgba(3,15,30,.55);z-index:60;display:none;justify-content:flex-end}#drawer.open{display:flex}.drawer-inner{background:white;width:min(820px,100vw);height:100%;overflow:auto;box-shadow:-20px 0 50px rgba(0,0,0,.12)}.drawer-head{position:sticky;top:0;z-index:2;background:white;border-bottom:1px solid var(--line);padding:19px 24px;display:flex;justify-content:space-between;align-items:start;gap:12px}.drawer-head h2{font:800 17px Montserrat,sans-serif;color:var(--navy);margin:2px 0}.drawer-main{padding:18px 24px 60px}.drawer-section{margin:23px 0}.drawer-section h3{font:800 12px Montserrat,sans-serif;margin:0 0 12px;color:var(--navy);text-transform:uppercase;letter-spacing:.045em}.doc-row{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #edf1f4;padding:10px 0}.doc-row:last-child{border-bottom:0}.doc-row b{font-size:12px}.doc-row small{display:block;font-size:10px;color:var(--muted)}.file-list{display:grid;gap:7px;max-height:390px;overflow:auto}.file-item{border:1px solid var(--line);padding:9px 11px;border-radius:8px;font-size:11px;display:flex;justify-content:space-between;align-items:center;gap:10px;overflow-wrap:anywhere}.file-item span{min-width:0}.photo-item{border:1px solid #e0e8ee;border-radius:10px;padding:12px;margin-bottom:9px;font-size:11px}.photo-item p{font-size:10.5px;color:var(--muted)}
+#toast{position:fixed;right:20px;bottom:20px;z-index:100;background:var(--navy);color:white;padding:11px 17px;border-radius:10px;box-shadow:0 8px 30px #0003;max-width:360px;font-size:12px;display:none}
+@media(max-width:1060px){.head-inner{flex-direction:column;align-items:flex-start}.brand{min-width:auto}.financial-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:780px){.head-inner{padding:12px 15px}.brand-sub{max-width:none}nav{width:100%;overflow-x:auto;flex-wrap:nowrap}.nav-btn{padding:9px 10px}main{padding:22px 14px 60px}.kpi-grid{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.finance-cards{grid-template-columns:repeat(2,1fr)}.financial-grid{grid-template-columns:1fr}.coverage-row{grid-template-columns:100px 1fr auto;gap:8px}.coverage-caption{min-width:65px}.drawer-head,.drawer-main{padding-left:15px;padding-right:15px}}
+@media(max-width:430px){.kpi-grid{grid-template-columns:1fr 1fr}.kpi{padding:13px}.kpi .num{font-size:25px}.finance-cards{grid-template-columns:1fr}.event-top{display:block}.event-top .chip{margin-top:8px}}
 </style>
 </head>
 <body>
-  <section id="login">
-    <div class="login-card pbox">
-      <img class="login-brand-logo plogo-main" src="./assets/logo-instituto-br.png" alt="Instituto BR">
-      <div class="login-kicker pkicker">Sistema de Monitoramento e Prestação de Contas — SMPC</div>
-      <h1 class="psub">PULSA SP · SMPC</h1>
-      <p class="phint">Acesso ao painel executivo de evidências, financeiro, metas e auditoria documental.</p>
-      <label for="senha">Senha de acesso</label>
-      <input class="pin" id="senha" type="password" autocomplete="current-password" placeholder="Senha de acesso">
-      <button class="primary-btn pbtn" onclick="entrar()">ACESSAR SISTEMA</button>
-      <div id="erroLogin" class="login-error perr"></div>
-    </div>
-    <div class="pfoot">Instituto BR Arte · Painel de monitoramento documental</div>
-  </section>
-
-  <header class="topbar hdr">
-    <div class="topbar-inner hdri">
-      <div class="brand-cluster brandwrap">
-        <img class="hlogo" src="./assets/logo-instituto-br.png" alt="Instituto BR">
-        <div class="hdiv"></div>
-        <div class="brand">
-          <div class="htit">PULSA SP · SMPC</div>
-          <div class="hsub">Periferias Urbanas, Linguagens, Saberes e Arte · Sistema de Monitoramento e Prestação de Contas</div>
-          <span id="agentBadge" class="agent-hidden">AGENTE_PULSA_V1</span>
-        </div>
-      </div>
-      <nav class="nav-tabs hnav" aria-label="Navegação principal">
-        <button class="nav-tab nbtn active on" data-tab="central" onclick="trocarAba('central',this)">Central de evidências</button>
-        <button class="nav-tab nbtn" data-tab="resumo" onclick="trocarAba('resumo',this)">Resumo</button>
-        <button class="nav-tab nbtn" data-tab="espetaculos" onclick="trocarAba('espetaculos',this)">Espetáculos</button>
-        <button class="nav-tab nbtn" data-tab="pastas" onclick="trocarAba('pastas',this)">Pastas</button>
-        <button class="nav-tab nbtn" data-tab="pendencias" onclick="trocarAba('pendencias',this)">Pendências</button>
-        <button class="nav-tab nbtn" data-tab="evidencias" onclick="trocarAba('evidencias',this)">Evidências</button>
-        <button class="nav-tab nbtn" data-tab="financeiro" onclick="trocarAba('financeiro',this)">Financeiro</button>
-        <button class="nav-tab nbtn" data-tab="auditoria" onclick="trocarAba('auditoria',this)">Auditoria</button>
-        <button class="nav-tab nbtn" data-tab="metas" onclick="trocarAba('metas',this)">Metas</button>
-        <button class="nav-tab nbtn nav-logout" onclick="sair()">Sair</button>
-      </nav>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <div id="globalLoading" class="loading hidden"><span class="loader-dot"></span>Carregando dados oficiais do PULSA SP...</div>
-
-    <section id="pane-central" class="pane">
-      <div class="page-head"><div><h2 class="st">Central de evidências por espetáculo</h2><p>Localize uma apresentação e veja, juntos, documentos, pastas e o que ainda precisa de conferência.</p></div></div>
-      <div class="central-intro">Acesso aos documentos encontrados não significa validação. Os resultados das fotos por inteligência artificial são indícios e exigem revisão humana.</div>
-      <div class="central-top"><div class="filter-field"><label>Buscar espetáculo, artista, data ou ID</label><input id="centralBusca" placeholder="Ex.: Água-Viva, 03/09, PULSA-2026-005" oninput="pulsaRenderCentral()"></div><div class="filter-field"><label>Exibir</label><select id="centralFiltro" onchange="pulsaRenderCentral()"><option value="todos">Todos</option><option value="pendentes">Com pendências</option><option value="criticos">Com divergência</option><option value="semPasta">Sem dossiê vinculado</option></select></div></div>
-      <div id="centralKpis" class="central-kpis"></div>
-      <div id="centralCards" class="central-grid"><div class="loading">Clique nesta aba para carregar o inventário por espetáculo.</div></div>
-    </section>
-    <section id="pane-resumo" class="pane hidden">
-      <div class="page-head">
-        <div><h2 class="st">Resumo executivo</h2><p>Visão consolidada de execução, conformidade documental, evidências e alertas prioritários.</p></div>
-        <div id="updatedAt" class="updated">Atualização: --</div>
-      </div>
-      <div class="quick-links card" aria-label="Acessos institucionais">
-        <a id="driveLink" class="quick-link" href="#" target="_blank" rel="noopener">Drive PULSA</a>
-        <a id="sheetLink" class="quick-link" href="#" target="_blank" rel="noopener">Planilha de Conformidade</a>
-        <a id="programLink" class="quick-link" href="#" target="_blank" rel="noopener">Programação Oficial</a>
-      </div>
-      <div id="summaryContent"></div>
-    </section>
-
-    <section id="pane-espetaculos" class="pane hidden">
-      <div class="page-head">
-        <div><h2 class="st">Espetáculos e atividades</h2><p>Dossiês documentais com evidências recebidas, lacunas, divergências e próxima ação do agente.</p></div>
-        <div class="updated">25 por página</div>
-      </div>
-      <div class="filters-panel">
-        <div class="filters-grid">
-          <div class="filter-field"><label>Busca</label><input id="filtroBusca" placeholder="Nome, artista, local, ID"></div>
-          <div class="filter-field"><label>Período</label><select id="filtroPeriodo"><option value="TODAS">Todas as apresentações</option><option value="SEMANA_ATUAL">Semana atual</option><option value="SEMANA_ANTERIOR">Semana anterior</option><option value="MES_ATUAL">Mês atual</option><option value="PERSONALIZADO">Período personalizado</option></select></div>
-          <div class="filter-field"><label>Prioridade</label><select id="filtroPrioridade"><option value="">Todas</option><option value="ALTA">Alta</option><option value="MEDIA">Média</option><option value="BAIXA">Baixa</option><option value="SEM_ACAO_IMEDIATA">Sem ação imediata</option></select></div>
-          <div class="filter-field"><label>Status documental</label><input id="filtroStatus" placeholder="Parcial, atenção, conforme"></div>
-        </div>
-        <details class="advanced">
-          <summary>Filtros avançados</summary>
-          <div class="filters-grid">
-            <div class="filter-field"><label>Atividade</label><input id="filtroAtividade" placeholder="Nome da atividade"></div>
-            <div class="filter-field"><label>Artista / grupo</label><input id="filtroArtista" placeholder="Artista ou grupo"></div>
-            <div class="filter-field"><label>Tipo de equipamento</label><input id="filtroEquipamento" placeholder="Centro Cultural, Casa de Cultura"></div>
-            <div class="filter-field"><label>Local</label><input id="filtroLocal" placeholder="Olido, Juventude..."></div>
-            <div class="filter-field"><label>Conformidade mínima</label><input id="filtroConformidadeMin" type="number" min="0" max="100" placeholder="0"></div>
-            <div class="filter-field"><label>Conformidade máxima</label><input id="filtroConformidadeMax" type="number" min="0" max="100" placeholder="100"></div>
-            <div class="filter-field"><label>Data inicial</label><input id="filtroDataInicio" type="date"></div>
-            <div class="filter-field"><label>Data final</label><input id="filtroDataFim" type="date"></div>
-            <div class="filter-field"><label>Nota Fiscal</label><select id="filtroNF"><option value="">Indiferente</option><option value="sim">Com NF</option></select></div>
-            <div class="filter-field"><label>Foto apresentação</label><select id="filtroFoto"><option value="">Indiferente</option><option value="sim">Com foto</option></select></div>
-            <div class="filter-field"><label>Borderô</label><select id="filtroBordero"><option value="">Indiferente</option><option value="sim">Com borderô</option></select></div>
-            <div class="filter-field"><label>Relatório físico</label><select id="filtroRelatorio"><option value="">Indiferente</option><option value="sim">Com relatório</option></select></div>
-            <div class="filter-field"><label>Divergência</label><select id="filtroDivergencia"><option value="">Indiferente</option><option value="sim">Somente divergentes</option></select></div>
-            <div class="filter-field"><label>Pendência financeira</label><select id="filtroFinanceiro"><option value="">Indiferente</option><option value="sim">Somente pendentes</option></select></div>
-          </div>
-        </details>
-        <div class="filter-actions"><button class="primary-btn" onclick="loadAtividades(1)">Aplicar filtros</button><button class="secondary-btn" onclick="resetAtividadeFiltros()">Limpar filtros</button></div>
-      </div>
-      <div id="activityMeta" class="activity-meta-line"><span>Carregue os dados para visualizar os dossiês.</span></div>
-      <div id="activityList" class="activity-grid activity-card-grid"></div>
-      <div id="activityPagination"></div>
-    </section>
-    <section id="pane-pastas" class="pane hidden">
-      <div class="page-head"><div><h2 class="st">Pastas e dossiês dos espetáculos</h2><p>Mapa de acesso aos arquivos oficiais, subpastas e evidências de cada apresentação.</p></div></div>
-      
-      <div class="st">Dossiês individuais</div>
-      <div class="filters-panel"><div class="filter-field"><label>Localizar espetáculo, artista ou ID</label><input id="pulsaPastaBusca" placeholder="Digite para filtrar" oninput="pulsaFiltrarIndice()"></div></div>
-      <div id="pulsaPastaItens" class="pulsa-folder-grid"><div class="loading">Carregue os dados para consultar as pastas.</div></div>
-    </section>
-    <section id="pane-pendencias" class="pane hidden">
-      <div class="page-head"><div><h2 class="st">Pendências por espetáculo</h2><p>Cada pendência vinculada ao seu espetáculo, documento, evidência e próxima ação.</p></div></div>
-      <div id="pulsaPendKpis" class="g4"></div>
-      <div class="filters-panel"><div class="filters-grid"><div class="filter-field"><label>Pesquisar</label><input id="pulsaPendBusca" placeholder="Espetáculo, documento, ação" oninput="pulsaFiltrarIndice()"></div><div class="filter-field"><label>Estado da evidência</label><select id="pulsaPendEstado" onchange="pulsaFiltrarIndice()"><option value="">Todos os estados</option><option value="NAO_LOCALIZADO">Não localizado</option><option value="RECEBIDO_NAO_VERIFICADO">Recebido, não verificado</option><option value="DIVERGENTE">Divergente</option><option value="ACESSO_NAO_VERIFICADO">Acesso não verificado</option><option value="PARCIALMENTE_VALIDADO">Parcialmente validado</option></select></div></div></div>
-      <div id="pulsaPendItens"></div>
-    </section>
-    <section id="pane-evidencias" class="pane hidden">
-      <div class="page-head"><div><h2 class="st">Evidências recebidas</h2><p>Inventário de rastreabilidade: origem, pacote recebido, destino, pendência e situação de auditoria.</p></div><div class="updated">Fonte: EVIDENCIAS_EMAIL</div></div>
-      <div id="evidenceContent"></div>
-    </section>
-    <section id="pane-financeiro" class="pane hidden">
-      <div class="page-head"><div><h2 class="st">Financeiro e Notas Fiscais</h2><p>Conferência de valores, documentos fiscais e origem do PIX sem inferência de dados.</p></div><div class="updated">Fonte: FINANCEIRO_NF</div></div>
-      <div id="financeContent"></div>
-    </section>
-    <section id="pane-auditoria" class="pane hidden">
-      <div class="page-head"><div><h2 class="st">Auditoria e pendências</h2><p>Critérios documentais, achados, divergências e próximos passos de regularização.</p></div><div class="filter-field" style="min-width:180px"><label>Prioridade</label><select id="auditPriority" onchange="loadAuditoria()"><option value="">Todas</option><option value="CRÍTICA">Crítica</option><option value="ALTA">Alta</option><option value="MÉDIA">Média</option><option value="BAIXA">Baixa</option><option value="CONFORME">Conforme</option></select></div></div>
-      <div id="auditContent"></div>
-    </section>
-    <section id="pane-metas" class="pane hidden">
-      <div class="page-head"><div><h2 class="st">Metas e monitoramento</h2><p>Meta física, indicadores, meios de verificação e avanço acumulado do projeto.</p></div><div class="updated">Fonte: METAS</div></div>
-      <div id="goalsContent"></div>
-    </section>
-  </main>
-
-  <div id="toast" class="toast hidden"></div>
-
-  <script>
-    const PULSA_API_URL = 'https://script.google.com/macros/s/AKfycbxUyyrHbg3YPuPpI4AbCHokU2dsoJ5Uvw7rBcn0viLZKfWFxlLJVJ6N1nvGjh9-vxNp/exec';
-    let TOKEN = '';
-    let BOOT = null;
-    let ACTIVE_TAB = 'resumo';
-    let KPI_FILTER = null;
-    const PAGE_SIZE = 25;
-    let ACTIVITY_PAGE = 1;
-    let ACTIVITY_RESULT = null;
-    let EVIDENCE_PAGE = 1;
-    let FINANCE_PAGE = 1;
-
-    const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-    const pct = value => `${Number(value || 0).toLocaleString('pt-BR',{maximumFractionDigits:2})}%`;
-    const numberBR = value => Number(value || 0).toLocaleString('pt-BR');
-    const moneyBR = value => Number(value || 0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-
-    function apiUrlConfigurada(){
-      return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:[?#].*)?$/i.test(String(PULSA_API_URL||'').trim());
-    }
-
-    async function apiPost(action, payload={}){
-      if(!apiUrlConfigurada()){
-        throw new Error('Configure PULSA_API_URL no index.html com a URL /exec do Web App do Apps Script.');
-      }
-      let response;
-      try{
-        response = await fetch(PULSA_API_URL,{
-          method:'POST',
-          redirect:'follow',
-          cache:'no-store',
-          credentials:'omit',
-          referrerPolicy:'no-referrer',
-          headers:{'Content-Type':'text/plain;charset=utf-8'},
-          body:JSON.stringify({action,...payload})
-        });
-      }catch(_err){
-        throw new Error('Não foi possível acessar a API do PULSA. Verifique a publicação do Apps Script e a conexão com a internet.');
-      }
-      const text = await response.text();
-      let json;
-      try{json=JSON.parse(text);}catch(_err){throw new Error('A API do PULSA retornou uma resposta inválida. Verifique a URL e a implantação do Web App.');}
-      if(!json || json.ok!==true) throw new Error((json&& (json.error||json.mensagem)) || 'Falha na API do PULSA.');
-      return json;
-    }
-
-    async function entrar(){
-      const senha = document.getElementById('senha').value;
-      const erro = document.getElementById('erroLogin');
-      erro.textContent = '';
-      if(!senha){erro.textContent='Informe a senha de acesso.';return;}
-      try{
-        const res = await apiPost('login',{senha});
-        if(!res || !res.ok){erro.textContent=(res&&res.mensagem)||'Acesso não autorizado.';return;}
-        TOKEN = res.token;
-        sessionStorage.setItem('pulsaPainelToken',TOKEN);
-        document.getElementById('login').classList.add('hidden');
-        await carregarBootstrap();
-      }catch(err){erro.textContent=err.message||String(err);}
-    }
-
-    async function sair(){
-      try{if(TOKEN) await apiPost('logout',{token:TOKEN});}catch(_e){}
-      TOKEN=''; BOOT=null; sessionStorage.removeItem('pulsaPainelToken'); location.reload();
-    }
-
-    async function carregarBootstrap(){
-      setLoading(true);
-      try{
-        BOOT = (await apiPost('bootstrap',{token:TOKEN})).data;
-        aplicarConfig(BOOT.config||{});
-        renderResumo(BOOT.resumo||{});
-        trocarAba('central',document.querySelector('.nav-tab[data-tab="central"]'));
-        document.getElementById('updatedAt').textContent='Atualização: '+(BOOT.geradoEm||'fonte oficial');
-      }catch(err){
-        sessionStorage.removeItem('pulsaPainelToken');
-        TOKEN='';
-        document.getElementById('login').classList.remove('hidden');
-        showToast(err.message||String(err));
-      }finally{setLoading(false);}
-    }
-
-    function aplicarConfig(c){
-      document.getElementById('agentBadge').textContent=c.agente||'AGENTE_PULSA_V1';
-      setHref('driveLink',c.pastaRaiz);
-      setHref('sheetLink',c.planilha);
-      setHref('programLink',c.programacaoOficial);
-    }
-
-    function setHref(id,url){
-      const el=document.getElementById(id);
-      if(url){el.href=url;el.classList.remove('hidden');}else{el.href='#';el.classList.add('hidden');}
-    }
-
-    function renderResumo(r){
-      const root=document.getElementById('summaryContent');
-      const c=(BOOT&&BOOT.config)||{};
-      const target=r.metaApresentacoes||0;
-      const metaPct=r.progressoMetaPercentual==null?0:r.progressoMetaPercentual;
-      const kpis=[
-        ['total',r.totalMapeadas||0,'Apresentações mapeadas','Base cumulativa de atividades',''],
-        ['conformidade',pct(r.conformidadeMedia),'Validação formal média','Documentos ainda aguardam conferência registrada',''],
-        ['nf',r.nfs||0,'NFs recebidas','Documentos fiscais localizados',''],
-        ['fotos',r.atividadesComFotos||0,'Com evidência fotográfica','Atividades com foto da apresentação',''],
-        ['completos',r.completos||0,'Dossiês validados','Somente conferências formalmente documentadas',''],
-        ['pendentes',r.pendentes||0,'Pendências documentais','Atividades ainda incompletas','warn'],
-        ['divergencia',r.divergencias||0,'Divergências críticas','Conflitos que exigem saneamento','danger'],
-        ['naoVerificados',r.naoVerificados||0,'Arquivos não verificados','Recebidos, mas com validação técnica pendente','warn']
-      ];
-      root.innerHTML=`
-        <div class="st">Ficha do Projeto</div>
-        <article class="card ficha-card"><div class="ficha-grid">
-          <div><div class="ficha-rot">Projeto</div><div class="ficha-val">${esc(c.projeto||'PULSA SP')}</div></div>
-          <div><div class="ficha-rot">Código</div><div class="ficha-val">${esc(c.codigo||'PULSA')}</div></div>
-          <div><div class="ficha-rot">Território</div><div class="ficha-val">${esc(c.territorio||'Município de São Paulo')}</div></div>
-          <div><div class="ficha-rot">Vigência</div><div class="ficha-val">${esc(c.vigencia||'A confirmar')}</div></div>
-          <div class="ficha-span"><div class="ficha-rot">Meta central</div><div class="ficha-val">${esc(c.meta1||'Realizar apresentações artístico-culturais em múltiplas linguagens')}</div></div>
-          <div><div class="ficha-rot">Público estimado</div><div class="ficha-val">${esc(c.publicoEstimado||'A consolidar')}</div></div>
-          <div><div class="ficha-rot">Agente</div><div class="ficha-val">${esc(c.agente||'AGENTE_PULSA_V1')}</div></div>
-        </div></article>
-
-        <div class="st">Operação e Evidências</div>
-        <div class="diag-top">
-          <button class="diag-main" data-kpi-filter="total"><div class="n">${numberBR(r.totalMapeadas||0)}</div><div class="t">Apresentações monitoradas</div><div class="s">Base cumulativa do PULSA, preparada para receber nova programação semanal sem apagar o histórico.</div></button>
-          <button class="diag-card" data-kpi-filter="fotos"><div class="n">${numberBR(r.atividadesComFotos||0)}</div><div class="t">Com evidência</div><div class="s">Atividades com registro fotográfico já localizado na fonte oficial.</div></button>
-          <button class="diag-card" data-kpi-filter="nf"><div class="n">${numberBR(r.nfs||0)}</div><div class="t">NFs localizadas</div><div class="s">Documentos fiscais registrados e vinculados à trilha financeira.</div></button>
-          <div class="diag-card"><div class="n">AGENTE</div><div class="t">AGENTE_PULSA_V1</div><div class="s">Leitura automática de lacunas, divergências e próxima ação por dossiê.</div></div>
-        </div>
-
-        <div class="st">Pendências Documentais Prioritárias</div>
-        <div class="alerta-doc"><div class="alerta-top"><div><div class="alerta-title">Saneamento documental</div><div class="alerta-help">Pendências, divergências e arquivos ainda não verificados permanecem visíveis até a comprovação documental.</div></div><div class="alerta-count">${numberBR((r.pendentes||0)+(r.divergencias||0))}</div></div><div class="alerta-list">${renderAlerts(r.alertasCriticos||[])}</div></div>
-
-        <div class="st">Visão Geral</div>
-        <div class="g4 kpi-grid-juntos">${kpis.map(k=>kpiCard(...k)).join('')}</div>
-
-        <div class="st">Execução Documental</div>
-        <div class="g2 dashboard-doc-grid">
-          <article class="card execution-card"><div class="execution-head"><div><div class="execution-title">Meta física de apresentações</div><div class="execution-help">Avanço acumulado conforme a fonte oficial.</div></div><div class="execution-number">${numberBR(r.totalMapeadas||0)} <small>/ ${numberBR(target||0)}</small></div></div><div class="sbw"><div class="sb smid" style="width:${Math.min(100,Math.max(0,metaPct))}%"></div></div><div class="execution-foot">${pct(metaPct)} da meta física</div></article>
-          <article class="card execution-card"><div class="execution-head"><div><div class="execution-title">Valor fiscal localizado</div><div class="execution-help">Soma dos valores fiscais carregados no controle financeiro.</div></div><div class="execution-number money">${moneyBR(r.valorFiscalVerificado||0)}</div></div><div class="notice">O painel não infere PIX, valor ou dados bancários ausentes. Divergências permanecem em auditoria.</div></article>
-        </div>
-
-        <div class="st">Cobertura de Evidências</div>
-        <article class="card coverage-card"><div class="coverage-list">${renderCoverage(r.cobertura||{})}</div></article>
-
-        <div class="st">Dossiês e Prioridade de Saneamento</div>
-        <div class="g2 rank-grid-juntos">
-          <article class="card"><div class="card-title-row"><h3>Dossiês mais completos</h3><span class="badge bCo">Conformidade</span></div><div class="rank-list">${renderRank(r.topCompletos||[],false)}</div></article>
-          <article class="card"><div class="card-title-row"><h3>Mais críticos</h3><span class="badge bEr">Prioridade</span></div><div class="rank-list">${renderRank(r.topCriticos||[],true)}</div></article>
-        </div>`;
-      root.querySelectorAll('[data-kpi-filter]').forEach(el=>el.addEventListener('click',()=>onKpiClick(el.dataset.kpiFilter)));
-    }
-
-    function kpiCard(filter,value,label,hint,cls){
-      return `<button class="kpi ${esc(cls||'')}" data-kpi-filter="${esc(filter)}"><div class="knum">${esc(value)}</div><div class="klab">${esc(label)}</div><div class="khelp">${esc(hint)}</div></button>`;
-    }
-
-    function renderCoverage(cobertura){
-      const order=['nf','contrato','fotoApresentacao','fotoPublico','bordero','relatorio','programacao'];
-      return order.map(key=>{
-        const item=cobertura[key]||{label:key,coberturaValidada:0,validados:0,total:0};
-        return `<div class="coverage-row"><div class="coverage-label">${esc(item.label)}</div><div class="bar"><span style="width:${Math.max(0,Math.min(100,Number(item.coberturaValidada||0)))}%"></span></div><div class="bar-value">${esc(item.coberturaValidada||0)}%</div></div>`;
-      }).join('');
-    }
-
-    function renderRank(items,critical){
-      if(!critical && items.length && items.every(a=>Number(a.conformidade||0)===0)) return '<div class="empty-state">Nenhuma validação formal foi registrada ainda. Existem documentos recebidos que aguardam conferência.</div>';
-      if(!items.length) return '<div class="empty-state">Sem registros suficientes para este ranking.</div>';
-      return items.map((a,i)=>`<div class="rank-item" data-activity-id="${esc(a.id)}"><div class="rank-num">${i+1}</div><div><div class="rank-title">${esc(a.nome||a.id)}</div><div class="rank-meta">${esc(a.data||'')} · ${critical?'Prioridade '+esc(a.prioridade||''):'Validação formal'}</div></div><div class="rank-score">${esc(a.conformidade||0)}%</div></div>`).join('');
-    }
-
-    function renderAlerts(items){
-      if(!items.length) return '<div class="empty-state">Nenhum alerta crítico retornado pela fonte oficial.</div>';
-      return items.map(raw=>{
-        const r=raw.values||raw;
-        const title=r['Espetáculo / Ação']||r['ID / Escopo']||r.Tema||'Achado de auditoria';
-        const desc=r['Próximo passo']||r.Situação||r.situacao||'';
-        const medium=/m[eé]dia|baixa/i.test(String(r.Prioridade||''));
-        return `<div class="alerta-item ${medium?'medium':''}"><strong>${esc(title)}</strong><div class="alerta-meta">${esc(desc)}</div></div>`;
-      }).join('');
-    }
-
-    function onKpiClick(filter){
-      KPI_FILTER=filter;
-      const btn=document.querySelector('.nav-tab[data-tab="espetaculos"]');
-      trocarAba('espetaculos',btn);
-    }
-
-    function trocarAba(nome,btn){
-      ACTIVE_TAB=nome;
-      document.querySelectorAll('.nav-tab').forEach(x=>{x.classList.toggle('active',x===btn);x.classList.toggle('on',x===btn);});
-      document.querySelectorAll('.pane').forEach(x=>x.classList.add('hidden'));
-      const pane=document.getElementById('pane-'+nome); if(pane) pane.classList.remove('hidden');
-      if(nome==='resumo' && BOOT) renderResumo(BOOT.resumo||{});
-      if(nome==='espetaculos') loadAtividades(1);
-      if(nome==='evidencias') loadEvidencias(1);
-      if(nome==='pastas'||nome==='pendencias'||nome==='central') pulsaCarregarIndice();
-      if(nome==='financeiro') loadFinanceiro(1);
-      if(nome==='auditoria') loadAuditoria();
-      if(nome==='metas') loadMetas();
-    }
-
-
-    function coletarFiltrosAtividades(){
-      const value=id=>{const el=document.getElementById(id);return el?el.value:''};
-      const bool=id=>value(id)==='sim';
-      const filtros={
-        busca:value('filtroBusca'), periodo:value('filtroPeriodo')||'TODAS', prioridade:value('filtroPrioridade'), status:value('filtroStatus'),
-        nome:value('filtroAtividade'), artista:value('filtroArtista'), tipoEquipamento:value('filtroEquipamento'), local:value('filtroLocal'),
-        dataInicio:value('filtroDataInicio'), dataFim:value('filtroDataFim'),
-        temNF:bool('filtroNF')||undefined, temFoto:bool('filtroFoto')||undefined, temBordero:bool('filtroBordero')||undefined,
-        temRelatorio:bool('filtroRelatorio')||undefined, divergencia:bool('filtroDivergencia')||undefined,
-        pendenciaFinanceira:bool('filtroFinanceiro')||undefined
-      };
-      const min=value('filtroConformidadeMin'),max=value('filtroConformidadeMax');
-      if(min!=='') filtros.minConformidade=Number(min);
-      if(max!=='') filtros.maxConformidade=Number(max);
-      aplicarFiltroKpi(filtros);
-      return filtros;
-    }
-
-    function aplicarFiltroKpi(f){
-      if(!KPI_FILTER) return;
-      if(KPI_FILTER==='nf') f.temNF=true;
-      if(KPI_FILTER==='fotos') f.temFoto=true;
-      if(KPI_FILTER==='completos'){f.minConformidade=100;f.maxConformidade=100;}
-      if(KPI_FILTER==='pendentes') f.maxConformidade=99;
-      if(KPI_FILTER==='divergencia') f.divergencia=true;
-      if(KPI_FILTER==='naoVerificados') f.prioridade='MEDIA';
-      if(KPI_FILTER==='financeiro') f.pendenciaFinanceira=true;
-      KPI_FILTER=null;
-    }
-
-    function resetAtividadeFiltros(){
-      ['filtroBusca','filtroStatus','filtroAtividade','filtroArtista','filtroEquipamento','filtroLocal','filtroConformidadeMin','filtroConformidadeMax','filtroDataInicio','filtroDataFim'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-      ['filtroPrioridade','filtroNF','filtroFoto','filtroBordero','filtroRelatorio','filtroDivergencia','filtroFinanceiro'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-      const periodo=document.getElementById('filtroPeriodo'); if(periodo)periodo.value='TODAS';
-      KPI_FILTER=null; loadAtividades(1);
-    }
-
-    async function loadAtividades(page=1){
-      ACTIVITY_PAGE=page;
-      const list=document.getElementById('activityList');
-      const meta=document.getElementById('activityMeta');
-      if(list) list.innerHTML='<div class="loading" style="grid-column:1/-1"><span class="loader-dot"></span>Carregando dossiês...</div>';
-      try{
-        const res=(await apiPost('atividades',{token:TOKEN,filtros:coletarFiltrosAtividades(),page,pageSize:PAGE_SIZE})).data;
-        
-        try {
-          const ids=(res.items||[]).map(a=>String(a.id||'')).filter(Boolean);
-          if(ids.length){
-            const auditoria=(await apiPost('auditoria_rigorosa',{token:TOKEN,ids})).data||{};
-            (res.items||[]).forEach(a=>{a.auditoriaRigorosa=auditoria[String(a.id||'')]||null;});
-          }
-        } catch (auditError) {
-          (res.items||[]).forEach(a=>{a.auditoriaRigorosa={erro:'Auditoria detalhada indisponível: '+String(auditError.message||auditError)};});
-        }
-        ACTIVITY_RESULT=res; renderAtividades(res);
-      }catch(err){
-        if(meta) meta.innerHTML='<span>Falha ao carregar atividades.</span>';
-        if(list) list.innerHTML=`<div class="empty-state" style="grid-column:1/-1">${esc(err.message||String(err))}</div>`;
-      }
-    }
-
-    function renderAtividades(res){
-      res=res||{items:[],page:1,pages:1,total:0,pageSize:PAGE_SIZE};
-      const meta=document.getElementById('activityMeta'),list=document.getElementById('activityList'),pag=document.getElementById('activityPagination');
-      if(meta) meta.innerHTML=`<span><b>${numberBR(res.total||0)}</b> atividade(s) no filtro atual</span><span>Página ${res.page||1} de ${res.pages||1}</span>`;
-      if(list) list.innerHTML=(res.items||[]).length?(res.items||[]).map(renderCardAtividade).join(''):'<div class="empty-state" style="grid-column:1/-1">Nenhuma atividade encontrada para os filtros selecionados.</div>';
-      if(pag) pag.innerHTML=renderPagination(res);
-    }
-
-    function renderCardAtividade(a){
-      const priority=String(a.prioridade||'').toLowerCase().replace(/_/g,'-');
-      const pClass=a.prioridade==='ALTA'?'bEr':a.prioridade==='MEDIA'?'bIn':'bCo';
-      const statusClass=/aten|diverg/i.test(String(a.statusDocumental||''))?'bAl':/parcial|pend/i.test(String(a.statusDocumental||''))?'bIn':'bCo';
-      const ev=a.evidencias||{};
-      const evidenceRows=[
-        ['Nota Fiscal',ev.nf],['Contrato / cachê',ev.contrato],['Fotos da apresentação',ev.fotoApresentacao],['Fotos do público',ev.fotoPublico],
-        ['Borderô',ev.bordero],['Relatório físico',ev.relatorio],['Programação / divulgação',ev.programacao],['Vídeos',ev.videos],['Acessibilidade / outros',ev.acessibilidadeOutros]
-      ].map(([label,e])=>renderSemaforoEvidencia(e,label)).join('');
-      const buttons=[];
-      if(a.dossieUrl)buttons.push(`<a class="drive-open" href="${esc(a.dossieUrl)}" target="_blank" rel="noopener">Abrir dossiê</a>`);
-      if(a.nfUrl)buttons.push(`<a class="drive-open secondary" href="${esc(a.nfUrl)}" target="_blank" rel="noopener">Abrir NF</a>`);
-      if(a.fonteBrutaUrl)buttons.push(`<a class="drive-open secondary" href="${esc(a.fonteBrutaUrl)}" target="_blank" rel="noopener">Abrir fonte bruta</a>`);
-      const valProg=a.valorProgramacao==null?'Não informado':moneyBR(a.valorProgramacao);
-      const valNF=a.valorNF==null?'Não informado':moneyBR(a.valorNF);
-      return `<article class="activity-card st-${a.prioridade==='ALTA'?'erro':a.prioridade==='MEDIA'?'alerta':'ok'} priority-${esc(priority)}" id="activity-${esc(a.id)}">
-        <div class="activity-card-head"><div><div class="activity-card-kicker">${esc(a.id)} · ${esc(a.data||'Data não informada')}</div><div class="activity-card-title">${esc(a.nome||a.id)}</div><div class="activity-card-sub">${esc(a.artista||'Artista não informado')} · ${esc(a.local||'Local não informado')} · ${esc(a.hora||'Horário não informado')}</div></div><div class="chips"><span class="badge ${pClass}">${esc(a.prioridade||'A classificar')}</span><span class="badge ${statusClass}">${esc(a.statusDocumental||'Sem status')}</span></div></div>
-        <div class="activity-card-evidence">${renderActivityEvidenceMini(ev)}</div>
-        <div class="activity-card-total"><span>Validação formal</span><strong>${esc((a.conformidade&&a.conformidade.percentual)||0)}%</strong></div>
-        <div class="evidence-title">Evidências do dossiê</div><div class="evidence-list">${evidenceRows}</div>
-        ${renderAuditoriaRigorosaCard(a)}
-        <div class="finance-mini"><div><span>Programação</span><strong>${esc(valProg)}</strong></div><div><span>Valor NF</span><strong>${esc(valNF)}</strong></div><div><span>Nº NF</span><strong>${esc(a.nf||'Não localizada')}</strong></div></div>
-        <div class="activity-card-reading"><strong>Leitura do Agente</strong><br>${esc(a.leituraAgente||'Leitura indisponível na fonte oficial.')}</div>
-        <div class="activity-next"><strong>Próxima ação</strong><br>${esc(a.proximaAcao||'Sem recomendação disponível.')}</div>
-        <div class="drive-actions">${buttons.join('')||'<div class="drive-nolink">Nenhum link documental disponível neste registro.</div>'}</div>
-      </article>`;
-    }
-
-
-    function renderAuditoriaRigorosaCard(a){
-      const d=a.auditoriaRigorosa;
-      if(!d)return '<section class="rig-box"><strong>Pastas e pendências individualizadas</strong><p>Inventário ainda não carregado ou não gerado.</p></section>';
-      if(d.erro)return `<section class="rig-box"><strong>Auditoria detalhada</strong><p>${esc(d.erro)}</p></section>`;
-      const pastas=d.pastas||[],arquivos=d.arquivos||[],pend=d.pendencias||[],fotos=d.analiseFotos||[];
-      const pastaHtml=pastas.length?pastas.map(p=>`<li><a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">📁 ${esc(p.caminho||p.nome)}</a></li>`).join(''):'<li>Nenhuma subpasta identificada no inventário.</li>';
-      const pendHtml=pend.length?pend.map(p=>`<li><b>${esc(p.nome||'Pendência')}</b> — ${esc(p.estado||'Pendente')}<div>${esc(p.acao||'Conferir documentação')}</div></li>`).join(''):'<li>Nenhuma pendência registrada no último inventário. Isso não comprova validação sem conferência.</li>';
-      const arqHtml=arquivos.length?arquivos.map(p=>`<li><a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${esc(p.nome)}</a> <small>(${esc(p.tipo||'Não classificado')})</small></li>`).join(''):'<li>Nenhum arquivo listado.</li>';
-      const fotoHtml=fotos.length?fotos.map(f=>`<li><a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer">Abrir fotografia</a> — ${esc(f.identificacao)} — ${esc(f.banner)} — ${esc(f.estado)}</li>`).join(''):'<li>A análise automática das imagens ainda não foi executada.</li>';
-      return `<section class="rig-box"><strong>Auditoria documental por espetáculo</strong>
-        <div class="rig-stats"><span>${pastas.length} pasta(s)</span><span>${arquivos.length} arquivo(s)</span><span>${pend.length} pendência(s)</span></div>
-        <details><summary>Ver todas as pastas (${pastas.length})</summary><ul>${pastaHtml}</ul></details>
-        <details><summary>Ver arquivos encontrados (${arquivos.length})</summary><ul>${arqHtml}</ul></details>
-        <details><summary>Conferência automática de fotos (${fotos.length})</summary><ul>${fotoHtml}</ul></details>
-        <details open><summary>Pendências deste espetáculo (${pend.length})</summary><ul class="rig-pend">${pendHtml}</ul></details>
-        <p class="rig-note">OCR automático identifica possíveis referências ao PULSA, mas a presença, legibilidade e correspondência do banner seguem pendentes de verificação visual documentada.</p></section>`;
-    }
-
-
-    const PULSA_PASTAS_RAIZ=[
-      ['00 · Governança e plano de trabalho','https://drive.google.com/drive/folders/19f0fsOp3eytkYT4cT3-1fvATkwFP_foo'],
-      ['01 · Evidências de execução','https://drive.google.com/drive/folders/13y73Vd8epf5OUEOYTc9OiqbsYCXm3umk'],
-      ['02 · Relatórios consolidados','https://drive.google.com/drive/folders/1TZ0m4DwErIviuP6Cvj1VGCsKkB4TrgLB'],
-      ['03 · Controle e links','https://drive.google.com/drive/folders/1Euw7P8xWah75S46ivHtjMSJO6rvwK4nx'],
-      ['04 · Comunicação geral','https://drive.google.com/drive/folders/1qWT1cFOQH6qYxkMu8VNH3nidEUFol_Si'],
-      ['05 · Materiais e insumos','https://drive.google.com/drive/folders/1acoeralGgt6k_6IEtawks6CgmC5_-2XI'],
-      ['06 · Emails recebidos','https://drive.google.com/drive/folders/1wx0REvfdDDaAc0l6TSAI01fhXnobUiR5'],
-      ['07 · Backup integral','https://drive.google.com/drive/folders/1kjktnU9kcx2a2U56tEQDHwt-X0G4aLvj'],
-      ['08 · Emails enviados','https://drive.google.com/drive/folders/1exBPaCT0BeAj2p2-Fe9RlKFpsOi-41eS'],
-      ['09 · Financeiro e prestação de contas','https://drive.google.com/drive/folders/17fD3GYX_CLpvtj5iejIfom-uLqevjr5I'],
-      ['10 · Avaliação do público','https://drive.google.com/drive/folders/1zKXOBEyuEL-xRIFXclJqDtwfvtztJnMV'],
-      ['11 · Acessibilidade e ações afirmativas','https://drive.google.com/drive/folders/1u95Ci7c41mOpQ1Xg01LxseEPeSTBLRTU'],
-      ['12 · Relatório final e anexos','https://drive.google.com/drive/folders/1YWWX_jqJYdIn4Ikom9xODyBo-q3Ihe_T'],
-      ['A validar · Arquivos sem correspondência','https://drive.google.com/drive/folders/1cBKAdfOCkbGklQgDDXfQN2Yu6EXlFjHz']
-    ];
-    let PULSA_INDICE_CACHE=null, PULSA_INDICE_PROMISE=null;
-    function pulsaLinkSeguro(url,label){const u=String(url||'');return /^https:\/\/drive\.google\.com\//.test(u) || /^https:\/\/docs\.google\.com\//.test(u) ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>` : `<span>${esc(label)} — link indisponível</span>`;}
-    async function pulsaCarregarIndice(){
-      const root=document.getElementById('pulsaRootFolderCards');
-      if(root) root.innerHTML='';
-      if(PULSA_INDICE_CACHE){pulsaFiltrarIndice();return;}
-      if(PULSA_INDICE_PROMISE)return PULSA_INDICE_PROMISE;
-      document.getElementById('pulsaPastaItens').innerHTML='<div class="loading">Carregando todos os espetáculos e suas pastas...</div>';
-      document.getElementById('pulsaPendItens').innerHTML='<div class="loading">Carregando pendências individualizadas...</div>';
-      PULSA_INDICE_PROMISE=(async()=>{
-        const first=(await apiPost('atividades',{token:TOKEN,filtros:{},page:1,pageSize:100})).data;
-        let items=[...(first.items||[])];
-        const pages=Number(first.pages||1);
-        // Consulta páginas em lotes pequenos; evita uma sequência muito longa de espera.
-        for(let i=2;i<=pages;i+=3){
-          const ps=Array.from({length:Math.min(3,pages-i+1)},(_,j)=>i+j);
-          const rs=await Promise.all(ps.map(page=>apiPost('atividades',{token:TOKEN,filtros:{},page,pageSize:100})));
-          rs.forEach(r=>items.push(...((r.data||{}).items||[])));
-        }
-        // Máximo de 3 chamadas simultâneas de auditoria por lote, com carga reduzida.
-        for(let i=0;i<items.length;i+=75){
-          const lotes=[items.slice(i,i+25),items.slice(i+25,i+50),items.slice(i+50,i+75)].filter(x=>x.length);
-          const rs=await Promise.all(lotes.map(lote=>apiPost('auditoria_rigorosa',{
-            token:TOKEN,ids:lote.map(a=>String(a.id||'')).filter(Boolean)
-          }).then(r=>r.data||{}).catch(e=>({__erro:String(e.message||e)}))));
-          lotes.forEach((lote,j)=>lote.forEach(a=>{a.auditoriaRigorosa=rs[j][String(a.id||'')]||{erro:rs[j].__erro||'Inventário não encontrado'};}));
-        }
-        PULSA_INDICE_CACHE=items;pulsaFiltrarIndice();pulsaRenderCentral();
-      })().catch(err=>{
-        const msg=`Não foi possível carregar o inventário completo: ${esc(err.message||String(err))}. Confira a implantação da API e as abas de inventário.`;
-        document.getElementById('pulsaPastaItens').innerHTML=`<div class="pulsa-index-notice">${msg}</div>`;
-        document.getElementById('pulsaPendItens').innerHTML=`<div class="pulsa-index-notice">${msg}</div>`;document.getElementById('centralCards').innerHTML=`<div class="pulsa-index-notice">${msg}</div>`;
-      }).finally(()=>{PULSA_INDICE_PROMISE=null;});
-      return PULSA_INDICE_PROMISE;
-    }
-    function pulsaFiltrarIndice(){
-      const data=PULSA_INDICE_CACHE;if(!data)return;
-      const term=(document.getElementById('pulsaPastaBusca')?.value||'').toLocaleLowerCase('pt-BR');
-      const list=data.filter(a=>([a.id,a.nome,a.artista,a.data,a.local].join(' ')).toLocaleLowerCase('pt-BR').includes(term));
-      document.getElementById('pulsaPastaItens').innerHTML=list.map(a=>{
-        const r=a.auditoriaRigorosa||{}, ps=r.pastas||[], fs=r.arquivos||[];
-        const all=ps.map(p=>`<li>${pulsaLinkSeguro(p.url,p.caminho||p.nome)}</li>`).join('');
-        const files=fs.map(f=>`<li>${pulsaLinkSeguro(f.url,f.nome)} <small>(${esc(f.tipo||'a classificar')})</small></li>`).join('');
-        return `<article class="pulsa-folder-card"><h3>${esc(a.nome||'Espetáculo sem nome')}</h3><div class="meta">${esc(a.id||'Sem ID')} · ${esc(a.data||'Sem data')} · ${esc(a.local||'')}</div>${a.dossieUrl?pulsaLinkSeguro(a.dossieUrl,'Abrir dossiê principal'):'<span class="estado">Dossiê sem link</span>'}<details><summary>Subpastas (${ps.length})</summary><ul>${all||'<li>Não inventariadas</li>'}</ul></details><details><summary>Arquivos (${fs.length})</summary><ul>${files||'<li>Não inventariados</li>'}</ul></details></article>`;
-      }).join('')||'<div class="pulsa-index-notice">Nenhum espetáculo encontrado.</div>';
-      const q=(document.getElementById('pulsaPendBusca')?.value||'').toLocaleLowerCase('pt-BR'), estado=document.getElementById('pulsaPendEstado')?.value||'';
-      let pendencias=0, semPasta=0, fotosPendente=0, espetaculosPendentes=0;
-      data.forEach(a=>{const d=a.auditoriaRigorosa||{};const p=d.pendencias||[];pendencias+=p.length;if(p.length)espetaculosPendentes++;if(!a.dossieUrl)semPasta++;fotosPendente+=(d.analiseFotos||[]).filter(f=>f.estado!=='VALIDADO').length;});
-      document.getElementById('pulsaPendKpis').innerHTML=[['Espetáculos cadastrados',data.length],['Com pendências',espetaculosPendentes],['Pendências registradas',pendencias],['Dossiês sem link',semPasta]].map(([k,v])=>`<div class="kpi"><div class="knum">${esc(v)}</div><div class="klab">${esc(k)}</div></div>`).join('');
-      const matches=data.map(a=>({a,ps:(a.auditoriaRigorosa?.pendencias||[]).filter(p=>(!estado||p.estado===estado)&&[a.nome,a.id,p.nome,p.acao,p.estado].join(' ').toLocaleLowerCase('pt-BR').includes(q))})).filter(x=>x.ps.length);
-      document.getElementById('pulsaPendItens').innerHTML=`<div class="pulsa-index-notice">Os totais são do inventário disponível. Arquivo encontrado não é comprovação validada. Conferências automáticas de fotos exigem revisão humana.</div>`+matches.map(({a,ps})=>`<article class="pulsa-pend-card ${ps.some(p=>p.estado==='DIVERGENTE')?'critica':''}"><h3>${esc(a.nome||a.id)}</h3><div class="meta">ID ${esc(a.id||'—')} · ${esc(a.data||'Sem data')} · ${ps.length} pendência(s) · ${a.dossieUrl?pulsaLinkSeguro(a.dossieUrl,'Abrir dossiê'):'Pasta sem link'}</div>${ps.map(p=>`<div class="pulsa-pend-item"><strong>${esc(p.nome||p.codigo||'Pendência')}</strong><div class="estado">${esc(p.estado||'A verificar')}</div><div>${esc(p.acao||'Conferir evidência')}</div>${String(p.urls||'').split(/\n/).filter(Boolean).slice(0,5).map(u=>`<div>${pulsaLinkSeguro(u,'Abrir evidência')}</div>`).join('')}</div>`).join('')}</article>`).join('')+(matches.length?'':'<div class="pulsa-index-notice">Nenhuma pendência corresponde aos filtros ou inventário ainda não foi preenchido.</div>');
-    }
-
-    function pulsaRenderCentral(){
-      const all=PULSA_INDICE_CACHE||[];
-      const out=document.getElementById('centralCards');if(!out)return;
-      if(!PULSA_INDICE_CACHE){out.innerHTML='<div class="loading">Buscando dossiês e pendências individuais…</div>';return;}
-      const q=(document.getElementById('centralBusca')?.value||'').toLocaleLowerCase('pt-BR').trim();
-      const filter=document.getElementById('centralFiltro')?.value||'todos';
-      let rows=all.filter(a=>{
-        const d=a.auditoriaRigorosa||{},ps=d.pendencias||[];
-        const hit=[a.nome,a.artista,a.id,a.data,a.local].join(' ').toLocaleLowerCase('pt-BR').includes(q);
-        if(!hit)return false;
-        if(filter==='pendentes')return ps.length>0;
-        if(filter==='criticos')return ps.some(p=>p.estado==='DIVERGENTE');
-        if(filter==='semPasta')return !a.dossieUrl&&!(d.pastas||[]).length;
-        return true;
-      });
-      const totalPend=all.reduce((n,a)=>n+((a.auditoriaRigorosa||{}).pendencias||[]).length,0);
-      const pendCases=all.filter(a=>((a.auditoriaRigorosa||{}).pendencias||[]).length).length;
-      const kpis=[['Espetáculos',all.length],['Com pendências',pendCases],['Pendências documentais',totalPend],['Exibidos',rows.length]];
-      document.getElementById('centralKpis').innerHTML=kpis.map(([k,v])=>`<div class="central-stat"><strong>${esc(v)}</strong><span>${esc(k)}</span></div>`).join('');
-      out.innerHTML=rows.map(a=>{
-        const d=a.auditoriaRigorosa||{},ps=d.pendencias||[],fs=d.arquivos||[],folders=d.pastas||[],photo=d.analiseFotos||[];
-        const st=['nf','contrato','fotoApresentacao','fotoPublico','bordero','relatorio','programacao'];
-        const labels=['Nota fiscal','Contrato / cachê','Fotos da apresentação','Fotos do público','Borderô','Relatório físico','Divulgação'];
-        const pmap={};ps.forEach(p=>{if(p.codigo)pmap[p.codigo]=p});
-        const evid=(a.evidencias||{});
-        const evidHtml=st.map((key,i)=>{
-          const p=pmap[key],e=evid[key]||{};
-          const state=p?.estado||e.estado||'NAO_VERIFICADO';
-          const validado=state==='VALIDADO',recebido=state==='RECEBIDO_NAO_VERIFICADO',div=state==='DIVERGENTE';
-          const desc=validado?'Validado':recebido?'Recebido, verificar':div?'Divergência':'Não localizado / verificar';
-          const urls=String(p?.urls||'').match(/https?:\/\/[^\s,;]+/g)||[];
-          return `<div class="central-evid"><span>${esc(labels[i])}</span><b class="${validado?'central-ok':div?'central-err':recebido?'central-wait':'central-muted'}">${esc(desc)}</b>${urls[0]?pulsaLinkSeguro(urls[0],'Abrir arquivo'):''}</div>`;
-        }).join('');
-        const pendHtml=ps.length?ps.map(p=>`<li><b>${esc(p.nome||p.codigo||'Documento')}</b> — ${esc(p.acao||p.estado||'Conferir')} ${(String(p.urls||'').match(/https?:\/\/[^\s,;]+/g)||[]).slice(0,3).map((u,i)=>pulsaLinkSeguro(u,'Arquivo '+(i+1))).join(' ')}</li>`).join(''):'<li>Nenhuma pendência retornada pelo inventário. Verifique se os dados estão atualizados.</li>';
-        const folderHtml=folders.map(p=>`<li>${pulsaLinkSeguro(p.url,p.nome||p.caminho||'Abrir subpasta')}</li>`).join('');
-        const fileHtml=fs.map(f=>`<li>${pulsaLinkSeguro(f.url,f.nome||'Abrir arquivo')} <small>${esc(f.tipo||'')}</small></li>`).join('');
-        const fotoMsg=photo.length?`${photo.length} análise(s) automática(s) registrada(s); confirmar visualmente.`:'Sem análises de fotos retornadas para esta ficha.';
-        const mainFolder=a.dossieUrl||(folders.find(p=>p.url)?.url)||'';
-        return `<article class="central-card"><div class="central-head"><div><h3>${esc(a.nome||'Espetáculo')}</h3><small>${esc(a.id||'')} · ${esc(a.data||'')} · ${esc(a.local||'')}</small></div><span class="central-count">${ps.length} pendência(s)</span></div><div class="central-open">${mainFolder?pulsaLinkSeguro(mainFolder,'📁 Abrir pasta do espetáculo'):'Pasta principal não vinculada'} <span>${fs.length} arquivo(s) inventariado(s)</span></div><div class="central-evidences">${evidHtml}</div><details class="central-detail" ${ps.length?'open':''}><summary>Pendências específicas (${ps.length})</summary><ul>${pendHtml}</ul></details><details class="central-detail"><summary>Subpastas (${folders.length})</summary><ul>${folderHtml||'<li>Não inventariadas</li>'}</ul></details><details class="central-detail"><summary>Todos os arquivos (${fs.length})</summary><ul>${fileHtml||'<li>Não inventariados</li>'}</ul></details><div class="central-photo">📷 ${esc(fotoMsg)}</div></article>`;
-      }).join('')||'<div class="central-intro">Nenhum espetáculo corresponde aos filtros.</div>';
-    }
-
-    function renderActivityEvidenceMini(ev){
-      const specs=[['NF',ev.nf],['Fotos',ev.fotoApresentacao],['Público',ev.fotoPublico],['Borderô',ev.bordero],['Relatório',ev.relatorio]];
-      return specs.map(([label,e])=>{const state=String((e&&e.estado)||'NAO_LOCALIZADO');const ok=state==='VALIDADO';const pending=state==='RECEBIDO_NAO_VERIFICADO';const diver=state==='DIVERGENTE';const mark=ok?'Sim':pending?'Pendente':diver?'Diverg.':'Não';return `<div class="activity-evidence-item ${ok?'ev-ok':pending?'ev-pending':diver?'ev-divergent':''}"><div class="n">${esc(mark)}</div><div class="l">${esc(label)}</div></div>`;}).join('');
-    }
-
-    function renderSemaforoEvidencia(evidence,label){
-      const e=evidence||{}; const estado=String(e.estado||'NAO_LOCALIZADO');
-      const map={
-        VALIDADO:['state-validado','Recebido e validado'],
-        RECEBIDO_NAO_VERIFICADO:['state-nao-verificado','Recebido — verificação pendente'],
-        NAO_LOCALIZADO:['state-ausente','Não localizado'],
-        DIVERGENTE:['state-divergente','Divergência documental']
-      };
-      const spec=map[estado]||map.NAO_LOCALIZADO;
-      const link=e.link&&estado!=='NAO_LOCALIZADO'?`<a class="evidence-link" href="${esc(e.link)}" target="_blank" rel="noopener">Abrir</a>`:'';
-      return `<div class="evidence-row ${spec[0]}"><span class="signal"></span><b>${esc(label)}</b><span class="evidence-state">${esc(spec[1])}</span>${link}</div>`;
-    }
-
-    function renderPagination(res){
-      const page=Number(res.page||1),pages=Number(res.pages||1),total=Number(res.total||0);
-      if(pages<=1)return `<div class="pagination"><div class="pagination-info">${numberBR(total)} registro(s) · 25 por página</div></div>`;
-      const nums=[]; const start=Math.max(1,page-2),end=Math.min(pages,page+2);
-      for(let i=start;i<=end;i++)nums.push(`<button class="page-btn ${i===page?'active':''}" onclick="loadAtividades(${i})">${i}</button>`);
-      return `<div class="pagination"><div class="pagination-info">${numberBR(total)} registro(s) · 25 por página</div><div class="pagination-buttons"><button class="page-btn" ${page<=1?'disabled':''} onclick="loadAtividades(${page-1})">Anterior</button>${nums.join('')}<button class="page-btn" ${page>=pages?'disabled':''} onclick="loadAtividades(${page+1})">Próxima</button></div></div>`;
-    }
-
-
-    async function loadEvidencias(page=1){
-      EVIDENCE_PAGE=page; const root=document.getElementById('evidenceContent');
-      root.innerHTML='<div class="loading"><span class="loader-dot"></span>Carregando inventário de evidências...</div>';
-      try{renderEvidencias((await apiPost('evidencias',{token:TOKEN,filtros:{},page,pageSize:PAGE_SIZE})).data);}
-      catch(err){root.innerHTML=`<div class="empty-state">${esc(err.message||String(err))}</div>`;}
-    }
-
-    function renderEvidencias(res){
-      const root=document.getElementById('evidenceContent'); res=res||{items:[],total:0,page:1,pages:1};
-      if(res.available===false){root.innerHTML='<div class="empty-state">A aba EVIDENCIAS_EMAIL está indisponível na fonte oficial.</div>';return;}
-      const cards=(res.items||[]).map(r=>{
-        const spec=evidenceStateSpec(r.estado);
-        const source=r.fonteOriginalUrl?`<a class="drive-open secondary" href="${esc(r.fonteOriginalUrl)}" target="_blank" rel="noopener">Abrir origem</a>`:'';
-        const dossier=r.pastaDestinoUrl?`<a class="drive-open" href="${esc(r.pastaDestinoUrl)}" target="_blank" rel="noopener">Abrir dossiê</a>`:'';
-        return `<article class="evidence-card ${spec.cls}"><div class="evidence-card-head"><div><div class="evidence-card-kicker">${esc(r.id)} · ${esc(r.data)}</div><h3>${esc(r.nome)}</h3><div class="evidence-card-origin">Fonte: ${esc(r.origem||'Não informada')}</div></div><span class="state-badge ${spec.cls}"><span class="signal"></span>${esc(spec.text)}</span></div><div class="evidence-package"><div class="package-number">${esc(r.qtd||0)}</div><div><strong>item(ns) identificado(s)</strong><span>${esc(r.evidencia||'Evidência sem descrição')}</span></div></div><div class="evidence-detail"><strong>Situação do pacote</strong><span>${esc(r.situacaoPacote||'Não informada')}</span></div><div class="activity-card-reading"><strong>Leitura do Agente</strong><br>${esc(r.auditoria||'Sem observação de auditoria.')}</div><div class="activity-next"><strong>Próxima ação</strong><br>${esc(r.proximoPasso||'Sem próxima ação registrada.')}</div><div class="drive-actions">${dossier}${source||''}${!dossier&&!source?'<div class="drive-nolink">Sem link disponível neste registro.</div>':''}</div></article>`;
-      }).join('');
-      root.innerHTML=`<div class="data-toolbar"><span class="updated">${numberBR(res.total||0)} registro(s) de rastreabilidade</span></div><div class="evidence-card-grid">${cards||'<div class="empty-state">Nenhum registro.</div>'}</div>${renderGenericPagination(res,'loadEvidencias')}`;
-    }
-
-    function evidenceStateSpec(estado){
-      const e=String(estado||'NAO_LOCALIZADO');
-      if(e==='VALIDADO')return{cls:'validado',text:'Recebido e validado'};
-      if(e==='RECEBIDO_NAO_VERIFICADO')return{cls:'nao-verificado',text:'Recebido — verificação pendente'};
-      if(e==='DIVERGENTE')return{cls:'divergente',text:'Divergência documental'};
-      return{cls:'',text:'Não localizado'};
-    }
-
-    async function loadFinanceiro(page=1){
-      FINANCE_PAGE=page; const root=document.getElementById('financeContent');
-      root.innerHTML='<div class="loading"><span class="loader-dot"></span>Carregando controle financeiro...</div>';
-      try{renderFinanceiro((await apiPost('financeiro',{token:TOKEN,filtros:{},page,pageSize:PAGE_SIZE})).data);}
-      catch(err){root.innerHTML=`<div class="empty-state">${esc(err.message||String(err))}</div>`;}
-    }
-
-    function renderFinanceiro(res){
-      const root=document.getElementById('financeContent'); res=res||{items:[],kpis:{},total:0,page:1,pages:1}; const k=res.kpis||{};
-      if(res.available===false){root.innerHTML='<div class="empty-state">A aba FINANCEIRO_NF está indisponível na fonte oficial.</div>';return;}
-      const kpis=[['NFs / links recebidos',k.recebidos||0],['PDFs com valor',k.pdfsComValor||0],['Valor fiscal',moneyBR(k.valorVerificado||0)],['PIX explícito na NF',k.pixNaNF||0],['Divergências',k.divergencias||0],['Pendentes de validação',k.pendentesValidacao||0]];
-      const cards=(res.items||[]).map(r=>{
-        const hasDiff=r.diferenca!=null&&Math.abs(Number(r.diferenca||0))>0;
-        const danger=r.bloqueio||hasDiff;
-        const links=[r.nfUrl?`<a class="drive-open" href="${esc(r.nfUrl)}" target="_blank" rel="noopener">Abrir NF</a>`:'',r.dossieUrl?`<a class="drive-open secondary" href="${esc(r.dossieUrl)}" target="_blank" rel="noopener">Abrir dossiê</a>`:''].filter(Boolean).join('');
-        return `<article class="finance-card ${danger?'finance-alert':''}"><div class="finance-card-head"><div><div class="finance-card-kicker">${esc(r.data||'Data não informada')} · NF ${esc(r.numeroNF||'não localizada')}</div><h3>${esc(r.nome||'Atividade sem nome')}</h3><div class="finance-provider">${esc(r.prestador||'Prestador não informado')}</div></div><span class="badge ${danger?'bEr':'bCo'}">${danger?'Requer atenção':'Localizada'}</span></div><div class="finance-values"><div><span>Referência</span><strong>${r.valorReferencia==null?'—':moneyBR(r.valorReferencia)}</strong></div><div><span>Valor NF</span><strong>${r.valorNF==null?'—':moneyBR(r.valorNF)}</strong></div><div><span>Diferença</span><strong class="${hasDiff?'danger-text':''}">${r.diferenca==null?'—':moneyBR(r.diferenca)}</strong></div></div><div class="finance-data"><div><span>CPF/CNPJ</span><strong>${esc(r.cnpj||'Não informado')}</strong></div><div><span>PIX</span><strong>${esc(r.pix||'Não informado')}</strong></div><div><span>Origem do PIX</span><strong>${esc(r.origemPix||'Não informada')}</strong></div></div><div class="activity-card-reading"><strong>Leitura financeira do Agente</strong><br>${esc(r.observacao||r.situacao||'Sem observação financeira registrada.')}</div><div class="drive-actions">${links||'<div class="drive-nolink">Sem link financeiro disponível.</div>'}</div></article>`;
-      }).join('');
-      root.innerHTML=`<div class="g3 finance-kpi-grid">${kpis.map(([l,v],i)=>`<div class="finance-kpi ${i===2?'is-money':''} ${i===4||i===5?'is-alert':''}"><div class="n">${esc(v)}</div><div class="t">${esc(l)}</div></div>`).join('')}</div><div class="st">Contratações e Notas Fiscais</div><div class="finance-card-grid">${cards||'<div class="empty-state">Nenhum registro financeiro.</div>'}</div>${renderGenericPagination(res,'loadFinanceiro')}`;
-    }
-
-    async function loadAuditoria(){
-      const root=document.getElementById('auditContent'); const priority=document.getElementById('auditPriority').value;
-      root.innerHTML='<div class="loading"><span class="loader-dot"></span>Carregando trilha de auditoria...</div>';
-      try{renderAuditoria((await apiPost('auditoria',{token:TOKEN,filtros:{prioridade:priority}})).data);}
-      catch(err){root.innerHTML=`<div class="empty-state">${esc(err.message||String(err))}</div>`;}
-    }
-
-    function renderAuditoria(res){
-      const root=document.getElementById('auditContent'); res=res||{criteria:[],findings:[]};
-      if(res.available===false){root.innerHTML='<div class="empty-state">A aba AUDITORIA está indisponível na fonte oficial.</div>';return;}
-      const criteria=(res.criteria||[]).map(c=>`<article class="criteria-card"><div class="criteria-title">${esc(c.criterio)}</div><div class="criteria-line"><span>Obrigatório?</span><strong>${esc(c.obrigatorio)}</strong></div><div class="criteria-line"><span>Fonte</span><strong>${esc(c.fonte)}</strong></div><div class="criteria-line"><span>Status</span><strong>${esc(c.status)}</strong></div><div class="criteria-help">${esc(c.regraAgente)}</div><div class="criteria-next"><strong>Pendência:</strong> ${esc(c.pendenciaGerada)}<br><strong>Responsável:</strong> ${esc(c.responsavel)} · ${esc(c.ultimaVerificacao)}</div></article>`).join('');
-      const findings=(res.findings||[]).map(f=>{
-        const p=String(f.prioridade||'').toLowerCase(); const critical=/cr[ií]tica/.test(p), high=/alta/.test(p), medium=/m[eé]dia/.test(p), ok=/conforme/.test(p);
-        const cls=critical||high?'critical':medium?'medium':ok?'ok':'';
-        const badge=critical?'bEr':high?'bAl':medium?'bIn':ok?'bCo':'bPe';
-        return `<article class="audit-card ${cls}"><div class="audit-card-top"><div><div class="audit-kicker">${esc(f.idEscopo||'Auditoria')}</div><h4>${esc(f.nome||f.tema||f.idEscopo)}</h4></div><span class="badge ${badge}">${esc(f.prioridade||'Sem prioridade')}</span></div><p><b>${esc(f.tema)}</b> · ${esc(f.situacao)}</p><p>${esc(f.evidenciaLocalizada)}</p><div class="activity-next"><strong>Próximo passo</strong><br>${esc(f.proximoPasso)}</div><div class="audit-meta"><span class="scope-badge ${f.escopoGeral?'global':''}">${f.escopoGeral?'Escopo geral':'Atividade específica'}</span><span class="scope-badge">${esc(f.verificacao)}</span></div></article>`;
-      }).join('');
-      root.innerHTML=`<div class="st">Critérios de Auditoria</div><div class="criteria-card-grid">${criteria||'<div class="empty-state">Nenhum critério cadastrado.</div>'}</div><div class="st">Pendências e Divergências Identificadas</div><div class="audit-card-grid">${findings||'<div class="empty-state">Nenhum achado para o filtro selecionado.</div>'}</div>`;
-    }
-
-    async function loadMetas(){
-      const root=document.getElementById('goalsContent'); root.innerHTML='<div class="loading"><span class="loader-dot"></span>Carregando metas...</div>';
-      try{renderMetas((await apiPost('metas',{token:TOKEN})).data);}
-      catch(err){root.innerHTML=`<div class="empty-state">${esc(err.message||String(err))}</div>`;}
-    }
-
-    function renderMetas(res){
-      const root=document.getElementById('goalsContent'); res=res||{metas:[],totalMapeadas:0,publicoStatus:'Aguardando borderôs/relatórios'};
-      if(res.available===false){root.innerHTML='<div class="empty-state">A aba METAS está indisponível na fonte oficial.</div>';return;}
-      const cards=(res.metas||[]).map(m=>{
-        const isPublico=/p[uú]blico/i.test(String(m.nome||'')+' '+String(m.indicador||''));
-        const current=isPublico?null:Number(res.totalMapeadas||0); const target=Number(m.metaFisicaNumero||0);
-        const prog=!isPublico&&target?Math.min(100,current/target*100):0;
-        return `<article class="goal-card meta-card-juntos"><h3>${esc(m.nome)}</h3><div class="goal-status">${esc(m.status||'Status não informado')}</div><p>${esc(m.resultadoEsperado)}</p><p><b>Indicador:</b> ${esc(m.indicador)}</p><p><b>Meio de verificação:</b> ${esc(m.meioVerificacao)}</p>${isPublico?`<div class="agent-box next-action"><div class="agent-label">Público consolidado</div><p>${esc(res.publicoStatus||'Aguardando borderôs/relatórios')}</p></div>`:`<div class="goal-progress"><span style="width:${prog}%"></span></div><div class="goal-numbers"><span>${numberBR(current)} mapeadas</span><span>${numberBR(target)} previstas</span></div>`}<p>${esc(m.observacao)}</p></article>`;
-      }).join('');
-      root.innerHTML=`<div class="meta-card-grid">${cards||'<div class="empty-state">Nenhuma meta cadastrada.</div>'}</div>`;
-    }
-
-    function renderGenericPagination(res,fn){
-      const page=Number(res.page||1),pages=Number(res.pages||1),total=Number(res.total||0);
-      return `<div class="pagination"><div class="pagination-info">${numberBR(total)} registro(s) · 25 por página</div><div class="pagination-buttons"><button class="page-btn" ${page<=1?'disabled':''} onclick="${fn}(${Math.max(1,page-1)})">Anterior</button><span class="page-btn active">${page}</span><button class="page-btn" ${page>=pages?'disabled':''} onclick="${fn}(${Math.min(pages,page+1)})">Próxima</button></div></div>`;
-    }
-
-    function setLoading(on){document.getElementById('globalLoading').classList.toggle('hidden',!on);}
-    function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),4200);}
-
-    window.addEventListener('load',()=>{
-      TOKEN='';
-      BOOT=null;
-      sessionStorage.removeItem('pulsaPainelToken');
-      document.getElementById('login').classList.remove('hidden');
-      const senha=document.getElementById('senha');
-      if(senha){
-        senha.value='';
-        senha.addEventListener('keydown',e=>{if(e.key==='Enter')entrar();});
-        setTimeout(()=>senha.focus(),80);
-      }
-    });
-  </script>
-</body>
-</html>
+<div id="login"><div class="login-card"><div class="eyebrow">Sistema de Monitoramento</div><h1>PULSA SP</h1><p>Central operacional de evidências e pendências do projeto cultural.</p><label for="password" style="font-weight:700;font-size:12px">Senha de acesso</label><input id="password" type="password" autocomplete="current-password" placeholder="Informe sua senha" onkeydown="if(event.key==='Enter')entrar()"><button class="btn primary" onclick="entrar()" id="loginBtn">Entrar no sistema</button><div id="loginError" class="login-error" role="alert"></div></div></div>
+<header><div class="head-inner"><div class="brand"><img class="logo" src="./assets/logo-instituto-br.png" alt="Instituto BR"><div><div class="brand-name">PULSA SP</div><div class="brand-sub">Central de Monitoramento e Prestação de Contas</div></div></div><nav aria-label="Menu principal"><button class="nav-btn active" data-tab="inicio" onclick="ir('inicio')">VISÃO GERAL</button><button class="nav-btn" data-tab="evidencias" onclick="ir('evidencias')">ESPETÁCULOS E EVIDÊNCIAS</button><button class="nav-btn" data-tab="pendencias" onclick="ir('pendencias')">PENDÊNCIAS <span class="pill-count hidden" id="navCount"></span></button><button class="nav-btn" data-tab="financeiro" onclick="ir('financeiro')">FINANCEIRO</button><button class="nav-btn logout" onclick="sair()">SAIR</button></nav></div></header>
+<main>
+<section id="page-inicio" class="page active"><div class="page-head"><div><div class="eyebrow">Painel de acompanhamento</div><h1>Visão geral do projeto</h1><p>O que já foi encontrado, o que precisa ser conferido e o que a equipe deve cobrar agora.</p></div><div class="actions"><span class="source-line" id="updated">Fonte: Conformidade PULSA SP</span><button class="btn tiny" onclick="atualizar()">↻ Atualizar</button></div></div><div id="homeContent"><div class="load-block"><span class="spin"></span>Carregando panorama do projeto...</div></div></section>
+<section id="page-evidencias" class="page"><div class="page-head"><div><div class="eyebrow">Consulta por apresentação</div><h1>Espetáculos e evidências</h1><p>Uma ficha por espetáculo: documentos encontrados, o que falta, fotos e links para as pastas.</p></div><div class="actions"><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchEv">Buscar espetáculo, artista ou data</label><input id="searchEv" placeholder="Digite nome, ID, data ou local..." oninput="mudarFiltro('ev')"></div><div class="field small"><label for="filterEv">Mostrar</label><select id="filterEv" onchange="mudarFiltro('ev')"><option value="todos">Todos os espetáculos</option><option value="falta">Com evidência não localizada</option><option value="verificar">Com documentos a conferir</option><option value="diverge">Com divergências</option><option value="pasta">Sem pasta vinculada</option></select></div></div><div class="results-meta"><span id="evCount">Aguardando carregamento</span><span>Links levam diretamente ao Drive quando disponíveis</span></div><div class="event-list" id="eventList"><div class="load-block"><span class="spin"></span>Consultando o projeto...</div></div><div id="evPaging"></div></section>
+<section id="page-pendencias" class="page"><div class="page-head"><div><div class="eyebrow">Trabalho da equipe</div><h1>Pendências para cobrar</h1><p>Solicitações por espetáculo, com indicação do documento e texto para enviar ao responsável.</p></div><div class="actions"><button class="btn tiny" onclick="exportarPendencias()">↓ Exportar pendências (CSV)</button><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchPend">Buscar espetáculo ou pendência</label><input id="searchPend" placeholder="Nome, artista, ID ou documento..." oninput="mudarFiltro('pend')"></div><div class="field small"><label for="filterPend">Tipo de pendência</label><select id="filterPend" onchange="mudarFiltro('pend')"><option value="todos">Todas as pendências</option><option value="falta">Não localizado — solicitar</option><option value="verificar">Recebido — conferir</option><option value="diverge">Divergências</option><option value="foto">Fotos e banner</option><option value="acesso">Acesso à pasta</option></select></div></div><div class="callout">O botão <b>Copiar cobrança</b> prepara uma mensagem para WhatsApp ou e-mail. Ele não envia a mensagem automaticamente. Ausência significa “não localizado no inventário”, não afirma que o documento nunca existiu.</div><div class="results-meta"><span id="pendCount">Aguardando carregamento</span></div><div id="pendingList" class="pending-groups"></div><div id="pendPaging"></div></section>
+<section id="page-financeiro" class="page"><div class="page-head"><div><div class="eyebrow">Acompanhamento financeiro</div><h1>Contratações e notas fiscais</h1><p>Referência, valor fiscal, divergências e acesso aos comprovantes quando vinculados.</p></div><button class="btn tiny" onclick="carregarFinanceiro(true)">↻ Atualizar financeiro</button></div><div id="financeContent"><div class="load-block">Abra a aba para consultar os registros financeiros.</div></div></section>
+</main>
+<div id="drawer" role="dialog" aria-modal="true" aria-label="Dossiê do espetáculo" onclick="if(event.target===this)fecharDetalhe()"><div class="drawer-inner"><div class="drawer-head"><div><div class="eyebrow">Dossiê de apresentação</div><h2 id="drawerTitle">Espetáculo</h2><div class="source-line" id="drawerMeta"></div></div><button class="btn tiny" onclick="fecharDetalhe()">✕ Fechar</button></div><div id="drawerContent" class="drawer-main"></div></div></div>
+<div id="toast" role="status"></div>
+<script>
+'use strict';
+const API='https://script.google.com/macros/s/AKfycbxUyyrHbg3YPuPpI4AbCHokU2dsoJ5Uvw7rBcn0viLZKfWFxlLJVJ6N1nvGjh9-vxNp/exec';
+const CORE=[['nf','Nota fiscal'],['contrato','Contrato/cachê'],['fotoApresentacao','Fotos da apresentação'],['fotoPublico','Fotos do público'],['bordero','Borderô'],['relatorio','Relatório de execução física'],['programacao','Programação/divulgação']];
+const STATE={token:'',data:null,detalhes:{},finance:null,evPage:1,pendPage:1,finPage:1,tab:'inicio',loading:null};
+const PER_PAGE=12;
+const $=id=>document.getElementById(id);
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const text=v=>String(v==null?'':v);
+const fmt=n=>Number(n||0).toLocaleString('pt-BR');
+const money=n=>Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const lower=s=>text(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function cleanUrl(u){const s=text(u).trim();return /^https:\/\/(drive|docs)\.google\.com\//.test(s)?s:'';}
+function link(u,label,klass='btn tiny'){u=cleanUrl(u);return u?`<a class="${klass}" href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`:`<span class="micro">${esc(label)}: link não disponível</span>`;}
+function statusLabel(st){return ({VALIDADO:'Validado',NAO_LOCALIZADO:'Não localizado',RECEBIDO_NAO_VERIFICADO:'Recebido, conferir',PARCIALMENTE_VALIDADO:'Parcialmente conferido',DIVERGENTE:'Divergência',ACESSO_NAO_VERIFICADO:'Acesso não verificado'})[st]||'Sem verificação registrada';}
+function statusClass(st){return st==='VALIDADO'?'ok':st==='NAO_LOCALIZADO'||st==='ACESSO_NAO_VERIFICADO'?'missing':st==='DIVERGENTE'?'divergent':'received';}
+function erroHtml(msg){return `<div class="error-box"><h3>Não foi possível carregar as informações</h3><p>${esc(msg)}</p><button class="btn primary" onclick="atualizar()">Tentar novamente</button></div>`;}
+function toast(msg){const el=$('toast');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4300);}
+async function api(action,payload={}){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),42000);
+  let resp;
+  try{resp=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action,...payload}),cache:'no-store',credentials:'omit',redirect:'follow',signal:controller.signal});}
+  catch(err){throw new Error(err.name==='AbortError'?'Tempo de consulta excedido (42 segundos). Tente atualizar ou verifique as execuções no Apps Script.':'Falha de comunicação com o Apps Script. Confira a implantação e a conexão.');}
+  finally{clearTimeout(timer);}
+  if(!resp.ok)throw new Error('O Apps Script respondeu com HTTP '+resp.status);
+  let data;try{data=await resp.json();}catch(_){throw new Error('A API retornou resposta inválida. Verifique a implantação do Apps Script.');}
+  if(!data||data.ok!==true)throw new Error(data?.error||data?.mensagem||'Falha da API.');
+  return data;
+}
+async function entrar(){const password=$('password').value;if(!password){$('loginError').textContent='Informe a senha.';return;}
+  $('loginBtn').disabled=true;$('loginBtn').textContent='Acessando...';$('loginError').textContent='';
+  try{const res=await api('login',{senha:password});STATE.token=res.token;sessionStorage.setItem('pulsaPainelToken',STATE.token);$('password').value='';$('login').classList.add('hidden');await atualizar();}
+  catch(err){$('loginError').textContent=err.message;}
+  finally{$('loginBtn').disabled=false;$('loginBtn').textContent='Entrar no sistema';}
+}
+async function sair(){try{if(STATE.token)await api('logout',{token:STATE.token});}catch(_){}sessionStorage.removeItem('pulsaPainelToken');STATE.token='';STATE.data=null;location.reload();}
+async function atualizar(){if(!STATE.token)return;if(STATE.loading)return STATE.loading;
+  $('homeContent').innerHTML='<div class="load-block"><span class="spin"></span>Atualizando dados de monitoramento...</div>';
+  STATE.loading=(async()=>{try{
+    const res=await api('central_operacional',{token:STATE.token,modo:'resumo'});
+    if(!res.data||!Array.isArray(res.data.espetaculos))throw new Error('A API não retornou a lista de espetáculos.');
+    STATE.data=res.data;STATE.detahes=null;STATE.detalhes={};
+    $('updated').textContent='Inventário consultado em '+text(STATE.data.geradoEm);
+    $('navCount').textContent=fmt(STATE.data.resumo.comPendencias||0);$('navCount').classList.remove('hidden');
+    renderHome();renderEvidencias();renderPendencias();
+  }catch(err){
+    const m=err.message||String(err);
+    $('homeContent').innerHTML=erroHtml(m);$('eventList').innerHTML=erroHtml(m);$('pendingList').innerHTML=erroHtml(m);
+    if(/sess[aã]o expirada|inv[aá]lida|fa[cç]a login/i.test(m)){STATE.token='';sessionStorage.removeItem('pulsaPainelToken');$('login').classList.remove('hidden');$('loginError').textContent='Sua sessão expirou. Entre novamente.';}
+  }finally{STATE.loading=null;}})();
+  return STATE.loading;
+}
+function ir(tab){STATE.tab=tab;document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id==='page-'+tab));document.querySelectorAll('.nav-btn[data-tab]').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));window.scrollTo({top:0,behavior:'instant'});if(tab==='financeiro')carregarFinanceiro();}
+function metric(label,value,note,klass=''){return `<div class="kpi ${klass}"><div class="tag">${esc(label)}</div><div class="num mono">${esc(value)}</div><div class="note">${esc(note)}</div></div>`;}
+function renderHome(){if(!STATE.data)return;const r=STATE.data.resumo,a=STATE.data.espetaculos||[];
+  const urgent=a.filter(x=>x.pendencias?.length).sort((x,y)=>urgency(y)-urgency(x)).slice(0,7);
+  $('homeContent').innerHTML=`<div class="kpi-grid">
+  ${metric('Espetáculos monitorados',fmt(r.espetaculos),'Apresentações identificadas na planilha')}
+  ${metric('Dossiês com pendências',fmt(r.comPendencias),'Espetáculos que exigem acompanhamento','urgent')}
+  ${metric('Não localizados',fmt(r.naoLocalizadas),'Itens não encontrados no inventário','urgent')}
+  ${metric('Recebidos a conferir',fmt(r.recebidasVerificar),'Documentos disponíveis, sem validação final','wait')}
+  </div><div class="grid"><section class="panel"><h2>Cobertura documental por tipo</h2><p class="panel-lead">Quantidade de espetáculos com evidência localizada, pendência e revisão pendente. Não é percentual de conformidade.</p><div class="coverage">
+  ${CORE.map(([code,label])=>{const x=r.porTipo?.[code]||{},tot=Math.max(1,r.espetaculos),rec=Number(x.recebidos||0),val=Number(x.verificados||0),div=Number(x.divergentes||0);return `<div class="coverage-row"><span class="coverage-label">${esc(label)}</span><div class="track"><span class="fill-verified" style="width:${100*val/tot}%"></span><span class="fill-received" style="width:${100*rec/tot}%"></span><span class="fill-divergent" style="width:${100*div/tot}%"></span></div><span class="coverage-caption">${rec} a conferir</span></div>`;}).join('')}</div><div class="legend"><span><i class="dot rec"></i>Recebido a conferir</span><span><i class="dot val"></i>Validado formalmente</span><span><i class="dot div"></i>Divergente</span><span>Demais casos: não localizados ou sem estado registrado</span></div></section>
+  <section class="panel"><h2>Prioridades de hoje</h2><p class="panel-lead">Espetáculos que precisam de ação da equipe de monitoramento.</p>${urgent.map(e=>`<div class="quick-row"><div><div class="quick-title">${esc(e.nome)}</div><div class="quick-sub">${esc(e.data)} · ${e.pendencias.length} pendência(s)</div></div><button class="btn tiny" onclick="abrirDetalhe('${esc(e.id)}')">Abrir</button></div>`).join('')||'<p class="micro">Nenhuma pendência registrada.</p>'}<div class="actions" style="margin-top:14px"><button class="btn primary" onclick="ir('pendencias')">Ver todas as cobranças →</button></div></section></div>
+  <section class="panel"><h2>O que estes números significam</h2><p class="panel-lead">O agente mantém a auditoria rigorosa em segundo plano. Documento encontrado não é documento aprovado.</p><div class="actions"><span class="chip received">${fmt(r.recebidasVerificar)} evidências a conferir</span><span class="chip missing">${fmt(r.naoLocalizadas)} não localizadas</span><span class="chip divergent">${fmt(r.divergencias)} divergências</span><span class="chip">${fmt(r.comDossie)} dossiês com link</span><span class="chip">${fmt(r.documentosInventariados)} arquivos inventariados</span></div><div class="callout">As validações formais continuam controladas na planilha. O Index exibe o andamento operacional para facilitar a cobrança e a prestação de contas sem inventar percentuais.</div></section>`;
+}
+function urgency(a){const p=a.pendencias||[];return p.filter(x=>x.estado==='DIVERGENTE').length*9+p.filter(x=>x.estado==='NAO_LOCALIZADO').length*3+p.length;}
+function eventosFiltrados(type){let a=(STATE.data?.espetaculos||[]).slice();const s=lower($(type==='ev'?'searchEv':'searchPend').value.trim()),f=$(type==='ev'?'filterEv':'filterPend').value;
+  a=a.filter(x=>{const p=x.pendencias||[];const hit=lower([x.nome,x.data,x.artista,x.local,x.id,p.map(y=>y.nome).join(' ')].join(' ')).includes(s);if(!hit)return false;
+    if(type==='pend'&&!p.length)return false;
+    if(f==='falta')return p.some(y=>y.estado==='NAO_LOCALIZADO');
+    if(f==='verificar')return p.some(y=>/RECEBIDO_NAO_VERIFICADO|PARCIALMENTE_VALIDADO/.test(y.estado));
+    if(f==='diverge')return p.some(y=>y.estado==='DIVERGENTE');
+    if(f==='pasta')return !x.dossie;
+    if(f==='foto')return p.some(y=>/foto|banner/i.test(y.codigo));
+    if(f==='acesso')return p.some(y=>y.estado==='ACESSO_NAO_VERIFICADO');
+    return true;
+  });a.sort((x,y)=>urgency(y)-urgency(x)||String(x.data).localeCompare(String(y.data)));return a;
+}
+function mudarFiltro(type){if(type==='ev'){STATE.evPage=1;renderEvidencias();}else{STATE.pendPage=1;renderPendencias();}}
+function paginator(id,total,page,callback){$(id).innerHTML=total<=PER_PAGE?'':`<div class="pagination"><button class="btn tiny" ${page<=1?'disabled':''} onclick="${callback}(${page-1})">← Anterior</button><span>Página ${page} de ${Math.ceil(total/PER_PAGE)}</span><button class="btn tiny" ${page>=Math.ceil(total/PER_PAGE)?'disabled':''} onclick="${callback}(${page+1})">Próxima →</button></div>`;}
+function paginaEv(n){STATE.evPage=n;renderEvidencias();window.scrollTo({top:0,behavior:'smooth'});}
+function paginaPend(n){STATE.pendPage=n;renderPendencias();window.scrollTo({top:0,behavior:'smooth'});}
+function renderEvidencias(){if(!STATE.data)return;const a=eventosFiltrados('ev');const page=Math.max(1,Math.min(STATE.evPage,Math.ceil(a.length/PER_PAGE)||1));STATE.evPage=page;
+  $('evCount').textContent=`${fmt(a.length)} espetáculo(s) encontrado(s) · exibindo até ${PER_PAGE} por página`;
+  $('eventList').innerHTML=a.slice((page-1)*PER_PAGE,page*PER_PAGE).map(e=>{
+    const p=e.pendencias||[];const miss=p.filter(x=>x.estado==='NAO_LOCALIZADO').length;const check=p.filter(x=>x.estado==='RECEBIDO_NAO_VERIFICADO'||x.estado==='PARCIALMENTE_VALIDADO').length;
+    const chips=[miss?`<span class="chip missing">${miss} não localizado(s)</span>`:'',check?`<span class="chip received">${check} a conferir</span>`:'',e.alertas?`<span class="chip divergent">${e.alertas} divergência(s)</span>`:'',`<span class="chip">${e.qtdArquivos} arquivo(s)</span>`,`<span class="chip">${e.qtdPastas} pasta(s)</span>`].filter(Boolean).join('');
+    return `<article class="event-card"><div class="event-top"><div><h3>${esc(e.nome||'Espetáculo sem nome')}</h3><div class="event-sub">${esc(e.data)} · ${esc(e.local)} · ${esc(e.artista)}<br><small>${esc(e.id)}</small></div></div><span class="chip ${p.length?'missing':'ok'}">${p.length?`${p.length} pendências`:'Sem pendência cadastrada'}</span></div><div class="chips">${chips}</div><div class="event-actions"><button class="btn primary" onclick="abrirDetalhe('${esc(e.id)}')">Ver evidências e pendências →</button>${e.dossie?link(e.dossie,'Abrir pasta do espetáculo','btn soft'):'<span class="micro">Pasta ainda não vinculada</span>'}</div></article>`;
+  }).join('')||'<div class="empty">Nenhum espetáculo corresponde a esta busca.</div>';paginator('evPaging',a.length,page,'paginaEv');
+}
+function renderPendencias(){if(!STATE.data)return;const a=eventosFiltrados('pend'),page=Math.max(1,Math.min(STATE.pendPage,Math.ceil(a.length/PER_PAGE)||1));STATE.pendPage=page;
+  const f=$('filterPend').value;const include=p=>f==='todos'||f==='falta'&&p.estado==='NAO_LOCALIZADO'||f==='verificar'&&/RECEBIDO_NAO_VERIFICADO|PARCIALMENTE_VALIDADO/.test(p.estado)||f==='diverge'&&p.estado==='DIVERGENTE'||f==='foto'&&/foto|banner/i.test(p.codigo)||f==='acesso'&&p.estado==='ACESSO_NAO_VERIFICADO';
+  const size=a.reduce((n,x)=>n+x.pendencias.filter(include).length,0);$('pendCount').textContent=`${a.length} espetáculo(s) · ${size} pendência(s) neste filtro`;
+  $('pendingList').innerHTML=a.slice((page-1)*PER_PAGE,page*PER_PAGE).map(e=>{
+    const ps=e.pendencias.filter(include);
+    return `<article class="pending-card"><div class="pending-head"><div><div class="pending-name">${esc(e.nome)}</div><div class="micro">${esc(e.data)} · ${esc(e.id)} · ${esc(e.local)}</div></div><span class="chip missing">${ps.length} pendência(s)</span></div><div class="pending-list">${ps.slice(0,6).map(p=>`<div class="pending-line"><div><b>${esc(p.nome||p.codigo||'Evidência')}</b><div class="desc">${esc(p.acao||'Conferir documentação')}</div></div><span class="chip ${statusClass(p.estado)}">${esc(statusLabel(p.estado))}</span></div>`).join('')}${ps.length>6?`<div class="micro" style="padding:10px 0">+ ${ps.length-6} outra(s) pendência(s) na ficha do espetáculo.</div>`:''}</div><div class="pending-tools">${e.dossie?link(e.dossie,'Abrir dossiê','btn soft tiny'):'<span class="micro">Dossiê sem link</span>'}<button class="btn tiny" onclick="abrirDetalhe('${esc(e.id)}')">Ver documentos</button><button class="btn primary tiny" onclick="copiarCobranca('${esc(e.id)}')">Copiar cobrança</button></div></article>`;
+  }).join('')||'<div class="empty">Nenhuma pendência corresponde aos filtros atuais.</div>';
+  paginator('pendPaging',a.length,page,'paginaPend');
+}
+function exportarPendencias(){
+  const rows=[['ID do espetáculo','Espetáculo','Data','Evidência','Situação','Próxima ação','Pasta do espetáculo']];
+  const items=eventosFiltrados('pend');const f=$('filterPend').value;
+  items.forEach(a=>(a.pendencias||[]).forEach(p=>{
+    if(f==='falta'&&p.estado!=='NAO_LOCALIZADO')return;
+    if(f==='verificar'&&!/RECEBIDO_NAO_VERIFICADO|PARCIALMENTE_VALIDADO/.test(p.estado))return;
+    if(f==='diverge'&&p.estado!=='DIVERGENTE')return;
+    if(f==='foto'&&!/foto|banner/i.test(p.codigo))return;
+    if(f==='acesso'&&p.estado!=='ACESSO_NAO_VERIFICADO')return;
+    rows.push([a.id,a.nome,a.data,p.nome,statusLabel(p.estado),p.acao,a.dossie||'']);
+  }));
+  const safe=v=>{
+    let x=text(v).replace(/\r?\n/g,' ').replace(/"/g,'""');
+    if(/^[=+@\-]/.test(x))x="'"+x; // evita fórmula ao abrir o CSV em planilhas
+    return '"'+x+'"';
+  };
+  const csv='\uFEFF'+rows.map(x=>x.map(safe).join(';')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='PULSA_PENDENCIAS_MONITORAMENTO.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  toast('Planilha de pendências exportada para acompanhamento.');
+}
+function textoCobranca(e){let ps=e.pendencias||[];let lines=ps.map(p=>{
+    const name=p.nome||p.codigo||'Evidência';
+    if(p.estado==='NAO_LOCALIZADO')return '- Solicitar/localizar: '+name;
+    if(p.estado==='ACESSO_NAO_VERIFICADO')return '- Corrigir acesso à pasta: '+name;
+    if(p.estado==='DIVERGENTE')return '- Esclarecer divergência: '+name;
+    return '- Conferir/validar: '+name;
+  });return `Bom dia! Para atualizar o monitoramento do PULSA SP, precisamos verificar as pendências documentais do espetáculo ${e.nome} (${e.data}, ID ${e.id}):\n\n${lines.join('\n')}\n\n${e.dossie?'Pasta de referência: '+e.dossie+'\n\n':''}Por favor, informem os documentos disponíveis e encaminhem o que ainda estiver pendente, identificando a apresentação correspondente. Obrigada.`;}
+async function copiarCobranca(id){const e=STATE.data?.espetaculos.find(x=>x.id===id);if(!e)return;let msg=textoCobranca(e);try{await navigator.clipboard.writeText(msg);toast('Texto de cobrança copiado. Cole no WhatsApp ou e-mail.');}catch(_){const t=document.createElement('textarea');t.value=msg;t.style.position='fixed';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('Texto preparado para copiar e enviar.');}}
+function abrirDetalhe(id){const e=STATE.data?.espetaculos.find(x=>x.id===id);if(!e)return;
+  $('drawerTitle').textContent=e.nome||e.id;$('drawerMeta').textContent=`${e.id} · ${e.data} · ${e.local}`;
+  $('drawer').classList.add('open');document.body.style.overflow='hidden';
+  const d=STATE.detalhes[id];if(d){renderDetalhe(e,d);return;}
+  $('drawerContent').innerHTML='<div class="load-block"><span class="spin"></span>Buscando somente as pastas, arquivos e fotos deste espetáculo...</div>';
+  api('central_operacional',{token:STATE.token,modo:'detalhe',id}).then(res=>{STATE.detalhes[id]=res.data;if($('drawer').classList.contains('open')&&$('drawerMeta').textContent.startsWith(id))renderDetalhe(e,res.data);})
+  .catch(err=>{$('drawerContent').innerHTML=erroHtml(err.message);});
+}
+function fecharDetalhe(){$('drawer').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharDetalhe();});
+function renderDetalhe(e,d){const rows=CORE.map(([code,label])=>{
+    const p=(d.pendencias||[]).find(x=>x.codigo===code)||(e.pendencias||[]).find(x=>x.codigo===code);
+    const st=p?.estado||e.estados?.[code]||'';
+    const evid=(d.arquivos||[]).filter(x=>x.tipo===code),urls=p?.urls||[];
+    const resource=urls[0]||e.primeiroArquivo?.[code]||evid[0]?.url||(code==='nf'?e.notaFiscal:'');
+    return `<div class="doc-row"><div><b>${esc(label)}</b><small>${esc(statusLabel(st))}${evid.length?` · ${evid.length} arquivo(s) inventariado(s)`:''}</small></div><div class="actions">${resource?link(resource,'Ver documento','btn tiny'):''}<span class="chip ${statusClass(st)}">${esc(statusLabel(st))}</span></div></div>`;
+  }).join('');
+  const pens=(d.pendencias||e.pendencias||[]).map(p=>`<div class="pending-line"><div><b>${esc(p.nome||p.codigo||'Pendência')}</b><div class="desc">${esc(p.acao||'Revisar')}</div></div><span class="chip ${statusClass(p.estado)}">${esc(statusLabel(p.estado))}</span></div>`).join('');
+  const folders=(d.pastas||[]).filter(x=>cleanUrl(x.url)).map(x=>`<div class="file-item"><span>📁 ${esc(x.nome||x.caminho)}</span>${link(x.url,'Abrir','btn tiny')}</div>`).join('');
+  const files=(d.arquivos||[]).filter(x=>cleanUrl(x.url)).map(x=>`<div class="file-item"><span>${esc(x.nome)} <small class="micro">${esc(x.tipo||'A classificar')}</small></span>${link(x.url,'Abrir','btn tiny')}</div>`).join('');
+  const photos=(d.fotos||[]).map(f=>`<div class="photo-item"><strong>${esc(f.banner||'Banner em análise')}</strong><p>${esc(f.identificacao||'')} · ${esc(f.estado||'A conferir')}<br>${esc(f.observacao||'')}</p>${f.url?link(f.url,'Abrir foto','btn tiny'):''}</div>`).join('');
+  $('drawerContent').innerHTML=`<div class="callout">A ficha distingue arquivos recebidos, não localizados e validados. Resultado do Gemini é indício e requer revisão humana.</div><div class="actions">${e.dossie?link(e.dossie,'📁 Abrir dossiê principal','btn primary'):'<span class="chip missing">Dossiê principal sem link</span>'}<button class="btn" onclick="copiarCobranca('${esc(e.id)}')">Copiar cobrança</button></div>
+  <section class="drawer-section"><h3>7 evidências essenciais</h3>${rows}</section>
+  <section class="drawer-section"><h3>Pendências desta apresentação (${(d.pendencias||[]).length})</h3>${pens||'<p class="micro">Nenhuma pendência foi retornada no inventário deste espetáculo. Confira a data da última atualização.</p>'}</section>
+  <section class="drawer-section"><h3>Subpastas (${d.totalPastas||0})</h3><div class="file-list">${folders||'<p class="micro">Nenhuma subpasta identificada.</p>'}</div></section>
+  <section class="drawer-section"><h3>Arquivos encontrados (${d.totalArquivos||0})</h3><div class="file-list">${files||'<p class="micro">Nenhum arquivo no inventário atual.</p>'}</div>${d.totalArquivos>(d.arquivos||[]).length?'<p class="micro">Lista limitada para não sobrecarregar o painel. Abra o dossiê para consultar todos os arquivos.</p>':''}</section>
+  <section class="drawer-section"><h3>Análise automática de fotos (${(d.fotos||[]).length})</h3>${photos||'<p class="micro">Nenhuma análise de foto retornada. Não significa que não existam fotografias.</p>'}</section>`;
+}
+async function carregarFinanceiro(force=false){if(!STATE.token)return;if(STATE.finance&&!force){renderFinanceiro();return;}
+  $('financeContent').innerHTML='<div class="load-block"><span class="spin"></span>Consultando notas fiscais...</div>';
+  try{const res=await api('central_operacional',{token:STATE.token,modo:'financeiro'});STATE.finance=res.data;STATE.finPage=1;renderFinanceiro();}
+  catch(err){$('financeContent').innerHTML=erroHtml(err.message);}
+}
+function financeJoin(f){if(f.dossieUrl)return f.dossieUrl;const data=(text(f.data).match(/\d{2}\/\d{2}\/\d{4}/)||[])[0];if(!data)return '';
+  const candidates=(STATE.data?.espetaculos||[]).filter(a=>lower(a.nome)===lower(f.nome)&&(text(a.data).match(/\d{2}\/\d{2}\/\d{4}/)||[])[0]===data);
+  return candidates.length===1?candidates[0].dossie:'';
+}
+function renderFinanceiro(){const d=STATE.finance;if(!d)return;const rows=d.itens||[],k=d.resumo||{};
+  $('financeContent').innerHTML=`<div class="finance-cards"><div class="finance-card"><div class="n">${fmt(k.registros)}</div><div class="l">NOTAS / REGISTROS</div></div><div class="finance-card"><div class="n">${money(k.valorFiscal)}</div><div class="l">VALOR FISCAL CADASTRADO</div></div><div class="finance-card warn"><div class="n">${fmt(k.divergencias)}</div><div class="l">DIVERGÊNCIAS / ATENÇÃO</div></div></div>
+  <div class="toolbar"><div class="field"><label>Buscar contratação ou nota fiscal</label><input id="finBusca" placeholder="Espetáculo, prestador ou NF" oninput="STATE.finPage=1;renderFinLista()"></div><div class="field small"><label>Status</label><select id="finFiltro" onchange="STATE.finPage=1;renderFinLista()"><option value="todos">Todas</option><option value="atencao">Requer atenção</option></select></div></div><div class="results-meta" id="finCount"></div><div class="financial-grid" id="finList"></div><div id="finPaging"></div>`;renderFinLista();}
+function paginaFin(n){STATE.finPage=n;renderFinLista();}
+function renderFinLista(){let rows=(STATE.finance?.itens||[]).slice(),q=lower($('finBusca')?.value||''),f=$('finFiltro')?.value||'todos';
+  rows=rows.filter(x=>lower([x.nome,x.prestador,x.numero].join(' ')).includes(q)&& (f!=='atencao'||Math.abs(x.diferenca)>0.01||/ATEN|DIVERG|VALIDAR|PENDENT/i.test(x.situacao)));
+  const count=rows.length,p=Math.max(1,Math.min(STATE.finPage,Math.ceil(count/PER_PAGE)||1));STATE.finPage=p;$('finCount').textContent=`${count} registro(s)`;
+  $('finList').innerHTML=rows.slice((p-1)*PER_PAGE,p*PER_PAGE).map(x=>{
+    const warn=Math.abs(x.diferenca)>0.01||/ATEN|DIVERG|PENDENT|VALIDAR/i.test(x.situacao);
+    return `<article class="fin-card ${warn?'warn':''}"><div class="fin-meta">${esc(x.data)} · NF ${esc(x.numero||'não informada')}</div><h3>${esc(x.nome||'Atividade')}</h3><div class="fin-meta">${esc(x.prestador)}</div><div class="fin-metrics"><div class="fin-metric"><small>Referência</small><b>${money(x.referencia)}</b></div><div class="fin-metric"><small>Nota fiscal</small><b>${money(x.valor)}</b></div><div class="fin-metric"><small>Diferença</small><b>${money(x.diferenca)}</b></div></div><span class="chip ${warn?'divergent':'ok'}">${esc(x.situacao||'A verificar')}</span>${x.observacao?`<div class="fin-note">${esc(x.observacao)}</div>`:''}<div class="actions" style="margin-top:auto">${x.nfUrl?link(x.nfUrl,'Abrir NF','btn primary tiny'):'<span class="micro">NF sem link direto</span>'}${financeJoin(x)?link(financeJoin(x),'Abrir dossiê','btn soft tiny'):'<span class="micro">Dossiê sem link</span>'}</div></article>`;
+  }).join('')||'<div class="empty">Nenhum registro corresponde aos filtros.</div>';
+  paginator('finPaging',rows.length,p,'paginaFin');
+}
+window.addEventListener('load',()=>{const token=sessionStorage.getItem('pulsaPainelToken');if(token){STATE.token=token;$('login').classList.add('hidden');atualizar();}});
+</script>
+</body></html>
