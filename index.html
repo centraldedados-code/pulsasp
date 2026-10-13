@@ -101,6 +101,32 @@ main{max-width:1550px;padding:31px 28px 80px}
 @media(max-width:580px){main{padding:22px 13px 60px}.kpi-grid{gap:9px}.kpi{padding:15px;min-height:138px}.kpi .num{font-size:27px}.kpi .tag{font-size:9px}.kpi .note{font-size:9px}.finance-cards{grid-template-columns:1fr}.event-top{display:flex;flex-wrap:wrap}.drawer-head,.drawer-main{padding-left:14px;padding-right:14px}.drawer-head h2{font-size:15px}.doc-row{flex-direction:column}.doc-row .actions{max-width:100%;width:100%;justify-content:flex-start}.coverage-row{grid-template-columns:100px minmax(0,1fr) auto}.coverage-caption{min-width:55px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 
+
+/* PULSA — Galeria operacional de evidências, mantendo a identidade institucional */
+.evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.evidence-card{display:flex;flex-direction:column;gap:11px;min-width:0;padding:16px;background:#fff;border:1px solid #dce7ee;border-left:4px solid #00b7d7;border-radius:13px;box-shadow:0 5px 17px rgba(2,23,56,.035)}
+.evidence-card.missing{border-left-color:#bb4e4e}.evidence-card.received{border-left-color:#c99621}.evidence-card.ok{border-left-color:#308362}.evidence-card.divergent{border-left-color:#b43b3b}
+.evidence-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.evidence-card h4{font:700 12px/1.4 Montserrat,sans-serif;color:#092040;margin:0;overflow-wrap:anywhere}.evidence-card .micro{line-height:1.55}
+.evidence-files{display:flex;flex-direction:column;gap:7px}
+.evidence-file{background:#f6f9fb;border:1px solid #e4ebf0;border-radius:9px;padding:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.evidence-filename{font:600 10.5px/1.5 'Open Sans',sans-serif;color:#233d55;min-width:0;overflow-wrap:anywhere;flex:1}
+.evidence-file .actions{flex-shrink:0}.evidence-file .btn{padding:6px 8px;font-size:10px}
+.evidence-footnote{font-size:10.5px;line-height:1.55;color:#657589}
+.evidence-intro{background:#eaf7fc;border:1px solid #bce9f2;border-radius:11px;padding:12px 14px;font-size:12px;line-height:1.6;color:#0b4860;margin-bottom:14px}
+.evidence-folder-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.evidence-folder-summary .btn{width:100%;white-space:normal;text-align:center}
+.arquivo-preview{position:fixed;inset:0;z-index:120;background:rgba(2,23,56,.77);display:none;align-items:center;justify-content:center;padding:18px}
+.arquivo-preview.open{display:flex}.arquivo-preview-panel{height:min(900px,96vh);width:min(1200px,98vw);border-radius:17px;background:white;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.22)}
+.arquivo-preview-header{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;padding:15px 21px;border-bottom:1px solid #dae5ed}
+.arquivo-preview-headline{min-width:0}.arquivo-preview-header h2{font:700 15px/1.45 Montserrat,sans-serif;color:#092040;margin:4px 0;overflow-wrap:anywhere}
+.arquivo-preview-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:12px 19px;background:#f0f4f7}
+.arquivo-preview-tip{font-size:11px;color:#3e5a70;line-height:1.5}
+.arquivo-preview-quadro{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #d9e4ea;border-radius:9px;overflow:hidden}
+.arquivo-preview-quadro iframe{width:100%;height:100%;border:0;background:white}.arquivo-preview-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 19px;border-top:1px solid #dae5ed}
+@media(max-width:850px){.evidence-grid{grid-template-columns:1fr}.arquivo-preview{padding:5px}.arquivo-preview-panel{width:100%;height:98vh}.arquivo-preview-header{padding:12px}.arquivo-preview-body{padding:10px}.arquivo-preview-footer{padding:9px}}
+@media(max-width:440px){.evidence-file{flex-wrap:wrap}.evidence-file .actions{width:100%}}
+
 </style>
 </head>
 <body>
@@ -108,11 +134,18 @@ main{max-width:1550px;padding:31px 28px 80px}
 <header><div class="head-inner"><div class="brand"><img class="logo" src="./assets/logo-instituto-br.png" alt="Instituto BR"><div><div class="brand-name">PULSA SP</div><div class="brand-sub">Central de Monitoramento e Prestação de Contas</div></div></div><nav aria-label="Menu principal"><button class="nav-btn active" data-tab="inicio" onclick="ir('inicio')">VISÃO GERAL</button><button class="nav-btn" data-tab="evidencias" onclick="ir('evidencias')">ESPETÁCULOS E EVIDÊNCIAS</button><button class="nav-btn" data-tab="pendencias" onclick="ir('pendencias')">PENDÊNCIAS <span class="pill-count hidden" id="navCount"></span></button><button class="nav-btn" data-tab="financeiro" onclick="ir('financeiro')">FINANCEIRO</button><button class="nav-btn logout" onclick="sair()">SAIR</button></nav></div></header>
 <main>
 <section id="page-inicio" class="page active"><div class="page-head"><div><div class="eyebrow">Painel de acompanhamento</div><h1>Visão geral do projeto</h1><p>O que já foi encontrado, o que precisa ser conferido e o que a equipe deve cobrar agora.</p></div><div class="actions"><span class="source-line" id="updated">Fonte: Conformidade PULSA SP</span><button class="btn tiny" onclick="atualizar()">↻ Atualizar</button></div></div><div id="homeContent"><div class="load-block"><span class="spin"></span>Carregando panorama do projeto...</div></div></section>
-<section id="page-evidencias" class="page"><div class="page-head"><div><div class="eyebrow">Consulta por apresentação</div><h1>Espetáculos e evidências</h1><p>Uma ficha por espetáculo: documentos encontrados, o que falta, fotos e links para as pastas.</p></div><div class="actions"><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchEv">Buscar espetáculo, artista ou data</label><input id="searchEv" placeholder="Digite nome, ID, data ou local..." oninput="mudarFiltro('ev')"></div><div class="field small"><label for="filterEv">Mostrar</label><select id="filterEv" onchange="mudarFiltro('ev')"><option value="todos">Todos os espetáculos</option><option value="falta">Com evidência não localizada</option><option value="verificar">Com documentos a conferir</option><option value="diverge">Com divergências</option><option value="pasta">Sem pasta vinculada</option></select></div></div><div class="results-meta"><span id="evCount">Aguardando carregamento</span><span>Links levam diretamente ao Drive quando disponíveis</span></div><div class="event-list" id="eventList"><div class="load-block"><span class="spin"></span>Consultando o projeto...</div></div><div id="evPaging"></div></section>
+<section id="page-evidencias" class="page"><div class="page-head"><div><div class="eyebrow">Consulta por apresentação</div><h1>Espetáculos e evidências</h1><p>Galeria de fotos e documentos por espetáculo, com links, análise visual e pendências lado a lado.</p></div><div class="actions"><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchEv">Buscar espetáculo, artista ou data</label><input id="searchEv" placeholder="Digite nome, ID, data ou local..." oninput="mudarFiltro('ev')"></div><div class="field small"><label for="filterEv">Mostrar</label><select id="filterEv" onchange="mudarFiltro('ev')"><option value="todos">Todos os espetáculos</option><option value="falta">Com evidência não localizada</option><option value="verificar">Com documentos a conferir</option><option value="diverge">Com divergências</option><option value="pasta">Sem pasta vinculada</option></select></div></div><div class="results-meta"><span id="evCount">Aguardando carregamento</span><span>Links levam diretamente ao Drive quando disponíveis</span></div><div class="event-list" id="eventList"><div class="load-block"><span class="spin"></span>Consultando o projeto...</div></div><div id="evPaging"></div></section>
 <section id="page-pendencias" class="page"><div class="page-head"><div><div class="eyebrow">Trabalho da equipe</div><h1>Pendências para cobrar</h1><p>Solicitações por espetáculo, com indicação do documento e texto para enviar ao responsável.</p></div><div class="actions"><button class="btn tiny" onclick="exportarPendencias()">↓ Exportar pendências (CSV)</button><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchPend">Buscar espetáculo ou pendência</label><input id="searchPend" placeholder="Nome, artista, ID ou documento..." oninput="mudarFiltro('pend')"></div><div class="field small"><label for="filterPend">Tipo de pendência</label><select id="filterPend" onchange="mudarFiltro('pend')"><option value="todos">Todas as pendências</option><option value="falta">Não localizado — solicitar</option><option value="verificar">Recebido — conferir</option><option value="diverge">Divergências</option><option value="foto">Fotos e banner</option><option value="acesso">Acesso à pasta</option></select></div></div><div class="callout">O botão <b>Copiar cobrança</b> prepara uma mensagem para WhatsApp ou e-mail. Ele não envia a mensagem automaticamente. Ausência significa “não localizado no inventário”, não afirma que o documento nunca existiu.</div><div class="results-meta"><span id="pendCount">Aguardando carregamento</span></div><div id="pendingList" class="pending-groups"></div><div id="pendPaging"></div></section>
 <section id="page-financeiro" class="page"><div class="page-head"><div><div class="eyebrow">Acompanhamento financeiro</div><h1>Contratações e notas fiscais</h1><p>Referência, valor fiscal, divergências e acesso aos comprovantes quando vinculados.</p></div><button class="btn tiny" onclick="carregarFinanceiro(true)">↻ Atualizar financeiro</button></div><div id="financeContent"><div class="load-block">Abra a aba para consultar os registros financeiros.</div></div></section>
 </main>
 <div id="drawer" role="dialog" aria-modal="true" aria-label="Dossiê do espetáculo" onclick="if(event.target===this)fecharDetalhe()"><div class="drawer-inner"><div class="drawer-head"><div><div class="eyebrow">Dossiê de apresentação</div><h2 id="drawerTitle">Espetáculo</h2><div class="source-line" id="drawerMeta"></div></div><button class="btn tiny" onclick="fecharDetalhe()">✕ Fechar</button></div><div id="drawerContent" class="drawer-main"></div></div></div>
+<div id="arquivoPreview" class="arquivo-preview" role="dialog" aria-modal="true" aria-label="Pré-visualização de documento" onclick="if(event.target===this)fecharPreview()">
+ <div class="arquivo-preview-panel">
+  <div class="arquivo-preview-header"><div class="arquivo-preview-headline"><div class="eyebrow">Conferência visual da evidência</div><h2 id="arquivoPreviewTitulo">Documento</h2><div id="arquivoPreviewMeta" class="source-line"></div></div><button class="btn tiny" onclick="fecharPreview()">✕ Fechar</button></div>
+  <div class="arquivo-preview-body"><div class="arquivo-preview-tip">Confira imagem, nitidez, identificação do projeto, banner, público e vínculo com o espetáculo. A visualização <b>não valida automaticamente</b> esta evidência.</div><div id="arquivoPreviewQuadro" class="arquivo-preview-quadro"></div></div>
+  <div class="arquivo-preview-footer"><div class="actions"><button class="btn tiny" id="arquivoPreviewAnterior" onclick="trocarPreview(-1)">← Anterior</button><button class="btn tiny" id="arquivoPreviewProximo" onclick="trocarPreview(1)">Próximo →</button></div><div class="actions"><a id="arquivoPreviewOriginal" class="btn primary" href="#" target="_blank" rel="noopener noreferrer">Abrir original no Drive ↗</a></div></div>
+ </div>
+</div>
 <div id="toast" role="status"></div>
 <script>
 'use strict';
@@ -202,7 +235,7 @@ function renderEvidencias(){if(!STATE.data)return;const a=eventosFiltrados('ev')
   $('eventList').innerHTML=a.slice((page-1)*PER_PAGE,page*PER_PAGE).map(e=>{
     const p=e.pendencias||[];const miss=p.filter(x=>x.estado==='NAO_LOCALIZADO').length;const check=p.filter(x=>x.estado==='RECEBIDO_NAO_VERIFICADO'||x.estado==='PARCIALMENTE_VALIDADO').length;
     const chips=[miss?`<span class="chip missing">${miss} não localizado(s)</span>`:'',check?`<span class="chip received">${check} a conferir</span>`:'',e.alertas?`<span class="chip divergent">${e.alertas} divergência(s)</span>`:'',`<span class="chip">${e.qtdArquivos} arquivo(s)</span>`,`<span class="chip">${e.qtdPastas} pasta(s)</span>`].filter(Boolean).join('');
-    return `<article class="event-card"><div class="event-top"><div><h3>${esc(e.nome||'Espetáculo sem nome')}</h3><div class="event-sub">${esc(e.data)} · ${esc(e.local)} · ${esc(e.artista)}<br><small>${esc(e.id)}</small></div></div><span class="chip ${p.length?'missing':'ok'}">${p.length?`${p.length} pendências`:'Sem pendência cadastrada'}</span></div><div class="chips">${chips}</div><div class="event-actions"><button class="btn primary" onclick="abrirDetalhe('${esc(e.id)}')">Ver evidências e pendências →</button>${e.dossie?link(e.dossie,'Abrir pasta do espetáculo','btn soft'):'<span class="micro">Pasta ainda não vinculada</span>'}</div></article>`;
+    return `<article class="event-card"><div class="event-top"><div><h3>${esc(e.nome||'Espetáculo sem nome')}</h3><div class="event-sub">${esc(e.data)} · ${esc(e.local)} · ${esc(e.artista)}<br><small>${esc(e.id)}</small></div></div><span class="chip ${p.length?'missing':'ok'}">${p.length?`${p.length} pendências`:'Sem pendência cadastrada'}</span></div><div class="chips">${chips}</div><div class="event-actions"><button class="btn primary" onclick="abrirDetalhe('${esc(e.id)}')">Ver galeria de evidências →</button>${e.dossie?link(e.dossie,'Abrir pasta do espetáculo','btn soft'):'<span class="micro">Pasta ainda não vinculada</span>'}</div></article>`;
   }).join('')||'<div class="empty">Nenhum espetáculo corresponde a esta busca.</div>';paginator('evPaging',a.length,page,'paginaEv');
 }
 function renderPendencias(){if(!STATE.data)return;const a=eventosFiltrados('pend'),page=Math.max(1,Math.min(STATE.pendPage,Math.ceil(a.length/PER_PAGE)||1));STATE.pendPage=page;
@@ -251,26 +284,81 @@ function abrirDetalhe(id){const e=STATE.data?.espetaculos.find(x=>x.id===id);if(
   api('central_operacional',{token:STATE.token,modo:'detalhe',id}).then(res=>{STATE.detalhes[id]=res.data;if($('drawer').classList.contains('open')&&$('drawerMeta').textContent.startsWith(id))renderDetalhe(e,res.data);})
   .catch(err=>{const m=/ID inv[aá]lido|Formato de ID n[aã]o reconhecido/i.test(err.message)?'O serviço de dossiês ainda não reconhece o ID deste espetáculo. É necessário publicar a versão corrigida de PulsaCentralOperacional.gs no Apps Script.':err.message;$('drawerContent').innerHTML=erroHtml(m);});
 }
-function fecharDetalhe(){$('drawer').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharDetalhe();});
-function renderDetalhe(e,d){const rows=CORE.map(([code,label])=>{
-    const p=(d.pendencias||[]).find(x=>x.codigo===code)||(e.pendencias||[]).find(x=>x.codigo===code);
-    const st=p?.estado||e.estados?.[code]||'';
-    const evid=(d.arquivos||[]).filter(x=>x.tipo===code),urls=p?.urls||[];
-    const resource=urls[0]||e.primeiroArquivo?.[code]||evid[0]?.url||(code==='nf'?e.notaFiscal:'');
-    return `<div class="doc-row"><div><b>${esc(label)}</b><small>${esc(statusLabel(st))}${evid.length?` · ${evid.length} arquivo(s) inventariado(s)`:''}</small></div><div class="actions">${resource?link(resource,'Ver documento','btn tiny'):''}<span class="chip ${statusClass(st)}">${esc(statusLabel(st))}</span></div></div>`;
-  }).join('');
-  const pens=(d.pendencias||e.pendencias||[]).map(p=>`<div class="pending-line"><div><b>${esc(p.nome||p.codigo||'Pendência')}</b><div class="desc">${esc(p.acao||'Revisar')}</div></div><span class="chip ${statusClass(p.estado)}">${esc(statusLabel(p.estado))}</span></div>`).join('');
-  const folders=(d.pastas||[]).filter(x=>cleanUrl(x.url)).map(x=>`<div class="file-item"><span>📁 ${esc(x.nome||x.caminho)}</span>${link(x.url,'Abrir','btn tiny')}</div>`).join('');
-  const files=(d.arquivos||[]).filter(x=>cleanUrl(x.url)).map(x=>`<div class="file-item"><span>${esc(x.nome)} <small class="micro">${esc(x.tipo||'A classificar')}</small></span>${link(x.url,'Abrir','btn tiny')}</div>`).join('');
-  const photos=(d.fotos||[]).map(f=>`<div class="photo-item"><strong>${esc(f.banner||'Banner em análise')}</strong><p>${esc(f.identificacao||'')} · ${esc(f.estado||'A conferir')}<br>${esc(f.observacao||'')}</p>${f.url?link(f.url,'Abrir foto','btn tiny'):''}</div>`).join('');
-  $('drawerContent').innerHTML=`<div class="callout">A ficha distingue arquivos recebidos, não localizados e validados. Resultado do Gemini é indício e requer revisão humana.</div><div class="actions">${e.dossie?link(e.dossie,'📁 Abrir dossiê principal','btn primary'):'<span class="chip missing">Dossiê principal sem link</span>'}<button class="btn" onclick="copiarCobranca('${esc(e.id)}')">Copiar cobrança</button></div>
-  <section class="drawer-section"><h3>7 evidências essenciais</h3>${rows}</section>
-  <section class="drawer-section"><h3>Pendências desta apresentação (${(d.pendencias||[]).length})</h3>${pens||'<p class="micro">Nenhuma pendência foi retornada no inventário deste espetáculo. Confira a data da última atualização.</p>'}</section>
-  <section class="drawer-section"><h3>Subpastas (${d.totalPastas||0})</h3><div class="file-list">${folders||'<p class="micro">Nenhuma subpasta identificada.</p>'}</div></section>
-  <section class="drawer-section"><h3>Arquivos encontrados (${d.totalArquivos||0})</h3><div class="file-list">${files||'<p class="micro">Nenhum arquivo no inventário atual.</p>'}</div>${d.totalArquivos>(d.arquivos||[]).length?'<p class="micro">Lista limitada para não sobrecarregar o painel. Abra o dossiê para consultar todos os arquivos.</p>':''}</section>
-  <section class="drawer-section"><h3>Análise automática de fotos (${(d.fotos||[]).length})</h3>${photos||'<p class="micro">Nenhuma análise de foto retornada. Não significa que não existam fotografias.</p>'}</section>`;
+function fecharDetalhe(){fecharPreview();$('drawer').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('arquivoPreview').classList.contains('open'))fecharPreview();else fecharDetalhe();}});
+const PULSA_PREVIEW={grupos:{},grupo:'',indice:0,titulo:''};
+function evidenciasPorTipo(e,d){
+  const grupos={};
+  const arqs=(d.arquivos||[]).filter(x=>cleanUrl(x.url));
+  CORE.forEach(([codigo])=>{
+    const p=(d.pendencias||[]).find(x=>x.codigo===codigo)||(e.pendencias||[]).find(x=>x.codigo===codigo);
+    const vistos=new Set(),lista=[];
+    function add(url,nome,fonte){url=cleanUrl(url);if(!url||vistos.has(url))return;vistos.add(url);lista.push({url,nome:nome||'Arquivo vinculado',fonte:fonte||''});}
+    arqs.filter(x=>x.tipo===codigo).forEach(x=>add(x.url,x.nome,'Inventário'));
+    (p?.urls||[]).forEach((url,i)=>add(url,'Documento relacionado '+(i+1),'Pendências'));
+    if(e.primeiroArquivo?.[codigo])add(e.primeiroArquivo[codigo],'Primeiro documento localizado','Resumo');
+    if(codigo==='nf')add(e.notaFiscal,'Nota fiscal vinculada','Planilha');
+    grupos[codigo]=lista;
+  });
+  const conhecidos=new Set(Object.values(grupos).flat().map(x=>x.url));
+  grupos.outros=arqs.filter(x=>!conhecidos.has(x.url)).map(x=>({url:x.url,nome:x.nome||'Arquivo sem classificação',fonte:x.tipo||'Sem categoria'}));
+  // Imagens analisadas mas não presentes no inventário continuam visíveis.
+  const ids=new Set(Object.values(grupos).flat().map(x=>x.url));
+  (d.fotos||[]).forEach((f,i)=>{const url=cleanUrl(f.url);if(url&&!ids.has(url)){grupos.outros.push({url,nome:'Fotografia analisada '+(i+1),fonte:'Análise de fotos'});ids.add(url);}});
+  return grupos;
 }
+function imagemDaAnalise(d,url){return (d.fotos||[]).find(f=>cleanUrl(f.url)===url);}
+function renderDetalhe(e,d){
+  const grupos=evidenciasPorTipo(e,d);PULSA_PREVIEW.grupos=grupos;
+  const cards=CORE.map(([code,label])=>{
+    const pend=(d.pendencias||[]).find(x=>x.codigo===code)||(e.pendencias||[]).find(x=>x.codigo===code);
+    const estado=pend?.estado||e.estados?.[code]||'';
+    const files=grupos[code]||[];
+    const isFoto=code==='fotoPublico'||code==='fotoApresentacao';
+    const content=files.length?files.map((file,i)=>{
+      const analise=imagemDaAnalise(d,file.url);
+      return `<div class="evidence-file"><div class="evidence-filename">${esc(file.nome)}${analise?`<div class="micro" style="margin-top:3px">Gemini: ${esc(analise.banner||analise.estado||'indício a conferir')}</div>`:''}</div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('${code}',${i})">Visualizar</button>${link(file.url,'Drive ↗','btn tiny')}</div></div>`;
+    }).join(''):'<div class="evidence-footnote">Nenhum arquivo com vínculo direto nesta categoria do inventário. Consulte a pasta e a pendência abaixo; isso não comprova que a evidência inexista.</div>';
+    const labelFiles=files.length===1?'1 documento com link':`${files.length} documentos com link`;
+    return `<article class="evidence-card ${statusClass(estado)}"><div class="evidence-card-head"><h4>${esc(label)}</h4><span class="chip ${statusClass(estado)}">${esc(statusLabel(estado))}</span></div><div class="micro">${labelFiles}</div><div class="evidence-files">${content}</div>${isFoto?'<div class="evidence-footnote">Confira pessoalmente nitidez, banner, público e identificação da apresentação.</div>':''}${pend?.acao?`<div class="evidence-footnote"><b>Próxima ação:</b> ${esc(pend.acao)}</div>`:''}</article>`;
+  }).join('');
+  const pendencias=(d.pendencias||e.pendencias||[]).map(p=>`<div class="pending-line"><div><b>${esc(p.nome||p.codigo||'Pendência')}</b><div class="desc">${esc(p.acao||'Revisar documentação')}</div></div><span class="chip ${statusClass(p.estado)}">${esc(statusLabel(p.estado))}</span></div>`).join('');
+  const folderRows=(d.pastas||[]).filter(x=>cleanUrl(x.url)).map(x=>`<div class="file-item"><span>📁 ${esc(x.nome||x.caminho)}</span>${link(x.url,'Abrir pasta ↗','btn tiny')}</div>`).join('');
+  const outros=grupos.outros||[];
+  const outrasLinhas=outros.map((x,i)=>`<div class="evidence-file"><div class="evidence-filename">${esc(x.nome)}<div class="micro">${esc(x.fonte)}</div></div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('outros',${i})">Visualizar</button>${link(x.url,'Drive ↗','btn tiny')}</div></div>`).join('');
+  const reviews=(d.fotos||[]).map((f,i)=>`<div class="photo-item"><b>Foto ${i+1} — ${esc(f.banner||'banner a conferir')}</b><p>${esc(f.identificacao||'')} · ${esc(f.estado||'Ainda não validado')}<br>${esc(f.observacao||'Sem observações registradas.')}</p>${f.url?link(f.url,'Abrir original ↗','btn tiny'):''}</div>`).join('');
+  $('drawerContent').innerHTML=`<div class="evidence-intro"><b>Galeria de evidências do espetáculo.</b> Clique em <b>Visualizar</b> para abrir fotos, contratos e PDFs sem sair do Index. Se o Drive bloquear a prévia, use <b>Drive ↗</b>. Encontrado ou analisado por IA não significa validado.</div>
+    <div class="actions" style="margin-bottom:18px">${e.dossie?link(e.dossie,'📁 Dossiê completo no Drive','btn primary'):'<span class="chip missing">Dossiê principal sem link</span>'}<button class="btn" onclick="copiarCobranca('${esc(e.id)}')">Copiar pendências para cobrança</button></div>
+    <section class="drawer-section"><h3>Galeria de evidências — sete requisitos</h3><div class="evidence-grid">${cards}</div></section>
+    <section class="drawer-section"><h3>Pendências a resolver (${(d.pendencias||[]).length})</h3>${pendencias||'<p class="micro">Nenhuma pendência retornada; confira a atualização do inventário.</p>'}</section>
+    <section class="drawer-section"><h3>Outros documentos e arquivos sem classificação (${outros.length})</h3>${outros.length?`<div class="evidence-files">${outrasLinhas}</div>`:'<p class="micro">Nenhum arquivo adicional encontrado nesta consulta.</p>'}</section>
+    <section class="drawer-section"><h3>Pastas do espetáculo (${d.totalPastas||0})</h3><div class="file-list">${folderRows||'<p class="micro">Nenhuma subpasta com endereço identificado.</p>'}</div></section>
+    <section class="drawer-section"><h3>Leitura automática das fotografias (${(d.fotos||[]).length})</h3>${reviews||'<p class="micro">Nenhuma análise visual disponível. Isso não significa ausência de fotos.</p>'}</section>
+    ${d.totalArquivos>(d.arquivos||[]).length?`<div class="callout">O inventário deste espetáculo contém ${fmt(d.totalArquivos)} arquivos, mas a API retornou somente ${fmt((d.arquivos||[]).length)} nesta consulta. Abra o dossiê no Drive para visualizar os demais.</div>`:''}`;
+}
+function urlPreviewDrive(url){
+  const u=cleanUrl(url);if(!u)return '';
+  const match=u.match(/^https:\/\/(?:drive|docs)\.google\.com\/(?:file|document|spreadsheets|presentation|drawings)\/d\/([A-Za-z0-9_-]{10,})/);
+  if(!match)return '';
+  const id=match[1];const kind=(u.match(/google\.com\/([^/]+)/)||[])[1];
+  if(kind==='document'||kind==='presentation'||kind==='spreadsheets')return 'https://docs.google.com/'+kind+'/d/'+id+'/preview';
+  return 'https://drive.google.com/file/d/'+id+'/preview';
+}
+function abrirPreview(grupo,indice){
+  const items=PULSA_PREVIEW.grupos[grupo]||[],obj=items[indice];if(!obj)return;
+  PULSA_PREVIEW.grupo=grupo;PULSA_PREVIEW.indice=indice;
+  const label=CORE.find(x=>x[0]===grupo)?.[1]||'Outros arquivos';
+  $('arquivoPreviewTitulo').textContent=obj.nome||'Documento';
+  $('arquivoPreviewMeta').textContent=`${label} · arquivo ${indice+1} de ${items.length}`;
+  const prev=urlPreviewDrive(obj.url);
+  $('arquivoPreviewQuadro').innerHTML=prev?`<iframe title="Prévia do documento — ${esc(obj.nome)}" src="${esc(prev)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>`:'<div class="empty">Este endereço não oferece prévia incorporada. Use “Abrir original no Drive”.</div>';
+  $('arquivoPreviewOriginal').href=obj.url;
+  $('arquivoPreviewAnterior').disabled=indice===0;
+  $('arquivoPreviewProximo').disabled=indice===items.length-1;
+  $('arquivoPreview').classList.add('open');
+}
+function trocarPreview(sentido){const grupo=PULSA_PREVIEW.grupo;abrirPreview(grupo,PULSA_PREVIEW.indice+sentido);}
+function fecharPreview(){$('arquivoPreview').classList.remove('open');$('arquivoPreviewQuadro').innerHTML='';}
 async function carregarFinanceiro(force=false){if(!STATE.token)return;if(STATE.finance&&!force){renderFinanceiro();return;}
   $('financeContent').innerHTML='<div class="load-block"><span class="spin"></span>Consultando notas fiscais...</div>';
   try{const res=await api('central_operacional',{token:STATE.token,modo:'financeiro'});STATE.finance=res.data;STATE.finPage=1;renderFinanceiro();}
