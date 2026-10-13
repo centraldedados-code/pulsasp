@@ -337,6 +337,18 @@
     .pulsa-pend-item .estado{color:#965f00;font-weight:700;font-size:9px;text-transform:uppercase}
     .pulsa-index-notice{background:#eef7f9;padding:12px 14px;border-radius:10px;margin:10px 0;font-size:11px;color:#315568}
     @media(max-width:650px){.pulsa-folder-grid{grid-template-columns:1fr}}
+    .central-intro{background:#edf7fa;border:1px solid #c9e7ee;border-radius:12px;padding:14px;margin:12px 0;color:#244456;font-size:12px}
+    .central-top{display:grid;grid-template-columns:3fr 1fr;gap:12px;margin:18px 0}
+    .central-top input,.central-top select{width:100%;background:#fff;padding:12px;border:1px solid #d6e0e8;border-radius:10px}
+    .central-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+    .central-stat{background:#fff;border:1px solid #dde4ea;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px}.central-stat strong{font-size:23px;color:#092040}.central-stat span{color:#64788a;font-size:11px}
+    .central-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .central-card{background:#fff;border:1px solid #dce5ed;border-radius:15px;padding:18px;min-width:0;box-shadow:0 4px 18px rgba(9,32,64,.04)}
+    .central-head{display:flex;justify-content:space-between;gap:10px;align-items:start}.central-head h3{font:700 15px Montserrat,sans-serif;margin:0 0 5px;color:#092040}.central-head small{color:#607386}.central-count{white-space:nowrap;background:#fff3e6;border:1px solid #f0dcbb;border-radius:40px;padding:5px 9px;font-size:10px;color:#795318;font-weight:bold}
+    .central-open{display:flex;justify-content:space-between;gap:10px;align-items:center;background:#eaf8fb;border-radius:8px;padding:10px;margin:13px 0;font-size:11px}.central-open a{font-weight:700;color:#006b87}.central-open span{color:#4d6776}
+    .central-evidences{display:grid;gap:3px}.central-evid{border-bottom:1px solid #edf1f4;padding:7px 0;display:flex;align-items:center;gap:8px;font-size:11px}.central-evid span{flex:1}.central-evid b{font-size:10px;font-weight:700}.central-evid a{font-size:10px;color:#007c99}.central-ok{color:#167747}.central-err{color:#b33131}.central-wait{color:#9b620d}.central-muted{color:#718096}
+    .central-detail{border-top:1px solid #e8edf2;padding-top:9px;margin-top:10px;font-size:11px}.central-detail summary{font-weight:700;color:#092040;cursor:pointer}.central-detail li{margin:8px 0;overflow-wrap:anywhere}.central-detail a{color:#007c9e}.central-photo{margin-top:12px;color:#607386;font-size:10px}
+    @media(max-width:900px){.central-grid{grid-template-columns:1fr}.central-top{grid-template-columns:1fr}.central-kpis{grid-template-columns:repeat(2,1fr)}}
   </style>
 <style>
 .rig-box{border:1px solid #dce4ea;background:#fbfcfe;border-radius:12px;padding:12px;margin-top:12px;color:#092040}
@@ -374,7 +386,8 @@
         </div>
       </div>
       <nav class="nav-tabs hnav" aria-label="Navegação principal">
-        <button class="nav-tab nbtn active on" data-tab="resumo" onclick="trocarAba('resumo',this)">Resumo</button>
+        <button class="nav-tab nbtn active on" data-tab="central" onclick="trocarAba('central',this)">Central de evidências</button>
+        <button class="nav-tab nbtn" data-tab="resumo" onclick="trocarAba('resumo',this)">Resumo</button>
         <button class="nav-tab nbtn" data-tab="espetaculos" onclick="trocarAba('espetaculos',this)">Espetáculos</button>
         <button class="nav-tab nbtn" data-tab="pastas" onclick="trocarAba('pastas',this)">Pastas</button>
         <button class="nav-tab nbtn" data-tab="pendencias" onclick="trocarAba('pendencias',this)">Pendências</button>
@@ -390,7 +403,14 @@
   <main class="wrap">
     <div id="globalLoading" class="loading hidden"><span class="loader-dot"></span>Carregando dados oficiais do PULSA SP...</div>
 
-    <section id="pane-resumo" class="pane">
+    <section id="pane-central" class="pane">
+      <div class="page-head"><div><h2 class="st">Central de evidências por espetáculo</h2><p>Localize uma apresentação e veja, juntos, documentos, pastas e o que ainda precisa de conferência.</p></div></div>
+      <div class="central-intro">Acesso aos documentos encontrados não significa validação. Os resultados das fotos por inteligência artificial são indícios e exigem revisão humana.</div>
+      <div class="central-top"><div class="filter-field"><label>Buscar espetáculo, artista, data ou ID</label><input id="centralBusca" placeholder="Ex.: Água-Viva, 03/09, PULSA-2026-005" oninput="pulsaRenderCentral()"></div><div class="filter-field"><label>Exibir</label><select id="centralFiltro" onchange="pulsaRenderCentral()"><option value="todos">Todos</option><option value="pendentes">Com pendências</option><option value="criticos">Com divergência</option><option value="semPasta">Sem dossiê vinculado</option></select></div></div>
+      <div id="centralKpis" class="central-kpis"></div>
+      <div id="centralCards" class="central-grid"><div class="loading">Clique nesta aba para carregar o inventário por espetáculo.</div></div>
+    </section>
+    <section id="pane-resumo" class="pane hidden">
       <div class="page-head">
         <div><h2 class="st">Resumo executivo</h2><p>Visão consolidada de execução, conformidade documental, evidências e alertas prioritários.</p></div>
         <div id="updatedAt" class="updated">Atualização: --</div>
@@ -442,7 +462,7 @@
     </section>
     <section id="pane-pastas" class="pane hidden">
       <div class="page-head"><div><h2 class="st">Pastas e dossiês dos espetáculos</h2><p>Mapa de acesso aos arquivos oficiais, subpastas e evidências de cada apresentação.</p></div></div>
-      <div id="pulsaRootFolderCards" class="pulsa-folder-grid"></div>
+      
       <div class="st">Dossiês individuais</div>
       <div class="filters-panel"><div class="filter-field"><label>Localizar espetáculo, artista ou ID</label><input id="pulsaPastaBusca" placeholder="Digite para filtrar" oninput="pulsaFiltrarIndice()"></div></div>
       <div id="pulsaPastaItens" class="pulsa-folder-grid"><div class="loading">Carregue os dados para consultar as pastas.</div></div>
@@ -545,6 +565,7 @@
         BOOT = (await apiPost('bootstrap',{token:TOKEN})).data;
         aplicarConfig(BOOT.config||{});
         renderResumo(BOOT.resumo||{});
+        trocarAba('central',document.querySelector('.nav-tab[data-tab="central"]'));
         document.getElementById('updatedAt').textContent='Atualização: '+(BOOT.geradoEm||'fonte oficial');
       }catch(err){
         sessionStorage.removeItem('pulsaPainelToken');
@@ -667,7 +688,7 @@
       if(nome==='resumo' && BOOT) renderResumo(BOOT.resumo||{});
       if(nome==='espetaculos') loadAtividades(1);
       if(nome==='evidencias') loadEvidencias(1);
-      if(nome==='pastas'||nome==='pendencias') pulsaCarregarIndice();
+      if(nome==='pastas'||nome==='pendencias'||nome==='central') pulsaCarregarIndice();
       if(nome==='financeiro') loadFinanceiro(1);
       if(nome==='auditoria') loadAuditoria();
       if(nome==='metas') loadMetas();
@@ -811,7 +832,7 @@
     function pulsaLinkSeguro(url,label){const u=String(url||'');return /^https:\/\/drive\.google\.com\//.test(u) || /^https:\/\/docs\.google\.com\//.test(u) ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>` : `<span>${esc(label)} — link indisponível</span>`;}
     async function pulsaCarregarIndice(){
       const root=document.getElementById('pulsaRootFolderCards');
-      root.innerHTML=PULSA_PASTAS_RAIZ.map(p=>`<article class="pulsa-folder-card">📁 ${pulsaLinkSeguro(p[1],p[0])}</article>`).join('');
+      if(root) root.innerHTML='';
       if(PULSA_INDICE_CACHE){pulsaFiltrarIndice();return;}
       if(PULSA_INDICE_PROMISE)return PULSA_INDICE_PROMISE;
       document.getElementById('pulsaPastaItens').innerHTML='<div class="loading">Carregando todos os espetáculos e suas pastas...</div>';
@@ -834,11 +855,11 @@
           }).then(r=>r.data||{}).catch(e=>({__erro:String(e.message||e)}))));
           lotes.forEach((lote,j)=>lote.forEach(a=>{a.auditoriaRigorosa=rs[j][String(a.id||'')]||{erro:rs[j].__erro||'Inventário não encontrado'};}));
         }
-        PULSA_INDICE_CACHE=items;pulsaFiltrarIndice();
+        PULSA_INDICE_CACHE=items;pulsaFiltrarIndice();pulsaRenderCentral();
       })().catch(err=>{
         const msg=`Não foi possível carregar o inventário completo: ${esc(err.message||String(err))}. Confira a implantação da API e as abas de inventário.`;
         document.getElementById('pulsaPastaItens').innerHTML=`<div class="pulsa-index-notice">${msg}</div>`;
-        document.getElementById('pulsaPendItens').innerHTML=`<div class="pulsa-index-notice">${msg}</div>`;
+        document.getElementById('pulsaPendItens').innerHTML=`<div class="pulsa-index-notice">${msg}</div>`;document.getElementById('centralCards').innerHTML=`<div class="pulsa-index-notice">${msg}</div>`;
       }).finally(()=>{PULSA_INDICE_PROMISE=null;});
       return PULSA_INDICE_PROMISE;
     }
@@ -858,6 +879,48 @@
       document.getElementById('pulsaPendKpis').innerHTML=[['Espetáculos cadastrados',data.length],['Com pendências',espetaculosPendentes],['Pendências registradas',pendencias],['Dossiês sem link',semPasta]].map(([k,v])=>`<div class="kpi"><div class="knum">${esc(v)}</div><div class="klab">${esc(k)}</div></div>`).join('');
       const matches=data.map(a=>({a,ps:(a.auditoriaRigorosa?.pendencias||[]).filter(p=>(!estado||p.estado===estado)&&[a.nome,a.id,p.nome,p.acao,p.estado].join(' ').toLocaleLowerCase('pt-BR').includes(q))})).filter(x=>x.ps.length);
       document.getElementById('pulsaPendItens').innerHTML=`<div class="pulsa-index-notice">Os totais são do inventário disponível. Arquivo encontrado não é comprovação validada. Conferências automáticas de fotos exigem revisão humana.</div>`+matches.map(({a,ps})=>`<article class="pulsa-pend-card ${ps.some(p=>p.estado==='DIVERGENTE')?'critica':''}"><h3>${esc(a.nome||a.id)}</h3><div class="meta">ID ${esc(a.id||'—')} · ${esc(a.data||'Sem data')} · ${ps.length} pendência(s) · ${a.dossieUrl?pulsaLinkSeguro(a.dossieUrl,'Abrir dossiê'):'Pasta sem link'}</div>${ps.map(p=>`<div class="pulsa-pend-item"><strong>${esc(p.nome||p.codigo||'Pendência')}</strong><div class="estado">${esc(p.estado||'A verificar')}</div><div>${esc(p.acao||'Conferir evidência')}</div>${String(p.urls||'').split(/\n/).filter(Boolean).slice(0,5).map(u=>`<div>${pulsaLinkSeguro(u,'Abrir evidência')}</div>`).join('')}</div>`).join('')}</article>`).join('')+(matches.length?'':'<div class="pulsa-index-notice">Nenhuma pendência corresponde aos filtros ou inventário ainda não foi preenchido.</div>');
+    }
+
+    function pulsaRenderCentral(){
+      const all=PULSA_INDICE_CACHE||[];
+      const out=document.getElementById('centralCards');if(!out)return;
+      if(!PULSA_INDICE_CACHE){out.innerHTML='<div class="loading">Buscando dossiês e pendências individuais…</div>';return;}
+      const q=(document.getElementById('centralBusca')?.value||'').toLocaleLowerCase('pt-BR').trim();
+      const filter=document.getElementById('centralFiltro')?.value||'todos';
+      let rows=all.filter(a=>{
+        const d=a.auditoriaRigorosa||{},ps=d.pendencias||[];
+        const hit=[a.nome,a.artista,a.id,a.data,a.local].join(' ').toLocaleLowerCase('pt-BR').includes(q);
+        if(!hit)return false;
+        if(filter==='pendentes')return ps.length>0;
+        if(filter==='criticos')return ps.some(p=>p.estado==='DIVERGENTE');
+        if(filter==='semPasta')return !a.dossieUrl&&!(d.pastas||[]).length;
+        return true;
+      });
+      const totalPend=all.reduce((n,a)=>n+((a.auditoriaRigorosa||{}).pendencias||[]).length,0);
+      const pendCases=all.filter(a=>((a.auditoriaRigorosa||{}).pendencias||[]).length).length;
+      const kpis=[['Espetáculos',all.length],['Com pendências',pendCases],['Pendências documentais',totalPend],['Exibidos',rows.length]];
+      document.getElementById('centralKpis').innerHTML=kpis.map(([k,v])=>`<div class="central-stat"><strong>${esc(v)}</strong><span>${esc(k)}</span></div>`).join('');
+      out.innerHTML=rows.map(a=>{
+        const d=a.auditoriaRigorosa||{},ps=d.pendencias||[],fs=d.arquivos||[],folders=d.pastas||[],photo=d.analiseFotos||[];
+        const st=['nf','contrato','fotoApresentacao','fotoPublico','bordero','relatorio','programacao'];
+        const labels=['Nota fiscal','Contrato / cachê','Fotos da apresentação','Fotos do público','Borderô','Relatório físico','Divulgação'];
+        const pmap={};ps.forEach(p=>{if(p.codigo)pmap[p.codigo]=p});
+        const evid=(a.evidencias||{});
+        const evidHtml=st.map((key,i)=>{
+          const p=pmap[key],e=evid[key]||{};
+          const state=p?.estado||e.estado||'NAO_VERIFICADO';
+          const validado=state==='VALIDADO',recebido=state==='RECEBIDO_NAO_VERIFICADO',div=state==='DIVERGENTE';
+          const desc=validado?'Validado':recebido?'Recebido, verificar':div?'Divergência':'Não localizado / verificar';
+          const urls=String(p?.urls||'').match(/https?:\/\/[^\s,;]+/g)||[];
+          return `<div class="central-evid"><span>${esc(labels[i])}</span><b class="${validado?'central-ok':div?'central-err':recebido?'central-wait':'central-muted'}">${esc(desc)}</b>${urls[0]?pulsaLinkSeguro(urls[0],'Abrir arquivo'):''}</div>`;
+        }).join('');
+        const pendHtml=ps.length?ps.map(p=>`<li><b>${esc(p.nome||p.codigo||'Documento')}</b> — ${esc(p.acao||p.estado||'Conferir')} ${(String(p.urls||'').match(/https?:\/\/[^\s,;]+/g)||[]).slice(0,3).map((u,i)=>pulsaLinkSeguro(u,'Arquivo '+(i+1))).join(' ')}</li>`).join(''):'<li>Nenhuma pendência retornada pelo inventário. Verifique se os dados estão atualizados.</li>';
+        const folderHtml=folders.map(p=>`<li>${pulsaLinkSeguro(p.url,p.nome||p.caminho||'Abrir subpasta')}</li>`).join('');
+        const fileHtml=fs.map(f=>`<li>${pulsaLinkSeguro(f.url,f.nome||'Abrir arquivo')} <small>${esc(f.tipo||'')}</small></li>`).join('');
+        const fotoMsg=photo.length?`${photo.length} análise(s) automática(s) registrada(s); confirmar visualmente.`:'Sem análises de fotos retornadas para esta ficha.';
+        const mainFolder=a.dossieUrl||(folders.find(p=>p.url)?.url)||'';
+        return `<article class="central-card"><div class="central-head"><div><h3>${esc(a.nome||'Espetáculo')}</h3><small>${esc(a.id||'')} · ${esc(a.data||'')} · ${esc(a.local||'')}</small></div><span class="central-count">${ps.length} pendência(s)</span></div><div class="central-open">${mainFolder?pulsaLinkSeguro(mainFolder,'📁 Abrir pasta do espetáculo'):'Pasta principal não vinculada'} <span>${fs.length} arquivo(s) inventariado(s)</span></div><div class="central-evidences">${evidHtml}</div><details class="central-detail" ${ps.length?'open':''}><summary>Pendências específicas (${ps.length})</summary><ul>${pendHtml}</ul></details><details class="central-detail"><summary>Subpastas (${folders.length})</summary><ul>${folderHtml||'<li>Não inventariadas</li>'}</ul></details><details class="central-detail"><summary>Todos os arquivos (${fs.length})</summary><ul>${fileHtml||'<li>Não inventariados</li>'}</ul></details><div class="central-photo">📷 ${esc(fotoMsg)}</div></article>`;
+      }).join('')||'<div class="central-intro">Nenhum espetáculo corresponde aos filtros.</div>';
     }
 
     function renderActivityEvidenceMini(ev){
