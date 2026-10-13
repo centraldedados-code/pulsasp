@@ -160,6 +160,37 @@ main{max-width:1550px;padding:31px 28px 80px}
 .evidence-file .evidence-filename{min-width:0;overflow-wrap:anywhere;word-break:break-word}
 @media(max-width:780px){.fotos-galeria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.fotos-galeria-grid{grid-template-columns:1fr}}
+
+/* PULSA V5 — ficha única e galeria de conferência dentro do painel */
+.event-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:14px}
+.event-card{min-width:0;min-height:220px;cursor:pointer;display:flex;flex-direction:column;gap:9px;box-shadow:0 8px 24px rgba(2,23,56,.055)}
+.event-card:hover{border-color:#00B7D7;box-shadow:0 11px 28px rgba(0,183,215,.10)}
+.event-actions{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap}
+.event-card .event-sub{font-size:11px;line-height:1.65}
+.source-note{background:#edf7fb;border-left:3px solid #00B7D7;color:#123b53;border-radius:8px;padding:10px 12px;font:600 11px/1.6 'Open Sans',sans-serif;overflow-wrap:anywhere}
+.source-note.warning{background:#fff8e7;border-left-color:#ECC203;color:#5a4410}
+.source-note b{display:block;color:#092040;margin-bottom:4px;font-family:Montserrat,sans-serif}
+.origin-card{background:#f6fafc;border:1px solid #dce7ee;border-radius:12px;padding:16px;margin-bottom:14px}
+.origin-card h3{margin:0 0 12px;font:700 13px Montserrat,sans-serif;color:#092040}
+.origin-line{font:12px/1.7 'Open Sans',sans-serif;color:#244257;margin:8px 0;overflow-wrap:anywhere}
+.origin-label{font:700 10px Montserrat,sans-serif;color:#092040;margin-bottom:4px}
+.origin-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.source-category{font-size:10.5px;line-height:1.45;display:flex;align-items:center;justify-content:space-between;gap:9px;border-top:1px solid #dce8ee;padding:10px 0}
+.source-category>*{min-width:0}
+.evidence-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.evidence-overview article{background:#092040;color:#fff;border-radius:12px;padding:14px 16px}
+.evidence-overview strong{display:block;font:700 23px Montserrat;color:#ECC203}
+.evidence-overview span{font-size:10px;line-height:1.5;color:#d2e2ea}
+.drawer-inner{width:min(1200px,100vw)}
+.foto-thumb-media{height:200px}
+.foto-thumb-fallback{display:none;background:#ebf2f7}
+.foto-thumb-fallback span{font-size:11px}
+.foto-thumb-data{font-size:11px}
+.fotos-galeria-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+#arquivoPreviewQuadro img{object-fit:contain;max-height:100%}
+@media(max-width:990px){.event-list{grid-template-columns:1fr}.origin-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.evidence-overview{grid-template-columns:repeat(3,minmax(0,1fr))}.evidence-overview article{padding:9px}.evidence-overview strong{font-size:19px}.fotos-galeria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:490px){.fotos-galeria-grid{grid-template-columns:1fr}.evidence-overview span{font-size:9px}}
 </style>
 </head>
 <body>
@@ -167,7 +198,7 @@ main{max-width:1550px;padding:31px 28px 80px}
 <header><div class="head-inner"><div class="brand"><img class="logo" src="./assets/logo-instituto-br.png" alt="Instituto BR"><div><div class="brand-name">PULSA SP</div><div class="brand-sub">Central de Monitoramento e Prestação de Contas</div></div></div><nav aria-label="Menu principal"><button class="nav-btn active" data-tab="inicio" onclick="ir('inicio')">VISÃO GERAL</button><button class="nav-btn" data-tab="evidencias" onclick="ir('evidencias')">ESPETÁCULOS E EVIDÊNCIAS</button><button class="nav-btn" data-tab="pendencias" onclick="ir('pendencias')">PENDÊNCIAS <span class="pill-count hidden" id="navCount"></span></button><button class="nav-btn" data-tab="financeiro" onclick="ir('financeiro')">FINANCEIRO</button><button class="nav-btn logout" onclick="sair()">SAIR</button></nav></div></header>
 <main>
 <section id="page-inicio" class="page active"><div class="page-head"><div><div class="eyebrow">Painel de acompanhamento</div><h1>Visão geral do projeto</h1><p>O que já foi encontrado, o que precisa ser conferido e o que a equipe deve cobrar agora.</p></div><div class="actions"><span class="source-line" id="updated">Fonte: Conformidade PULSA SP</span><button class="btn tiny" onclick="atualizar()">↻ Atualizar</button></div></div><div id="homeContent"><div class="load-block"><span class="spin"></span>Carregando panorama do projeto...</div></div></section>
-<section id="page-evidencias" class="page"><div class="page-head"><div><div class="eyebrow">Consulta por apresentação</div><h1>Espetáculos e evidências</h1><p>Galeria de fotos e documentos por espetáculo, com links, análise visual e pendências lado a lado.</p></div><div class="actions"><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchEv">Buscar espetáculo, artista ou data</label><input id="searchEv" placeholder="Digite nome, ID, data ou local..." oninput="mudarFiltro('ev')"></div><div class="field small"><label for="filterEv">Mostrar</label><select id="filterEv" onchange="mudarFiltro('ev')"><option value="todos">Todos os espetáculos</option><option value="falta">Com evidência não localizada</option><option value="verificar">Com documentos a conferir</option><option value="diverge">Com divergências</option><option value="pasta">Sem pasta vinculada</option></select></div></div><div class="results-meta"><span id="evCount">Aguardando carregamento</span><span>Links levam diretamente ao Drive quando disponíveis</span></div><div class="event-list" id="eventList"><div class="load-block"><span class="spin"></span>Consultando o projeto...</div></div><div id="evPaging"></div></section>
+<section id="page-evidencias" class="page"><div class="page-head"><div><div class="eyebrow">Consulta por apresentação</div><h1>Espetáculos e evidências</h1><p>Abra um espetáculo para ver fotos, contratos, NFs e demais documentos. Registros recebidos por e-mail, mas ainda não arquivados, ficam destacados.</p></div><div class="actions"><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchEv">Buscar espetáculo, artista ou data</label><input id="searchEv" placeholder="Digite nome, ID, data ou local..." oninput="mudarFiltro('ev')"></div><div class="field small"><label for="filterEv">Mostrar</label><select id="filterEv" onchange="mudarFiltro('ev')"><option value="todos">Todos os espetáculos</option><option value="falta">Com evidência não localizada</option><option value="verificar">Com documentos a conferir</option><option value="diverge">Com divergências</option><option value="pasta">Sem pasta vinculada</option></select></div></div><div class="results-meta"><span id="evCount">Aguardando carregamento</span><span>Links levam diretamente ao Drive quando disponíveis</span></div><div class="event-list" id="eventList"><div class="load-block"><span class="spin"></span>Consultando o projeto...</div></div><div id="evPaging"></div></section>
 <section id="page-pendencias" class="page"><div class="page-head"><div><div class="eyebrow">Trabalho da equipe</div><h1>Pendências para cobrar</h1><p>Solicitações por espetáculo, com indicação do documento e texto para enviar ao responsável.</p></div><div class="actions"><button class="btn tiny" onclick="exportarPendencias()">↓ Exportar pendências (CSV)</button><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchPend">Buscar espetáculo ou pendência</label><input id="searchPend" placeholder="Nome, artista, ID ou documento..." oninput="mudarFiltro('pend')"></div><div class="field small"><label for="filterPend">Tipo de pendência</label><select id="filterPend" onchange="mudarFiltro('pend')"><option value="todos">Todas as pendências</option><option value="falta">Não localizado — solicitar</option><option value="verificar">Recebido — conferir</option><option value="diverge">Divergências</option><option value="foto">Fotos e banner</option><option value="acesso">Acesso à pasta</option></select></div></div><div class="callout">O botão <b>Copiar cobrança</b> prepara uma mensagem para WhatsApp ou e-mail. Ele não envia a mensagem automaticamente. Ausência significa “não localizado no inventário”, não afirma que o documento nunca existiu.</div><div class="results-meta"><span id="pendCount">Aguardando carregamento</span></div><div id="pendingList" class="pending-groups"></div><div id="pendPaging"></div></section>
 <section id="page-financeiro" class="page"><div class="page-head"><div><div class="eyebrow">Acompanhamento financeiro</div><h1>Contratações e notas fiscais</h1><p>Referência, valor fiscal, divergências e acesso aos comprovantes quando vinculados.</p></div><button class="btn tiny" onclick="carregarFinanceiro(true)">↻ Atualizar financeiro</button></div><div id="financeContent"><div class="load-block">Abra a aba para consultar os registros financeiros.</div></div></section>
 </main>
@@ -248,7 +279,7 @@ function renderHome(){if(!STATE.data)return;const r=STATE.data.resumo,a=STATE.da
 }
 function urgency(a){const p=a.pendencias||[];return p.filter(x=>x.estado==='DIVERGENTE').length*9+p.filter(x=>x.estado==='NAO_LOCALIZADO').length*3+p.length;}
 function eventosFiltrados(type){let a=(STATE.data?.espetaculos||[]).slice();const s=lower($(type==='ev'?'searchEv':'searchPend').value.trim()),f=$(type==='ev'?'filterEv':'filterPend').value;
-  a=a.filter(x=>{const p=x.pendencias||[];const hit=lower([x.nome,x.data,x.artista,x.local,x.id,p.map(y=>y.nome).join(' ')].join(' ')).includes(s);if(!hit)return false;
+  a=a.filter(x=>{const p=x.pendencias||[];const hit=lower([x.nome,x.data,x.artista,x.local,x.id,x.jaExiste,x.aindaFalta,p.map(y=>y.nome).join(' ')].join(' ')).includes(s);if(!hit)return false;
     if(type==='pend'&&!p.length)return false;
     if(f==='falta')return p.some(y=>y.estado==='NAO_LOCALIZADO');
     if(f==='verificar')return p.some(y=>/RECEBIDO_NAO_VERIFICADO|PARCIALMENTE_VALIDADO/.test(y.estado));
@@ -263,13 +294,28 @@ function mudarFiltro(type){if(type==='ev'){STATE.evPage=1;renderEvidencias();}el
 function paginator(id,total,page,callback){$(id).innerHTML=total<=PER_PAGE?'':`<div class="pagination"><button class="btn tiny" ${page<=1?'disabled':''} onclick="${callback}(${page-1})">← Anterior</button><span>Página ${page} de ${Math.ceil(total/PER_PAGE)}</span><button class="btn tiny" ${page>=Math.ceil(total/PER_PAGE)?'disabled':''} onclick="${callback}(${page+1})">Próxima →</button></div>`;}
 function paginaEv(n){STATE.evPage=n;renderEvidencias();window.scrollTo({top:0,behavior:'smooth'});}
 function paginaPend(n){STATE.pendPage=n;renderPendencias();window.scrollTo({top:0,behavior:'smooth'});}
-function renderEvidencias(){if(!STATE.data)return;const a=eventosFiltrados('ev');const page=Math.max(1,Math.min(STATE.evPage,Math.ceil(a.length/PER_PAGE)||1));STATE.evPage=page;
-  $('evCount').textContent=`${fmt(a.length)} espetáculo(s) encontrado(s) · exibindo até ${PER_PAGE} por página`;
+function resumoOrigem(e){
+  const txt=text(e.jaExiste); if(!txt)return '';
+  const encurtado=txt.length>240?txt.slice(0,237)+'…':txt;
+  return `<div class="source-note ${e.qtdArquivos===0?'warning':''}"><b>${e.qtdArquivos===0?'Recebimentos mencionados na planilha — conferir arquivamento':'Histórico registrado na planilha'}</b>${esc(encurtado)}</div>`;
+}
+function renderEvidencias(){if(!STATE.data)return;
+  const a=eventosFiltrados('ev'),page=Math.max(1,Math.min(STATE.evPage,Math.ceil(a.length/PER_PAGE)||1));STATE.evPage=page;
+  $('evCount').textContent=`${fmt(a.length)} espetáculo(s) · ${PER_PAGE} por página · clique no cartão para abrir a ficha`;
   $('eventList').innerHTML=a.slice((page-1)*PER_PAGE,page*PER_PAGE).map(e=>{
-    const p=e.pendencias||[];const miss=p.filter(x=>x.estado==='NAO_LOCALIZADO').length;const check=p.filter(x=>x.estado==='RECEBIDO_NAO_VERIFICADO'||x.estado==='PARCIALMENTE_VALIDADO').length;
-    const chips=[miss?`<span class="chip missing">${miss} não localizado(s)</span>`:'',check?`<span class="chip received">${check} a conferir</span>`:'',e.alertas?`<span class="chip divergent">${e.alertas} divergência(s)</span>`:'',`<span class="chip">${e.qtdArquivos} arquivo(s)</span>`,`<span class="chip">${e.qtdPastas} pasta(s)</span>`].filter(Boolean).join('');
-    return `<article class="event-card"><div class="event-top"><div><h3>${esc(e.nome||'Espetáculo sem nome')}</h3><div class="event-sub">${esc(e.data)} · ${esc(e.local)} · ${esc(e.artista)}<br><small>${esc(e.id)}</small></div></div><span class="chip ${p.length?'missing':'ok'}">${p.length?`${p.length} pendências`:'Sem pendência cadastrada'}</span></div><div class="chips">${chips}</div><div class="event-actions"><button class="btn primary" onclick="abrirDetalhe('${esc(e.id)}')">Ver galeria de evidências →</button>${e.dossie?link(e.dossie,'Abrir pasta do espetáculo','btn soft'):'<span class="micro">Pasta ainda não vinculada</span>'}</div></article>`;
-  }).join('')||'<div class="empty">Nenhum espetáculo corresponde a esta busca.</div>';paginator('evPaging',a.length,page,'paginaEv');
+    const p=e.pendencias||[],miss=p.filter(x=>x.estado==='NAO_LOCALIZADO').length;
+    const checks=p.filter(x=>/RECEBIDO_NAO_VERIFICADO|PARCIALMENTE_VALIDADO/.test(x.estado)).length;
+    const chips=[`<span class="chip">${e.qtdArquivos} arquivo(s) no inventário</span>`,
+      miss?`<span class="chip missing">${miss} não localizado(s) no Drive</span>`:'',
+      checks?`<span class="chip received">${checks} a conferir</span>`:'',
+      e.alertas?`<span class="chip divergent">${e.alertas} divergência(s)</span>`:''].filter(Boolean).join('');
+    return `<article class="event-card" tabindex="0" role="button" aria-label="Abrir ficha ${esc(e.nome)} de ${esc(e.data)}" onclick="if(!event.target.closest('a,button'))abrirDetalhe('${esc(e.id)}')" onkeydown="if((event.key==='Enter'||event.key===' ')&&event.target===this){event.preventDefault();abrirDetalhe('${esc(e.id)}')}">
+      <div class="event-top"><div><h3>${esc(e.nome)}</h3><div class="event-sub">${esc(e.data)} · ${esc(e.local)} · ${esc(e.artista)}<br><small>${esc(e.id)}</small></div></div><span class="chip ${p.length?'missing':'ok'}">${p.length} pendência(s)</span></div>
+      <div class="chips">${chips}</div>${resumoOrigem(e)}
+      <div class="event-actions"><button class="btn primary" onclick="abrirDetalhe('${esc(e.id)}')">Abrir fotos e documentos →</button>${e.dossie?link(e.dossie,'Pasta oficial ↗','btn soft'):''}</div>
+    </article>`;
+  }).join('')||'<div class="empty">Nenhum espetáculo encontrado.</div>';
+  paginator('evPaging',a.length,page,'paginaEv');
 }
 function renderPendencias(){if(!STATE.data)return;const a=eventosFiltrados('pend'),page=Math.max(1,Math.min(STATE.pendPage,Math.ceil(a.length/PER_PAGE)||1));STATE.pendPage=page;
   const f=$('filterPend').value;const include=p=>f==='todos'||f==='falta'&&p.estado==='NAO_LOCALIZADO'||f==='verificar'&&/RECEBIDO_NAO_VERIFICADO|PARCIALMENTE_VALIDADO/.test(p.estado)||f==='diverge'&&p.estado==='DIVERGENTE'||f==='foto'&&/foto|banner/i.test(p.codigo)||f==='acesso'&&p.estado==='ACESSO_NAO_VERIFICADO';
@@ -356,7 +402,7 @@ function pulsaFotosDaFicha(d){
 }
 function pulsaGaleriaFotografica(d){
   const fotos=pulsaFotosDaFicha(d);PULSA_PREVIEW.grupos.galeriaFotos=fotos;
-  if(!fotos.length)return '<div class="callout">Nenhuma fotografia foi vinculada a este dossiê no inventário. Abra a pasta ou confira os recebimentos por e-mail antes de solicitar novas fotos.</div>';
+  if(!fotos.length)return '<div class="callout"><b>Não há imagem arquivada para visualizar neste espetáculo.</b> Confira o histórico de recebimentos acima: pode haver fotos recebidas por e-mail ainda não copiadas para o Drive. Isso não prova ausência da evidência. Abra a fonte ou a pasta oficial para localizar e arquivar o arquivo antes de cobrar novamente.</div>';
   const pages=Math.max(1,Math.ceil(fotos.length/PULSA_GALERIA.porPagina));
   PULSA_GALERIA.pagina=Math.min(Math.max(1,PULSA_GALERIA.pagina),pages);
   const ini=(PULSA_GALERIA.pagina-1)*PULSA_GALERIA.porPagina;
@@ -367,7 +413,7 @@ function pulsaGaleriaFotografica(d){
     const url=cached.startsWith('data:image/')?cached:pulsaFotoSrc(f.url,550);
     const analise=f.analise;
     const situacao=analise?(/FALHA|ERRO/.test(analise.estado||'')?'IA: análise ainda pendente':(analise.banner||analise.estado||'Conferência pendente')):'Conferência humana pendente';
-    return `<article class="foto-thumb-card"><div class="foto-thumb-media">${url?`<img id="fotoPulsa_${esc(fid)}" loading="lazy" decoding="async" src="${esc(url)}" alt="${esc(f.nome||'Fotografia')}" onclick="abrirPreview('galeriaFotos',${i})" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="foto-thumb-fallback" style="${url?'':'display:flex'}">Sem miniatura do Drive. A foto permanece disponível pelo link original.</div></div><div class="foto-thumb-data"><div class="foto-thumb-title">${esc(f.nome||'Fotografia identificada')}</div><div class="foto-thumb-meta">${esc(f.tipo||'Sem classificação')} · ${esc(situacao)}</div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('galeriaFotos',${i})">Ampliar</button>${link(f.url,'Drive ↗','btn tiny')}</div></div></article>`;
+    return `<article class="foto-thumb-card"><div class="foto-thumb-media">${url?`<img id="fotoPulsa_${esc(fid)}" loading="lazy" decoding="async" src="${esc(url)}" alt="${esc(f.nome||'Fotografia')}" onclick="abrirPreview('galeriaFotos',${i})" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="foto-thumb-fallback" style="${url?'':'display:flex'}">Prévia indisponível neste navegador. Use Drive ↗ para conferir.</div></div><div class="foto-thumb-data"><div class="foto-thumb-title">${esc(f.nome||'Fotografia identificada')}</div><div class="foto-thumb-meta">${esc(f.tipo||'Sem classificação')} · ${esc(situacao)}</div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('galeriaFotos',${i})">Ampliar</button>${link(f.url,'Drive ↗','btn tiny')}</div></div></article>`;
   }).join('');
   const toolbar=`<div class="fotos-pag-toolbar"><span class="source-line">${fotos.length} foto(s) · exibindo ${ini+1}–${ini+mostradas.length} · página ${PULSA_GALERIA.pagina}/${pages}</span><div class="actions"><button class="btn tiny" onclick="pulsaPaginaFoto(-1)" ${PULSA_GALERIA.pagina===1?'disabled':''}>← Anteriores</button><button class="btn tiny" onclick="pulsaPaginaFoto(1)" ${PULSA_GALERIA.pagina===pages?'disabled':''}>Próximas →</button></div></div>`;
   return `<p class="fotos-avisos">Fotos associadas ao ID e à data deste espetáculo. A imagem pode vir da prévia do Drive ou, quando disponível, de miniatura fornecida pelo Apps Script. Não significa aprovação documental.</p>${toolbar}<div class="fotos-galeria-grid">${itens}</div>${pages>1?toolbar:''}`;
@@ -392,9 +438,9 @@ async function pulsaCarregarMiniaturas(){
   if(!pendentes.length)return;
   PULSA_GALERIA.carregando=true;
   try{
-    for(let k=0;k<pendentes.length;k+=8){
+    for(let k=0;k<pendentes.length;k+=6){
       if(PULSA_GALERIA.evento!==evento)break;
-      const r=await api('central_operacional',{token:STATE.token,modo:'miniaturas',id:{espetaculo:evento,arquivos:pendentes.slice(k,k+8)}});
+      const r=await api('central_operacional',{token:STATE.token,modo:'miniaturas',id:{espetaculo:evento,arquivos:pendentes.slice(k,k+6)}});
       for(const a of (r.data?.itens||[])){
         if(!a.id)continue;
         PULSA_GALERIA.cache.set(a.id,a.imagem||'indisponivel');
@@ -416,6 +462,30 @@ function pulsaPastasAgrupadas(d){
     return `<div class="dupe-folders"><b>⚠ ${esc(a.caminho||a.nome)}</b><div>${items.length} pastas com o mesmo caminho. Conferir antes de mover ou excluir.</div><div class="actions">${items.map((x,i)=>link(x.url,'Abrir cópia '+(i+1)+' ↗','btn tiny')).join('')}</div></div>`;}).join('');
 }
 
+function resumoDocumental(e,d){
+  const c=d.controle||{};
+  const arquivos=d.arquivos||[];
+  const imagens=pulsaFotosDaFicha(d);
+  const semClass=arquivos.filter(x=>!CORE.some(([id])=>id===x.tipo)).length;
+  return `<div class="evidence-overview">
+    <article><strong>${arquivos.length}</strong><span>Arquivos inventariados neste evento</span></article>
+    <article><strong>${imagens.length}</strong><span>Fotos vinculadas à galeria</span></article>
+    <article><strong>${semClass}</strong><span>Arquivos a classificar</span></article>
+  </div>
+  <section class="origin-card"><h3>O que já chegou × o que está arquivado</h3>
+    <div class="origin-grid"><div><div class="origin-label">REGISTRO DA PLANILHA — RECEBIMENTOS / FONTES</div>
+      <p class="origin-line">${esc(c.jaExiste||e.jaExiste||'Não há descrição de recebimentos nesta linha.')}</p>
+      ${c.notasFotos?`<p class="origin-line"><b>Fotografias:</b> ${esc(c.notasFotos)}</p>`:''}
+      ${c.publico?`<p class="origin-line"><b>Público:</b> ${esc(c.publico)}</p>`:''}
+      ${c.fonteBruta?`<p class="origin-line"><b>Fonte:</b> ${esc(c.fonteBruta)}</p>`:''}
+      ${c.fonteUrl?link(c.fonteUrl,'Abrir fonte original ↗','btn soft tiny'):''}
+    </div><div><div class="origin-label">O QUE A PLANILHA INFORMA QUE AINDA FALTA</div>
+      <p class="origin-line">${esc(c.aindaFalta||e.aindaFalta||'Consultar pendências documentais individuais.')}</p>
+      <p class="origin-line" style="color:#a45b13;font-weight:700">Os dados da origem NÃO comprovam que o arquivo já está copiado no dossiê.</p>
+    </div></div>
+    ${Object.keys(c.linksCategoria||{}).length?`<div style="margin-top:10px"><div class="origin-label">ACESSOS REGISTRADOS NA PLANILHA</div>${Object.entries(c.linksCategoria).map(([id,r])=>`<div class="source-category"><span>${esc(CORE.find(x=>x[0]===id)?.[1]||id)} — ${esc(r.rotulo||'Acesso disponível')}</span>${link(r.url,'Abrir ↗','btn tiny')}</div>`).join('')}</div>`:''}
+  </section>`;
+}
 function renderDetalhe(e,d){
   const grupos=evidenciasPorTipo(e,d);PULSA_PREVIEW.grupos=grupos;
   if(PULSA_GALERIA.evento!==e.id){PULSA_GALERIA.evento=e.id;PULSA_GALERIA.pagina=1;PULSA_GALERIA.cache.clear();}
@@ -428,7 +498,7 @@ function renderDetalhe(e,d){
     const content=files.length?files.map((file,i)=>{
       const analise=imagemDaAnalise(d,file.url);
       return `<div class="evidence-file"><div class="evidence-filename">${esc(file.nome)}${analise?`<div class="micro" style="margin-top:3px">Gemini: ${esc(analise.banner||analise.estado||'indício a conferir')}</div>`:''}</div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('${code}',${i})">Visualizar</button>${link(file.url,'Drive ↗','btn tiny')}</div></div>`;
-    }).join(''):'<div class="evidence-footnote">Nenhum arquivo com vínculo direto nesta categoria do inventário. Consulte a pasta e a pendência abaixo; isso não comprova que a evidência inexista.</div>';
+    }).join(''):'<div class="evidence-footnote">Nenhum arquivo arquivado e identificado nesta categoria. Verifique o histórico recebido na origem antes de solicitar novamente.</div>';
     const labelFiles=files.length===1?'1 documento com link':`${files.length} documentos com link`;
     return `<article class="evidence-card ${statusClass(estado)}"><div class="evidence-card-head"><h4>${esc(label)}</h4><span class="chip ${statusClass(estado)}">${esc(statusLabel(estado))}</span></div><div class="micro">${labelFiles}</div><div class="evidence-files">${content}</div>${isFoto?'<div class="evidence-footnote">Confira pessoalmente nitidez, banner, público e identificação da apresentação.</div>':''}${pend?.acao?`<div class="evidence-footnote"><b>Próxima ação:</b> ${esc(pend.acao)}</div>`:''}</article>`;
   }).join('');
@@ -437,8 +507,9 @@ function renderDetalhe(e,d){
   const outros=grupos.outros||[];
   const outrasLinhas=outros.map((x,i)=>`<div class="evidence-file"><div class="evidence-filename">${esc(x.nome)}<div class="micro">${esc(x.fonte)}</div></div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('outros',${i})">Visualizar</button>${link(x.url,'Drive ↗','btn tiny')}</div></div>`).join('');
   const reviews=(d.fotos||[]).map((f,i)=>`<div class="photo-item"><b>Foto ${i+1} — ${esc(f.banner||'banner a conferir')}</b><p>${esc(f.identificacao||'')} · ${esc(f.estado||'Ainda não validado')}<br>${esc(f.observacao||'Sem observações registradas.')}</p>${f.url?link(f.url,'Abrir original ↗','btn tiny'):''}</div>`).join('');
-  $('drawerContent').innerHTML=`<div class="evidence-intro"><b>Galeria de evidências do espetáculo.</b> Clique em <b>Visualizar</b> para abrir fotos, contratos e PDFs sem sair do Index. Se o Drive bloquear a prévia, use <b>Drive ↗</b>. Encontrado ou analisado por IA não significa validado.</div>
+  $('drawerContent').innerHTML=`<div class="evidence-intro"><b>Ficha de conferência do espetáculo.</b> Abaixo estão os arquivos do Drive e o histórico do que foi recebido por e-mail. Clique em <b>Visualizar</b> para abrir fotos, contratos e PDFs sem sair do Index. Se o Drive bloquear a prévia, use <b>Drive ↗</b>. Encontrado ou analisado por IA não significa validado.</div>
     <div class="actions" style="margin-bottom:18px">${e.dossie?link(e.dossie,'📁 Dossiê completo no Drive','btn primary'):'<span class="chip missing">Dossiê principal sem link</span>'}<button class="btn" onclick="copiarCobranca('${esc(e.id)}')">Copiar pendências para cobrança</button></div>
+    ${resumoDocumental(e,d)}
     <section class="drawer-section"><h3>Fotografias da apresentação e do público</h3><div id="pulsaFotosPainel">${pulsaGaleriaFotografica(d)}</div></section>
     <section class="drawer-section"><h3>Galeria de evidências — sete requisitos</h3><div class="evidence-grid">${cards}</div></section>
     <section class="drawer-section"><h3>Pendências a resolver (${(d.pendencias||[]).length})</h3>${pendencias||'<p class="micro">Nenhuma pendência retornada; confira a atualização do inventário.</p>'}</section>
@@ -464,7 +535,8 @@ function abrirPreview(grupo,indice){
   $('arquivoPreviewMeta').textContent=`${label} · arquivo ${indice+1} de ${items.length}`;
   const prev=urlPreviewDrive(obj.url);
   const foto=(grupo==='galeriaFotos'||/\.(?:jpe?g|png|webp|gif)$/i.test(obj.nome||''));
-  const srcImagem=foto?pulsaFotoSrc(obj.url,1600):'';
+  const cached=foto?PULSA_GALERIA.cache.get(pulsaIdArquivoDrive(obj.url)):'';
+  const srcImagem=foto?(cached&&cached.startsWith('data:image/')?cached:pulsaFotoSrc(obj.url,1600)):'';
   $('arquivoPreviewQuadro').innerHTML=srcImagem?`<img src="${esc(srcImagem)}" alt="${esc(obj.nome||'Fotografia')}" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<div class=&quot;empty&quot;>Prévia indisponível. Abra o original no Drive.</div>')">`:prev?`<iframe title="Prévia do documento — ${esc(obj.nome)}" src="${esc(prev)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>`:'<div class="empty">Este endereço não oferece prévia incorporada. Use “Abrir original no Drive”.</div>';
   $('arquivoPreviewOriginal').href=obj.url;
   $('arquivoPreviewAnterior').disabled=indice===0;
