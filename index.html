@@ -127,6 +127,23 @@ main{max-width:1550px;padding:31px 28px 80px}
 @media(max-width:850px){.evidence-grid{grid-template-columns:1fr}.arquivo-preview{padding:5px}.arquivo-preview-panel{width:100%;height:98vh}.arquivo-preview-header{padding:12px}.arquivo-preview-body{padding:10px}.arquivo-preview-footer{padding:9px}}
 @media(max-width:440px){.evidence-file{flex-wrap:wrap}.evidence-file .actions{width:100%}}
 
+
+/* Galeria visual em linha: miniaturas carregadas só ao abrir o dossiê. */
+.fotos-galeria-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.foto-thumb-card{min-width:0;overflow:hidden;border:1px solid #dbe7ee;border-radius:12px;background:#f7fafc}
+.foto-thumb-media{height:145px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#e7eef3;position:relative}
+.foto-thumb-media img{display:block;max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;cursor:pointer}
+.foto-thumb-fallback{display:none;align-items:center;justify-content:center;padding:12px;text-align:center;color:#586c7d;font:600 11px/1.45 'Open Sans',sans-serif;position:absolute;inset:0}
+.foto-thumb-data{padding:10px 11px}.foto-thumb-title{font:600 11px/1.45 'Open Sans',sans-serif;color:#092040;overflow-wrap:anywhere;min-height:32px}
+.foto-thumb-meta{font-size:10px;color:#6a7989;line-height:1.5;margin:5px 0 10px;overflow-wrap:anywhere}
+.foto-thumb-card .actions{gap:6px;flex-wrap:wrap}.foto-thumb-card .btn{padding:7px 8px;font-size:10px}
+.fotos-avisos{font-size:11px;line-height:1.5;color:#516d83;margin:0 0 15px}
+.arquivo-preview-quadro img{width:100%;height:100%;object-fit:contain;display:block}
+.dupe-folders{border:1px solid #e4d3ab;background:#fff9e8;border-radius:8px;padding:9px 12px;margin:7px 0;font-size:11px}
+.dupe-folders .actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+@media(max-width:850px){.fotos-galeria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:470px){.fotos-galeria-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -307,7 +324,36 @@ function evidenciasPorTipo(e,d){
   (d.fotos||[]).forEach((f,i)=>{const url=cleanUrl(f.url);if(url&&!ids.has(url)){grupos.outros.push({url,nome:'Fotografia analisada '+(i+1),fonte:'Análise de fotos'});ids.add(url);}});
   return grupos;
 }
-function imagemDaAnalise(d,url){return (d.fotos||[]).find(f=>cleanUrl(f.url)===url);}
+function imagemDaAnalise(d,url){return (d.fotos||[]).slice().reverse().find(f=>cleanUrl(f.url)===url);}
+function pulsaIdArquivoDrive(url){
+  const m=cleanUrl(url).match(/\/file\/d\/([A-Za-z0-9_-]{10,})/) || cleanUrl(url).match(/[?&]id=([A-Za-z0-9_-]{10,})/);
+  return m?m[1]:'';
+}
+function pulsaFotoSrc(url,sz){const id=pulsaIdArquivoDrive(url);return id?'https://drive.google.com/thumbnail?id='+encodeURIComponent(id)+'&sz=w'+(sz||550):'';}
+function pulsaEhFoto(arq){return /^foto(?:Apresentacao|Publico|Indefinida)$/.test(arq.tipo||'')||/\.(?:jpe?g|png|webp|gif|heic)$/i.test(arq.nome||'');}
+function pulsaFotosDaFicha(d){
+  const fotos=new Map();
+  (d.arquivos||[]).filter(x=>pulsaEhFoto(x)&&cleanUrl(x.url)).forEach(x=>fotos.set(cleanUrl(x.url),{url:cleanUrl(x.url),nome:x.nome,tipo:x.tipo||'Foto sem classificação',fonte:'Inventário'}));
+  (d.fotos||[]).forEach((x,i)=>{const url=cleanUrl(x.url);if(!url)return;const anterior=fotos.get(url)||{url,nome:'Fotografia recebida '+(i+1),tipo:'fotoIndefinida',fonte:'Análise automática'};fotos.set(url,{...anterior,analise:x});});
+  return Array.from(fotos.values());
+}
+function pulsaGaleriaFotografica(d){
+  const fotos=pulsaFotosDaFicha(d);PULSA_PREVIEW.grupos.galeriaFotos=fotos;
+  if(!fotos.length)return '<div class="callout">Nenhuma fotografia foi associada a este dossiê no inventário atual. Verifique os e-mails e as pastas de origem antes de cobrar novamente.</div>';
+  const itens=fotos.map((f,i)=>{
+    const url=pulsaFotoSrc(f.url,550);
+    const analise=f.analise;
+    const situacao=analise?( /FALHA|ERRO/.test(analise.estado||'')?'Gemini: falha técnica — ainda sem análise':(analise.banner||analise.estado||'Aguardando conferência')):'Aguardando conferência humana';
+    return `<article class="foto-thumb-card"><div class="foto-thumb-media">${url?`<img loading="lazy" decoding="async" src="${esc(url)}" alt="${esc(f.nome||'Foto')}" onclick="abrirPreview('galeriaFotos',${i})" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="foto-thumb-fallback" style="${url?'':'display:flex'}">Prévia bloqueada ou indisponível. Use o link do Drive.</div></div><div class="foto-thumb-data"><div class="foto-thumb-title">${esc(f.nome||'Fotografia recebida')}</div><div class="foto-thumb-meta">${esc(f.tipo||'Não classificada')} · ${esc(situacao)}</div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('galeriaFotos',${i})">Ampliar</button>${link(f.url,'Abrir original ↗','btn tiny')}</div></div></article>`;
+  }).join('');
+  return `<p class="fotos-avisos">${fotos.length} foto(s) identificada(s) neste dossiê. Algumas miniaturas privadas podem ser bloqueadas pelo Google Drive; nesse caso, use “Abrir original”. Imagem localizada ou analisada pela IA NÃO significa aprovada.</p><div class="fotos-galeria-grid">${itens}</div>`;
+}
+function pulsaPastasAgrupadas(d){
+  const mp=new Map();(d.pastas||[]).filter(x=>cleanUrl(x.url)).forEach(x=>{const chave=(x.caminho||x.nome||'Pasta sem nome').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();if(!mp.has(chave))mp.set(chave,[]);mp.get(chave).push(x);});
+  return [...mp.values()].map(items=>{const a=items[0];if(items.length===1)return `<div class="file-item"><span>📁 ${esc(a.nome||a.caminho)}</span>${link(a.url,'Abrir pasta ↗','btn tiny')}</div>`;
+    return `<div class="dupe-folders"><b>⚠ ${esc(a.caminho||a.nome)}</b><div>${items.length} pastas com o mesmo caminho. Conferir antes de mover ou excluir.</div><div class="actions">${items.map((x,i)=>link(x.url,'Abrir cópia '+(i+1)+' ↗','btn tiny')).join('')}</div></div>`;}).join('');
+}
+
 function renderDetalhe(e,d){
   const grupos=evidenciasPorTipo(e,d);PULSA_PREVIEW.grupos=grupos;
   const cards=CORE.map(([code,label])=>{
@@ -323,12 +369,13 @@ function renderDetalhe(e,d){
     return `<article class="evidence-card ${statusClass(estado)}"><div class="evidence-card-head"><h4>${esc(label)}</h4><span class="chip ${statusClass(estado)}">${esc(statusLabel(estado))}</span></div><div class="micro">${labelFiles}</div><div class="evidence-files">${content}</div>${isFoto?'<div class="evidence-footnote">Confira pessoalmente nitidez, banner, público e identificação da apresentação.</div>':''}${pend?.acao?`<div class="evidence-footnote"><b>Próxima ação:</b> ${esc(pend.acao)}</div>`:''}</article>`;
   }).join('');
   const pendencias=(d.pendencias||e.pendencias||[]).map(p=>`<div class="pending-line"><div><b>${esc(p.nome||p.codigo||'Pendência')}</b><div class="desc">${esc(p.acao||'Revisar documentação')}</div></div><span class="chip ${statusClass(p.estado)}">${esc(statusLabel(p.estado))}</span></div>`).join('');
-  const folderRows=(d.pastas||[]).filter(x=>cleanUrl(x.url)).map(x=>`<div class="file-item"><span>📁 ${esc(x.nome||x.caminho)}</span>${link(x.url,'Abrir pasta ↗','btn tiny')}</div>`).join('');
+  const folderRows=pulsaPastasAgrupadas(d);
   const outros=grupos.outros||[];
   const outrasLinhas=outros.map((x,i)=>`<div class="evidence-file"><div class="evidence-filename">${esc(x.nome)}<div class="micro">${esc(x.fonte)}</div></div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('outros',${i})">Visualizar</button>${link(x.url,'Drive ↗','btn tiny')}</div></div>`).join('');
   const reviews=(d.fotos||[]).map((f,i)=>`<div class="photo-item"><b>Foto ${i+1} — ${esc(f.banner||'banner a conferir')}</b><p>${esc(f.identificacao||'')} · ${esc(f.estado||'Ainda não validado')}<br>${esc(f.observacao||'Sem observações registradas.')}</p>${f.url?link(f.url,'Abrir original ↗','btn tiny'):''}</div>`).join('');
   $('drawerContent').innerHTML=`<div class="evidence-intro"><b>Galeria de evidências do espetáculo.</b> Clique em <b>Visualizar</b> para abrir fotos, contratos e PDFs sem sair do Index. Se o Drive bloquear a prévia, use <b>Drive ↗</b>. Encontrado ou analisado por IA não significa validado.</div>
     <div class="actions" style="margin-bottom:18px">${e.dossie?link(e.dossie,'📁 Dossiê completo no Drive','btn primary'):'<span class="chip missing">Dossiê principal sem link</span>'}<button class="btn" onclick="copiarCobranca('${esc(e.id)}')">Copiar pendências para cobrança</button></div>
+    <section class="drawer-section"><h3>Fotografias — pré-visualização na ficha</h3>${pulsaGaleriaFotografica(d)}</section>
     <section class="drawer-section"><h3>Galeria de evidências — sete requisitos</h3><div class="evidence-grid">${cards}</div></section>
     <section class="drawer-section"><h3>Pendências a resolver (${(d.pendencias||[]).length})</h3>${pendencias||'<p class="micro">Nenhuma pendência retornada; confira a atualização do inventário.</p>'}</section>
     <section class="drawer-section"><h3>Outros documentos e arquivos sem classificação (${outros.length})</h3>${outros.length?`<div class="evidence-files">${outrasLinhas}</div>`:'<p class="micro">Nenhum arquivo adicional encontrado nesta consulta.</p>'}</section>
@@ -347,11 +394,13 @@ function urlPreviewDrive(url){
 function abrirPreview(grupo,indice){
   const items=PULSA_PREVIEW.grupos[grupo]||[],obj=items[indice];if(!obj)return;
   PULSA_PREVIEW.grupo=grupo;PULSA_PREVIEW.indice=indice;
-  const label=CORE.find(x=>x[0]===grupo)?.[1]||'Outros arquivos';
+  const label=grupo==='galeriaFotos'?'Fotografias':(CORE.find(x=>x[0]===grupo)?.[1]||'Outros arquivos');
   $('arquivoPreviewTitulo').textContent=obj.nome||'Documento';
   $('arquivoPreviewMeta').textContent=`${label} · arquivo ${indice+1} de ${items.length}`;
   const prev=urlPreviewDrive(obj.url);
-  $('arquivoPreviewQuadro').innerHTML=prev?`<iframe title="Prévia do documento — ${esc(obj.nome)}" src="${esc(prev)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>`:'<div class="empty">Este endereço não oferece prévia incorporada. Use “Abrir original no Drive”.</div>';
+  const foto=(grupo==='galeriaFotos'||/\.(?:jpe?g|png|webp|gif)$/i.test(obj.nome||''));
+  const srcImagem=foto?pulsaFotoSrc(obj.url,1600):'';
+  $('arquivoPreviewQuadro').innerHTML=srcImagem?`<img src="${esc(srcImagem)}" alt="${esc(obj.nome||'Fotografia')}" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<div class=&quot;empty&quot;>Prévia indisponível. Abra o original no Drive.</div>')">`:prev?`<iframe title="Prévia do documento — ${esc(obj.nome)}" src="${esc(prev)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>`:'<div class="empty">Este endereço não oferece prévia incorporada. Use “Abrir original no Drive”.</div>';
   $('arquivoPreviewOriginal').href=obj.url;
   $('arquivoPreviewAnterior').disabled=indice===0;
   $('arquivoPreviewProximo').disabled=indice===items.length-1;
