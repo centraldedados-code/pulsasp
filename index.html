@@ -128,7 +128,7 @@ main{max-width:1550px;padding:31px 28px 80px}
 @media(max-width:440px){.evidence-file{flex-wrap:wrap}.evidence-file .actions{width:100%}}
 
 
-/* Galeria visual em linha: miniaturas carregadas só ao abrir o dossiê. */
+/* Galeria visual em linha: miniaturas sob demanda, sem mexer nos documentos. */
 .fotos-galeria-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .foto-thumb-card{min-width:0;overflow:hidden;border:1px solid #dbe7ee;border-radius:12px;background:#f7fafc}
 .foto-thumb-media{height:145px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#e7eef3;position:relative}
@@ -144,6 +144,22 @@ main{max-width:1550px;padding:31px 28px 80px}
 @media(max-width:850px){.fotos-galeria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:470px){.fotos-galeria-grid{grid-template-columns:1fr}}
 
+
+/* Galeria aprimorada: grade visual, paginação, contraste e mensagens claras. */
+.fotos-pag-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:10px 0 15px;padding:12px 13px;background:#eff6fa;border:1px solid #d7e7ef;border-radius:12px}
+.fotos-pag-toolbar .source-line{font-weight:700;color:#092040}
+.fotos-pag-toolbar .actions{display:flex;gap:6px;flex-wrap:wrap}
+.foto-thumb-media{height:175px;background:#e7eff4}
+.foto-thumb-media img{width:100%;height:100%;object-fit:contain}
+.fotos-galeria-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.foto-thumb-card{border:1px solid #cddfe9;box-shadow:0 5px 15px rgba(9,32,64,.035)}
+.foto-thumb-card:hover{border-color:#00B7D7;box-shadow:0 8px 23px rgba(9,32,64,.09)}
+.foto-thumb-meta{overflow-wrap:anywhere}
+.galeria-observacao{padding:10px 12px;background:#fffaf0;border-left:3px solid #ECC203;color:#594d2b;border-radius:6px;font:600 11px/1.5 'Open Sans',sans-serif;margin:12px 0}
+.evidence-file{min-width:0;overflow-wrap:anywhere}
+.evidence-file .evidence-filename{min-width:0;overflow-wrap:anywhere;word-break:break-word}
+@media(max-width:780px){.fotos-galeria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.fotos-galeria-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -304,6 +320,7 @@ function abrirDetalhe(id){const e=STATE.data?.espetaculos.find(x=>x.id===id);if(
 function fecharDetalhe(){fecharPreview();$('drawer').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('arquivoPreview').classList.contains('open'))fecharPreview();else fecharDetalhe();}});
 const PULSA_PREVIEW={grupos:{},grupo:'',indice:0,titulo:''};
+const PULSA_GALERIA={evento:'',pagina:1,porPagina:12,cache:new Map(),carregando:false};
 function evidenciasPorTipo(e,d){
   const grupos={};
   const arqs=(d.arquivos||[]).filter(x=>cleanUrl(x.url));
@@ -339,14 +356,59 @@ function pulsaFotosDaFicha(d){
 }
 function pulsaGaleriaFotografica(d){
   const fotos=pulsaFotosDaFicha(d);PULSA_PREVIEW.grupos.galeriaFotos=fotos;
-  if(!fotos.length)return '<div class="callout">Nenhuma fotografia foi associada a este dossiê no inventário atual. Verifique os e-mails e as pastas de origem antes de cobrar novamente.</div>';
-  const itens=fotos.map((f,i)=>{
-    const url=pulsaFotoSrc(f.url,550);
+  if(!fotos.length)return '<div class="callout">Nenhuma fotografia foi vinculada a este dossiê no inventário. Abra a pasta ou confira os recebimentos por e-mail antes de solicitar novas fotos.</div>';
+  const pages=Math.max(1,Math.ceil(fotos.length/PULSA_GALERIA.porPagina));
+  PULSA_GALERIA.pagina=Math.min(Math.max(1,PULSA_GALERIA.pagina),pages);
+  const ini=(PULSA_GALERIA.pagina-1)*PULSA_GALERIA.porPagina;
+  const mostradas=fotos.slice(ini,ini+PULSA_GALERIA.porPagina);
+  const itens=mostradas.map((f,k)=>{
+    const i=ini+k, fid=pulsaIdArquivoDrive(f.url);
+    const cached=PULSA_GALERIA.cache.get(fid)||'';
+    const url=cached.startsWith('data:image/')?cached:pulsaFotoSrc(f.url,550);
     const analise=f.analise;
-    const situacao=analise?( /FALHA|ERRO/.test(analise.estado||'')?'Gemini: falha técnica — ainda sem análise':(analise.banner||analise.estado||'Aguardando conferência')):'Aguardando conferência humana';
-    return `<article class="foto-thumb-card"><div class="foto-thumb-media">${url?`<img loading="lazy" decoding="async" src="${esc(url)}" alt="${esc(f.nome||'Foto')}" onclick="abrirPreview('galeriaFotos',${i})" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="foto-thumb-fallback" style="${url?'':'display:flex'}">Prévia bloqueada ou indisponível. Use o link do Drive.</div></div><div class="foto-thumb-data"><div class="foto-thumb-title">${esc(f.nome||'Fotografia recebida')}</div><div class="foto-thumb-meta">${esc(f.tipo||'Não classificada')} · ${esc(situacao)}</div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('galeriaFotos',${i})">Ampliar</button>${link(f.url,'Abrir original ↗','btn tiny')}</div></div></article>`;
+    const situacao=analise?(/FALHA|ERRO/.test(analise.estado||'')?'IA: análise ainda pendente':(analise.banner||analise.estado||'Conferência pendente')):'Conferência humana pendente';
+    return `<article class="foto-thumb-card"><div class="foto-thumb-media">${url?`<img id="fotoPulsa_${esc(fid)}" loading="lazy" decoding="async" src="${esc(url)}" alt="${esc(f.nome||'Fotografia')}" onclick="abrirPreview('galeriaFotos',${i})" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="foto-thumb-fallback" style="${url?'':'display:flex'}">Sem miniatura do Drive. A foto permanece disponível pelo link original.</div></div><div class="foto-thumb-data"><div class="foto-thumb-title">${esc(f.nome||'Fotografia identificada')}</div><div class="foto-thumb-meta">${esc(f.tipo||'Sem classificação')} · ${esc(situacao)}</div><div class="actions"><button class="btn soft tiny" onclick="abrirPreview('galeriaFotos',${i})">Ampliar</button>${link(f.url,'Drive ↗','btn tiny')}</div></div></article>`;
   }).join('');
-  return `<p class="fotos-avisos">${fotos.length} foto(s) identificada(s) neste dossiê. Algumas miniaturas privadas podem ser bloqueadas pelo Google Drive; nesse caso, use “Abrir original”. Imagem localizada ou analisada pela IA NÃO significa aprovada.</p><div class="fotos-galeria-grid">${itens}</div>`;
+  const toolbar=`<div class="fotos-pag-toolbar"><span class="source-line">${fotos.length} foto(s) · exibindo ${ini+1}–${ini+mostradas.length} · página ${PULSA_GALERIA.pagina}/${pages}</span><div class="actions"><button class="btn tiny" onclick="pulsaPaginaFoto(-1)" ${PULSA_GALERIA.pagina===1?'disabled':''}>← Anteriores</button><button class="btn tiny" onclick="pulsaPaginaFoto(1)" ${PULSA_GALERIA.pagina===pages?'disabled':''}>Próximas →</button></div></div>`;
+  return `<p class="fotos-avisos">Fotos associadas ao ID e à data deste espetáculo. A imagem pode vir da prévia do Drive ou, quando disponível, de miniatura fornecida pelo Apps Script. Não significa aprovação documental.</p>${toolbar}<div class="fotos-galeria-grid">${itens}</div>${pages>1?toolbar:''}`;
+}
+function pulsaPaginaFoto(offset){
+  const all=PULSA_PREVIEW.grupos.galeriaFotos||[];
+  const max=Math.max(1,Math.ceil(all.length/PULSA_GALERIA.porPagina));
+  PULSA_GALERIA.pagina=Math.min(max,Math.max(1,PULSA_GALERIA.pagina+offset));
+  const node=$('pulsaFotosPainel');if(node&&STATE.detalhes[PULSA_GALERIA.evento]){
+    node.innerHTML=pulsaGaleriaFotografica(STATE.detalhes[PULSA_GALERIA.evento]);
+    pulsaCarregarMiniaturas();
+    node.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+async function pulsaCarregarMiniaturas(){
+  if(!PULSA_GALERIA.evento || !STATE.token || PULSA_GALERIA.carregando)return;
+  const evento=PULSA_GALERIA.evento;
+  const fotos=PULSA_PREVIEW.grupos.galeriaFotos||[];
+  const ini=(PULSA_GALERIA.pagina-1)*PULSA_GALERIA.porPagina;
+  const pendentes=fotos.slice(ini,ini+PULSA_GALERIA.porPagina)
+    .map(f=>pulsaIdArquivoDrive(f.url)).filter(id=>id && !PULSA_GALERIA.cache.has(id));
+  if(!pendentes.length)return;
+  PULSA_GALERIA.carregando=true;
+  try{
+    for(let k=0;k<pendentes.length;k+=8){
+      if(PULSA_GALERIA.evento!==evento)break;
+      const r=await api('central_operacional',{token:STATE.token,modo:'miniaturas',id:{espetaculo:evento,arquivos:pendentes.slice(k,k+8)}});
+      for(const a of (r.data?.itens||[])){
+        if(!a.id)continue;
+        PULSA_GALERIA.cache.set(a.id,a.imagem||'indisponivel');
+        const img=$('fotoPulsa_'+a.id);
+        if(img&&a.imagem && img.closest('#pulsaFotosPainel')){
+          img.style.display='block';img.src=a.imagem;
+          const fallback=img.nextElementSibling;if(fallback)fallback.style.display='none';
+        }
+      }
+    }
+  }catch(e){
+    // A galeria ainda oferece o thumbnail do Drive e o link original.
+    console.warn('Miniaturas no Apps Script indisponíveis:',e.message||e);
+  }finally{PULSA_GALERIA.carregando=false;}
 }
 function pulsaPastasAgrupadas(d){
   const mp=new Map();(d.pastas||[]).filter(x=>cleanUrl(x.url)).forEach(x=>{const chave=(x.caminho||x.nome||'Pasta sem nome').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();if(!mp.has(chave))mp.set(chave,[]);mp.get(chave).push(x);});
@@ -356,10 +418,12 @@ function pulsaPastasAgrupadas(d){
 
 function renderDetalhe(e,d){
   const grupos=evidenciasPorTipo(e,d);PULSA_PREVIEW.grupos=grupos;
+  if(PULSA_GALERIA.evento!==e.id){PULSA_GALERIA.evento=e.id;PULSA_GALERIA.pagina=1;PULSA_GALERIA.cache.clear();}
   const cards=CORE.map(([code,label])=>{
     const pend=(d.pendencias||[]).find(x=>x.codigo===code)||(e.pendencias||[]).find(x=>x.codigo===code);
-    const estado=pend?.estado||e.estados?.[code]||'';
     const files=grupos[code]||[];
+    let estado=pend?.estado||e.estados?.[code]||'';
+    if(estado==='NAO_LOCALIZADO'&&files.length)estado='RECEBIDO_NAO_VERIFICADO';
     const isFoto=code==='fotoPublico'||code==='fotoApresentacao';
     const content=files.length?files.map((file,i)=>{
       const analise=imagemDaAnalise(d,file.url);
@@ -375,13 +439,14 @@ function renderDetalhe(e,d){
   const reviews=(d.fotos||[]).map((f,i)=>`<div class="photo-item"><b>Foto ${i+1} — ${esc(f.banner||'banner a conferir')}</b><p>${esc(f.identificacao||'')} · ${esc(f.estado||'Ainda não validado')}<br>${esc(f.observacao||'Sem observações registradas.')}</p>${f.url?link(f.url,'Abrir original ↗','btn tiny'):''}</div>`).join('');
   $('drawerContent').innerHTML=`<div class="evidence-intro"><b>Galeria de evidências do espetáculo.</b> Clique em <b>Visualizar</b> para abrir fotos, contratos e PDFs sem sair do Index. Se o Drive bloquear a prévia, use <b>Drive ↗</b>. Encontrado ou analisado por IA não significa validado.</div>
     <div class="actions" style="margin-bottom:18px">${e.dossie?link(e.dossie,'📁 Dossiê completo no Drive','btn primary'):'<span class="chip missing">Dossiê principal sem link</span>'}<button class="btn" onclick="copiarCobranca('${esc(e.id)}')">Copiar pendências para cobrança</button></div>
-    <section class="drawer-section"><h3>Fotografias — pré-visualização na ficha</h3>${pulsaGaleriaFotografica(d)}</section>
+    <section class="drawer-section"><h3>Fotografias da apresentação e do público</h3><div id="pulsaFotosPainel">${pulsaGaleriaFotografica(d)}</div></section>
     <section class="drawer-section"><h3>Galeria de evidências — sete requisitos</h3><div class="evidence-grid">${cards}</div></section>
     <section class="drawer-section"><h3>Pendências a resolver (${(d.pendencias||[]).length})</h3>${pendencias||'<p class="micro">Nenhuma pendência retornada; confira a atualização do inventário.</p>'}</section>
     <section class="drawer-section"><h3>Outros documentos e arquivos sem classificação (${outros.length})</h3>${outros.length?`<div class="evidence-files">${outrasLinhas}</div>`:'<p class="micro">Nenhum arquivo adicional encontrado nesta consulta.</p>'}</section>
     <section class="drawer-section"><h3>Pastas do espetáculo (${d.totalPastas||0})</h3><div class="file-list">${folderRows||'<p class="micro">Nenhuma subpasta com endereço identificado.</p>'}</div></section>
     <section class="drawer-section"><h3>Leitura automática das fotografias (${(d.fotos||[]).length})</h3>${reviews||'<p class="micro">Nenhuma análise visual disponível. Isso não significa ausência de fotos.</p>'}</section>
     ${d.totalArquivos>(d.arquivos||[]).length?`<div class="callout">O inventário deste espetáculo contém ${fmt(d.totalArquivos)} arquivos, mas a API retornou somente ${fmt((d.arquivos||[]).length)} nesta consulta. Abra o dossiê no Drive para visualizar os demais.</div>`:''}`;
+  pulsaCarregarMiniaturas();
 }
 function urlPreviewDrive(url){
   const u=cleanUrl(url);if(!u)return '';
