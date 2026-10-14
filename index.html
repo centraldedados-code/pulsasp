@@ -204,7 +204,7 @@ main{max-width:1550px;padding:31px 28px 80px}
 <header><div class="head-inner"><div class="brand"><img class="logo" src="./assets/logo-instituto-br.png" alt="Instituto BR"><div><div class="brand-name">PULSA SP</div><div class="brand-sub">Central de Monitoramento e Prestação de Contas</div></div></div><nav aria-label="Menu principal"><button class="nav-btn active" data-tab="inicio" onclick="ir('inicio')">VISÃO GERAL</button><button class="nav-btn" data-tab="evidencias" onclick="ir('evidencias')">ESPETÁCULOS E EVIDÊNCIAS</button><button class="nav-btn" data-tab="pendencias" onclick="ir('pendencias')">PENDÊNCIAS <span class="pill-count hidden" id="navCount"></span></button><button class="nav-btn" data-tab="financeiro" onclick="ir('financeiro')">FINANCEIRO</button><button class="nav-btn logout" onclick="sair()">SAIR</button></nav></div></header>
 <main>
 <section id="page-inicio" class="page active"><div class="page-head"><div><div class="eyebrow">Painel de acompanhamento</div><h1>Visão geral do projeto</h1><p>O que já foi encontrado, o que precisa ser conferido e o que a equipe deve cobrar agora.</p></div><div class="actions"><span class="source-line" id="updated">Fonte: Conformidade PULSA SP</span><button class="btn tiny" onclick="atualizar()">↻ Atualizar</button></div></div><div id="homeContent"><div class="load-block"><span class="spin"></span>Carregando panorama do projeto...</div></div></section>
-<section id="page-evidencias" class="page"><div class="page-head"><div><div class="eyebrow">Consulta por apresentação</div><h1>Espetáculos e evidências</h1><p>Abra um espetáculo para ver fotos, contratos, NFs e demais documentos. Registros recebidos por e-mail, mas ainda não arquivados, ficam destacados.</p></div><div class="actions"><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchEv">Buscar espetáculo, artista ou data</label><input id="searchEv" placeholder="Digite nome, ID, data ou local..." oninput="mudarFiltro('ev')"></div><div class="field small"><label for="filterEv">Mostrar</label><select id="filterEv" onchange="mudarFiltro('ev')"><option value="todos">Todos os espetáculos</option><option value="falta">Com evidência não localizada</option><option value="verificar">Com documentos a conferir</option><option value="diverge">Com divergências</option><option value="pasta">Sem pasta vinculada</option></select></div></div><div class="results-meta"><span id="evCount">Aguardando carregamento</span><span>Links levam diretamente ao Drive quando disponíveis</span></div><div class="event-list" id="eventList"><div class="load-block"><span class="spin"></span>Consultando o projeto...</div></div><div id="evPaging"></div></section>
+<section id="page-evidencias" class="page"><div class="page-head"><div><div class="eyebrow">Consulta por apresentação</div><h1>Espetáculos e evidências</h1><p>Exibindo primeiro os espetáculos com fotografias arquivadas. Selecione <b>Todos os espetáculos</b> para consultar também os que têm apenas documentos ou pendências. Visualização não significa aprovação.</p></div><div class="actions"><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchEv">Buscar espetáculo, artista ou data</label><input id="searchEv" placeholder="Digite nome, ID, data ou local..." oninput="mudarFiltro('ev')"></div><div class="field small"><label for="filterEv">Mostrar</label><select id="filterEv" onchange="mudarFiltro('ev')"><option value="comFotos" selected>Com fotografias no inventário</option><option value="semFotos">Sem fotos no inventário</option><option value="todos">Todos os espetáculos</option><option value="falta">Com evidência não localizada</option><option value="verificar">Com documentos a conferir</option><option value="diverge">Com divergências</option><option value="pasta">Sem pasta vinculada</option></select></div></div><div class="results-meta"><span id="evCount">Aguardando carregamento</span><span>Links levam diretamente ao Drive quando disponíveis</span></div><div class="event-list" id="eventList"><div class="load-block"><span class="spin"></span>Consultando o projeto...</div></div><div id="evPaging"></div></section>
 <section id="page-pendencias" class="page"><div class="page-head"><div><div class="eyebrow">Trabalho da equipe</div><h1>Pendências para cobrar</h1><p>Solicitações por espetáculo, com indicação do documento e texto para enviar ao responsável.</p></div><div class="actions"><button class="btn tiny" onclick="exportarPendencias()">↓ Exportar pendências (CSV)</button><button class="btn tiny" onclick="atualizar()">↻ Atualizar dados</button></div></div><div class="toolbar"><div class="field"><label for="searchPend">Buscar espetáculo ou pendência</label><input id="searchPend" placeholder="Nome, artista, ID ou documento..." oninput="mudarFiltro('pend')"></div><div class="field small"><label for="filterPend">Tipo de pendência</label><select id="filterPend" onchange="mudarFiltro('pend')"><option value="todos">Todas as pendências</option><option value="falta">Não localizado — solicitar</option><option value="verificar">Recebido — conferir</option><option value="diverge">Divergências</option><option value="foto">Fotos e banner</option><option value="acesso">Acesso à pasta</option></select></div></div><div class="callout">O botão <b>Copiar cobrança</b> prepara uma mensagem para WhatsApp ou e-mail. Ele não envia a mensagem automaticamente. Ausência significa “não localizado no inventário”, não afirma que o documento nunca existiu.</div><div class="results-meta"><span id="pendCount">Aguardando carregamento</span></div><div id="pendingList" class="pending-groups"></div><div id="pendPaging"></div></section>
 <section id="page-financeiro" class="page"><div class="page-head"><div><div class="eyebrow">Acompanhamento financeiro</div><h1>Contratações e notas fiscais</h1><p>Referência, valor fiscal, divergências e acesso aos comprovantes quando vinculados.</p></div><button class="btn tiny" onclick="carregarFinanceiro(true)">↻ Atualizar financeiro</button></div><div id="financeContent"><div class="load-block">Abra a aba para consultar os registros financeiros.</div></div></section>
 </main>
@@ -223,6 +223,12 @@ const API='https://script.google.com/macros/s/AKfycbxUyyrHbg3YPuPpI4AbCHokU2dsoJ
 const CORE=[['nf','Nota fiscal'],['contrato','Contrato/cachê'],['fotoApresentacao','Fotos da apresentação'],['fotoPublico','Fotos do público'],['bordero','Borderô'],['relatorio','Relatório de execução física'],['programacao','Programação/divulgação']];
 const STATE={token:'',data:null,detalhes:{},finance:null,evPage:1,pendPage:1,finPage:1,tab:'inicio',loading:null};
 const PER_PAGE=12;
+// Contagem dinamica enviada pelo Apps Script; fallback para a API anterior (categoria foto).
+function pulsaQtdFotosResumo(e){
+  if(e&&Number.isFinite(Number(e.qtdFotos))&&e.qtdFotos!==undefined&&e.qtdFotos!==null)return Math.max(0,Number(e.qtdFotos));
+  const p=e?.primeiroArquivo||{};
+  return Object.keys(p).some(k=>/^foto(?:Apresentacao|Publico|Indefinida)$/.test(k)&&cleanUrl(p[k]))?1:0;
+}
 const $=id=>document.getElementById(id);
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const text=v=>String(v==null?'':v);
@@ -290,6 +296,8 @@ function eventosFiltrados(type){let a=(STATE.data?.espetaculos||[]).slice();cons
     if(f==='falta')return p.some(y=>y.estado==='NAO_LOCALIZADO');
     if(f==='verificar')return p.some(y=>/RECEBIDO_NAO_VERIFICADO|PARCIALMENTE_VALIDADO/.test(y.estado));
     if(f==='diverge')return p.some(y=>y.estado==='DIVERGENTE');
+    if(f==='comFotos')return pulsaQtdFotosResumo(x)>0;
+    if(f==='semFotos')return pulsaQtdFotosResumo(x)===0;
     if(f==='pasta')return !x.dossie;
     if(f==='foto')return p.some(y=>/foto|banner/i.test(y.codigo));
     if(f==='acesso')return p.some(y=>y.estado==='ACESSO_NAO_VERIFICADO');
@@ -307,18 +315,22 @@ function resumoOrigem(e){
 }
 function renderEvidencias(){if(!STATE.data)return;
   const a=eventosFiltrados('ev'),page=Math.max(1,Math.min(STATE.evPage,Math.ceil(a.length/PER_PAGE)||1));STATE.evPage=page;
-  $('evCount').textContent=`${fmt(a.length)} espetáculo(s) · ${PER_PAGE} por página · clique no cartão para abrir a ficha`;
+  const modo=$('filterEv').value;
+  $('evCount').textContent=modo==='comFotos'?`${fmt(a.length)} espetáculo(s) com fotografias · ${PER_PAGE} por página · clique em Abrir galeria`:`${fmt(a.length)} espetáculo(s) · ${PER_PAGE} por página · clique no cartão para abrir a ficha`;
   $('eventList').innerHTML=a.slice((page-1)*PER_PAGE,page*PER_PAGE).map(e=>{
     const p=e.pendencias||[],miss=p.filter(x=>x.estado==='NAO_LOCALIZADO').length;
     const checks=p.filter(x=>/RECEBIDO_NAO_VERIFICADO|PARCIALMENTE_VALIDADO/.test(x.estado)).length;
-    const chips=[`<span class="chip">${e.qtdArquivos} arquivo(s) no inventário</span>`,
+    const qtdFotos=pulsaQtdFotosResumo(e);
+    const fotosConfirmadas=e.qtdFotos!==undefined&&e.qtdFotos!==null;
+    const fotoChip=qtdFotos?`<span class="chip received">📷 ${fotosConfirmadas?fmt(qtdFotos)+' foto(s) no inventário':'Fotos indicadas no inventário'}</span>`:`<span class="chip">Sem fotos no inventário</span>`;
+    const chips=[fotoChip,`<span class="chip">${e.qtdArquivos} arquivo(s) no inventário</span>`,
       miss?`<span class="chip missing">${miss} não localizado(s) no Drive</span>`:'',
       checks?`<span class="chip received">${checks} a conferir</span>`:'',
       e.alertas?`<span class="chip divergent">${e.alertas} divergência(s)</span>`:''].filter(Boolean).join('');
     return `<article class="event-card" tabindex="0" role="button" aria-label="Abrir ficha ${esc(e.nome)} de ${esc(e.data)}" onclick="if(!event.target.closest('a,button'))abrirDetalhe('${esc(e.id)}')" onkeydown="if((event.key==='Enter'||event.key===' ')&&event.target===this){event.preventDefault();abrirDetalhe('${esc(e.id)}')}">
       <div class="event-top"><div><h3>${esc(e.nome)}</h3><div class="event-sub">${esc(e.data)} · ${esc(e.local)} · ${esc(e.artista)}<br><small>${esc(e.id)}</small></div></div><span class="chip ${p.length?'missing':'ok'}">${p.length} pendência(s)</span></div>
       <div class="chips">${chips}</div>${resumoOrigem(e)}
-      <div class="event-actions"><button class="btn primary" onclick="abrirDetalhe('${esc(e.id)}')">Abrir fotos e documentos →</button>${e.dossie?link(e.dossie,'Pasta oficial ↗','btn soft'):''}</div>
+      <div class="event-actions"><button class="btn primary" onclick="abrirDetalhe('${esc(e.id)}',${qtdFotos>0?'true':'false'})">${qtdFotos>0?'📷 Abrir galeria de fotos →':'Abrir documentos →'}</button>${e.dossie?link(e.dossie,'Pasta oficial ↗','btn soft'):''}</div>
     </article>`;
   }).join('')||'<div class="empty">Nenhum espetáculo encontrado.</div>';
   paginator('evPaging',a.length,page,'paginaEv');
@@ -361,12 +373,12 @@ function textoCobranca(e){let ps=e.pendencias||[];let lines=ps.map(p=>{
     return '- Conferir/validar: '+name;
   });return `Bom dia! Para atualizar o monitoramento do PULSA SP, precisamos verificar as pendências documentais do espetáculo ${e.nome} (${e.data}, ID ${e.id}):\n\n${lines.join('\n')}\n\n${e.dossie?'Pasta de referência: '+e.dossie+'\n\n':''}Por favor, informem os documentos disponíveis e encaminhem o que ainda estiver pendente, identificando a apresentação correspondente. Obrigada.`;}
 async function copiarCobranca(id){const e=STATE.data?.espetaculos.find(x=>x.id===id);if(!e)return;let msg=textoCobranca(e);try{await navigator.clipboard.writeText(msg);toast('Texto de cobrança copiado. Cole no WhatsApp ou e-mail.');}catch(_){const t=document.createElement('textarea');t.value=msg;t.style.position='fixed';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('Texto preparado para copiar e enviar.');}}
-function abrirDetalhe(id){const e=STATE.data?.espetaculos.find(x=>x.id===id);if(!e)return;
+function abrirDetalhe(id,irDiretoFotos=false){const e=STATE.data?.espetaculos.find(x=>x.id===id);if(!e)return;
   $('drawerTitle').textContent=e.nome||e.id;$('drawerMeta').textContent=`${e.id} · ${e.data} · ${e.local}`;
   $('drawer').classList.add('open');document.body.style.overflow='hidden';
-  const d=STATE.detalhes[id];if(d){renderDetalhe(e,d);return;}
+  const d=STATE.detalhes[id];if(d){renderDetalhe(e,d);if(irDiretoFotos)pulsaIrParaFotos();return;}
   $('drawerContent').innerHTML='<div class="load-block"><span class="spin"></span>Buscando somente as pastas, arquivos e fotos deste espetáculo...</div>';
-  api('central_operacional',{token:STATE.token,modo:'detalhe',id}).then(res=>{STATE.detalhes[id]=res.data;if($('drawer').classList.contains('open')&&$('drawerMeta').textContent.startsWith(id))renderDetalhe(e,res.data);})
+  api('central_operacional',{token:STATE.token,modo:'detalhe',id}).then(res=>{STATE.detalhes[id]=res.data;if($('drawer').classList.contains('open')&&$('drawerMeta').textContent.startsWith(id)){renderDetalhe(e,res.data);if(irDiretoFotos)pulsaIrParaFotos();}})
   .catch(err=>{const m=/ID inv[aá]lido|Formato de ID n[aã]o reconhecido/i.test(err.message)?'O serviço de dossiês ainda não reconhece o ID deste espetáculo. É necessário publicar a versão corrigida de PulsaCentralOperacional.gs no Apps Script.':err.message;$('drawerContent').innerHTML=erroHtml(m);});
 }
 function fecharDetalhe(){fecharPreview();$('drawer').classList.remove('open');document.body.style.overflow='';}
